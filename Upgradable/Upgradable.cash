@@ -1,19 +1,13 @@
 pragma cashscript ^0.11.0;
 
+contract Upgradable(bytes baseCategory, bytes32 daoScriptHash) {
+  function removeAuthorizedThread() {
+    // Can only be called by DAO script Hash.
+  }
 
-contract OpenCashDAO(
-  bytes32 daoCategory
-) {
-
-  // Proposal minting NFT, starts from 0
-  // Minting NFT is for minting new Proposals and ProposalCounter
-  // Mutable NFTs are the Proposal NFTs
-  // Immutable NFTs are the AuthorizedThreadNFT as well as Finalised Proposal NFTs
-
-  // AuthorizedThreadNFTs are 35 in length
-  // AddProposalNFT is 40 bytes
-  // RemoveProposalNFT is 6 bytes
-  // ReplaceProposalNFT is 36 bytes
+  function newProposal(){
+    // Allow a thread to be used by the DAO to create a proposal.
+  }
 
   /**
    * @inputs
@@ -28,15 +22,15 @@ contract OpenCashDAO(
     // Added as safeguard.
     require(tx.version == 2);
 
-    // DAO Contract
+    // Registry Contract
 
     bytes selfLockingBytecode = tx.inputs[this.activeInputIndex].lockingBytecode;
-    // authorizedThreadNFT must stay with the DAO Contract.
+    // authorizedThreadNFT must stay with the Registry Contract.
     require(tx.inputs[0].lockingBytecode == selfLockingBytecode);
     require(tx.outputs[0].lockingBytecode == selfLockingBytecode);
 
-    require(tx.inputs[0].tokenCategory == daoCategory);
-    require(tx.outputs[0].tokenCategory == daoCategory);
+    require(tx.inputs[0].tokenCategory == baseCategory);
+    require(tx.outputs[0].tokenCategory == baseCategory);
     // Keeping the value same to not influence any satoshi movement in authorized contracts
     require(tx.outputs[0].value == tx.inputs[0].value);
     // The commitment that has the lockingbytecode of the authorized contract should never change.
@@ -45,9 +39,12 @@ contract OpenCashDAO(
 
     // Authorized Contract
 
+    // <4 bytes of proposalID><2 bytes of threadCount><32 bytes of scriptHash>
+    bytes scriptHash = tx.inputs[1].nftCommitment.split(6)[1];
     // Expect the NFT commitment that contains the lockingBytecode of the authorized contract.
-    require(tx.inputs[1].lockingBytecode == tx.inputs[0].nftCommitment);
+    require(tx.inputs[1].lockingBytecode == new LockingBytecodeP2SH32(scriptHash));
     // With these prerequisites met, we just need to make sure that all the contracts that are deployed are written
     // and initialized properly, and they expect this structure and handle the inputs and outputs as expected.
   }
+
 }

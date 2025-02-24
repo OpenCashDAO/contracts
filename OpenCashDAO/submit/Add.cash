@@ -1,7 +1,6 @@
 pragma cashscript ^0.11.0;
 
-contract ProposalToAdd(bytes32 daoScriptHash) {
-
+contract ProposalToAdd() {
   /**
    * ProposalNFT structure:
    * - ProposalID: 4 bytes
