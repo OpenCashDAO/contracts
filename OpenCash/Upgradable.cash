@@ -1,0 +1,50 @@
+pragma cashscript ^0.11.0;
+
+contract Upgradable(bytes projectCategory, bytes32 daoScriptHash) {
+  function removeAuthorizedThread() {
+    // Can only be called by DAO script Hash.
+  }
+
+  function newProposal(){
+    // Allow a thread to be used by the DAO to create a proposal.
+  }
+
+  /**
+   * @inputs
+   * - Input0: AuthorizedThreadNFT from self
+   * - Input1: Any UTXO from Authorized contract
+   * 
+   * @outputs
+   * - Output0: AuthorizedThreadNFT back to self
+   * - Output1: Output back to Authorized contract to be reused again
+   */
+  function call(){
+    // Added as safeguard.
+    require(tx.version == 2);
+
+    // Registry Contract
+
+    bytes selfLockingBytecode = tx.inputs[this.activeInputIndex].lockingBytecode;
+    // authorizedThreadNFT must stay with the Registry Contract.
+    require(tx.inputs[0].lockingBytecode == selfLockingBytecode);
+    require(tx.outputs[0].lockingBytecode == selfLockingBytecode);
+
+    require(tx.inputs[0].tokenCategory == projectCategory);
+    require(tx.outputs[0].tokenCategory == projectCategory);
+    // Keeping the value same to not influence any satoshi movement in authorized contracts
+    require(tx.outputs[0].value == tx.inputs[0].value);
+    // The commitment that has the lockingbytecode of the authorized contract should never change.
+    require(tx.outputs[0].nftCommitment == tx.inputs[0].nftCommitment);
+    // Not checking the tokenAmount as it changes.
+
+    // Authorized Contract
+
+    // <4 bytes of proposalID><2 bytes of threadCount><32 bytes of scriptHash>
+    bytes scriptHash = tx.inputs[1].nftCommitment.split(6)[1];
+    // Expect the NFT commitment that contains the lockingBytecode of the authorized contract.
+    require(tx.inputs[1].lockingBytecode == new LockingBytecodeP2SH32(scriptHash));
+    // With these prerequisites met, we just need to make sure that all the contracts that are deployed are written
+    // and initialized properly, and they expect this structure and handle the inputs and outputs as expected.
+  }
+
+}

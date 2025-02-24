@@ -1,0 +1,19 @@
+pragma cashscript ^0.11.0;
+
+contract RetractVote() {
+  /**
+   * @inputs
+   * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
+   * - Input1: Any input from this contract.
+   * - Input2: Proposal ThreadNFT (with tokenAmount)
+   * - Input3: RecieptNFT used to cast vote.
+   * 
+   * @outputs
+   * - Output0: DAO Contract's authorizedThreadNFT back to self
+   * - Output1: Input1 back to this contract without any change.
+   * - Output2: Proposal ThreadNFT back to DAO (minus the tokenAmount in the recieptNFT)
+   * - Output3: tokenAmount to the recieptNFT provider
+   */
+  function call() {
+  }
+}

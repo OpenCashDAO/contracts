@@ -1,0 +1,33 @@
+pragma cashscript ^0.11.0;
+
+contract Delegate(bytes daoScriptHash, bytes delegateCategory, bytes20 delegatePKH) {
+  function delegateVote() {
+    // Delegate the vote and get a recipentNFT
+  }
+
+  function retractDelegatedVote(int amount) {
+    // Mention the amount that should be retracted.
+  }
+
+  /**
+   * @inputs
+   * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
+   * - Input1: Any input from this contract.
+   * - Input2: Proposal ThreadNFT (with tokenAmount)
+   * - Input3: RecieptNFT used to cast vote.
+   * 
+   * @outputs
+   * - Output0: DAO Contract's authorizedThreadNFT back to self
+   * - Output1: Input1 back to this contract without any change.
+   * - Output2: Proposal ThreadNFT back to DAO (minus the tokenAmount in the recieptNFT)
+   * - Output3: tokenAmount to the recieptNFT provider
+   */
+  function castVoteOnProposal() {
+    // Only the delegatePKH can cast the vote.
+    // Only a specific dao can get that vote.
+  }
+
+  function retractVoteFromProposal() {
+    // Only the delegatePKH can retract the vote.
+  }
+}

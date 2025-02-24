@@ -1,0 +1,25 @@
+pragma cashscript ^0.11.0;
+
+contract CastVote() {
+  /**
+   * @inputs
+   * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
+   * - Input1: Any input from this contract.
+   * - Input2: Minting NFT of daoCategory from DAO.
+   * - Input3: Mutable Proposal NFT of daoCategory from DAO.
+   * - Input4: Utxo to cast vote with tokenAmount
+   * 
+   * @outputs
+   * - Output0: DAO Contract's authorizedThreadNFT back to self
+   * - Output1: Input1 back to this contract without any change.
+   * - Output2: Minting NFT of daoCategory back to DAO
+   * - Output3: Mutable Proposal NFT back to DAO with tokenAmount (Equal to `voteAmount`)
+   * - Output4: RecieptNFT of Vote, to be used later to get back the tokens from proposal NFT to the bytecode of Input3
+   * - Output5: Change pure BCH
+   */
+  function call(int voteAmount) {
+
+    // Must be mutable
+    // Must has the threadLeft as 0, this means that the voting is still happening.
+  }
+}
