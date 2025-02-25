@@ -1,0 +1,35 @@
+pragma cashscript ^0.11.0;
+
+contract DelegateController(bytes daoCategory, bytes20 delegatePKH, bytes32 voteScriptHash, bytes32 retractScriptHash) {
+
+  // Called by any user to delegate their vote to the delegatePKH.
+  function delegateVote(int delegateAmount) {
+    // Use the tokens and then delegate it to someone.
+    // Leave the utxo here.
+  }
+
+  // Called by the delegatePKH to undelegate their vote.
+  function undelegate() {
+    // Mention the amount that should be retracted.
+  }
+
+  /**
+   * @inputs
+   * - Input0: Proposal ThreadNFT (with tokenAmount)
+   * - Input1: RecieptNFT used to cast vote.
+   * 
+   * @outputs
+   * - Output2: Proposal ThreadNFT back to DAO (minus the tokenAmount in the recieptNFT)
+   * - Output3: tokenAmount to the recieptNFT provider
+   */
+  function castVote(int voteAmount) {
+    // To be used with voteScriptHash and the category should be daoCategory
+    // Only the delegatePKH can cast the vote.
+    // Only a specific dao can get that vote.
+  }
+
+  function retractVote() {
+    // To be used with retractScriptHash and the category should be daoCategory
+    // Only the delegatePKH can retract the vote.
+  }
+}

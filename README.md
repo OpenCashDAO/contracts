@@ -1,5 +1,8 @@
 # OpenCash
 
+> **Note:** This project is currently under active development. Features and functionalities are subject to change.
+
+
 OpenCash is a feature loaded DAO
 
 - Submit Proposals

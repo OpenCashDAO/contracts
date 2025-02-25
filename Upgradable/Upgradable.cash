@@ -1,11 +1,7 @@
 pragma cashscript ^0.11.0;
 
 contract Upgradable(bytes baseCategory, bytes32 daoScriptHash) {
-  function removeAuthorizedThread() {
-    // Can only be called by DAO script Hash.
-  }
-
-  function newProposal(){
+  function RemoveOrReplaceAuthorizedThread(){
     // Allow a thread to be used by the DAO to create a proposal.
   }
 

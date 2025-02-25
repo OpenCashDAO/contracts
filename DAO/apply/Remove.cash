@@ -1,0 +1,100 @@
+pragma cashscript ^0.11.0;
+
+/**
+ * @param voteThreshold - The minimum number of votes required for the proposal to pass.
+ * @param voteWindow - The minimum time window during which votes can be cast.
+ * @param projectCategory - The category of the project for which the proposal is being applied. [reversed]
+ * @param projectScriptHash - The script hash of the project for which the proposal is being applied.
+ */
+contract RemoveContractFromProject(
+  int voteThreshold,
+  int voteWindow,
+  bytes32 projectCategory,
+  bytes32 projectScriptHash
+) {
+  /**
+   * @inputs
+   * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
+   * - Input1: Any input from this contract.
+   * 
+   * @outputs
+   * - Output0: DAO Contract's authorizedThreadNFT back to DAO Contract
+   * - Output1: Input1 back to this contract without any change.
+   */
+  function call() {
+    //  * If the proposalNFT is mutable AND threadLeft is 0 then the voting is still happening.
+    //  * If the proposalNFT is mutable AND threadLeft is not 0 then the proposal has passed and the threadCount is updated and it needs to go through the ExecuteProposal contract.
+    //  * If the proposalNFT is immutable then it's finalised and all the threads are dealt with.
+
+    require(tx.inputs.length == 5);
+    require(tx.outputs.length <= 7);
+
+    // This contract can only be used at input1 and it should return the input1 back to itself.
+    require(this.activeInputIndex == 1);
+    require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);
+    // Ensure that the domainCategory in not minted here.
+    require(tx.outputs[this.activeInputIndex].tokenCategory == 0x);
+
+    // This contract can only be used with the 'lockingbytecode' used in the 0th input.
+    // Note: This contract can be used with any contract that fulfills these conditions, and that is fine
+    // because those contracts will not be manipulating the utxos of the Registry contract. Instead, they will
+    // be manipulating their own utxos.
+    bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;
+    require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);
+    require(tx.inputs[3].lockingBytecode == daoInputLockingBytecode);
+    require(tx.inputs[4].lockingBytecode == daoInputLockingBytecode);
+    require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);
+    require(tx.outputs[3].lockingBytecode == daoInputLockingBytecode);
+    require(tx.outputs[4].lockingBytecode == daoInputLockingBytecode);
+
+    // Project minting NFT should be minting and of the 'projectCategory', used to mint the output[5]
+    bytes projectInputCategory, bytes projectInputCapability = tx.inputs[2].tokenCategory.split(32);
+    require(projectInputCategory == projectCategory);
+    require(projectInputCapability == 0x02); // Minting
+    // ProjectMinting NFT should go back to the DAO Contract without change
+    require(tx.outputs[2].tokenCategory == tx.inputs[2].tokenCategory);
+    
+    // Check ProposalNFTs categories
+    bytes daoInputCategory = tx.inputs[0].tokenCategory;
+    // VoteProposalNFT should be mutable
+    bytes voteProposalCategory, bytes voteProposalCapability = tx.inputs[3].tokenCategory.split(32);
+    require(voteProposalCategory == daoInputCategory);
+    require(voteProposalCapability == 0x01); // Mutable
+    require(tx.inputs[4].tokenCategory == daoInputCategory);
+    require(tx.outputs[3].tokenCategory == daoInputCategory);
+
+    // The vote amount should stay the same.
+    require(tx.inputs[3].tokenAmount == tx.outputs[3].tokenAmount);
+
+    // TimeProposalNFT
+    // The min wait time for the proposal has been crossed and now the proposal can be executed.
+    require(tx.inputs[4].sequenceNumber >= voteWindow);
+    require(tx.inputs[4].nftCommitment.split(4)[0] == proposalId);
+    require(tx.inputs[4].nftCommitment.length == 29);
+
+    // New authorizedThreadNFT to the project contract
+    bytes proposalId, bytes remainingBytes0 = tx.inputs[3].nftCommitment.split(4);
+    bytes threadLeft, bytes remainingBytes1 = remainingBytes0.split(2);
+    bytes threadCount, bytes proposedScriptHash = remainingBytes1.split(2);
+
+    int newThreadLeft = int(threadLeft) - 1;
+    require(newThreadLeft <= threadCount);
+    bytes newThreadLeftBytes = bytes(newThreadLeft);
+    require(newThreadLeftBytes.length == 2);
+
+    require(tx.outputs[3].nftCommitment == proposalId + newThreadLeftBytes + threadCount + proposedScriptHash);
+    require(tx.outputs[3].nftCommitment.length == 40);
+    require(tx.outputs[3].nftCommitment.length == tx.inputs[3].nftCommitment.length);
+
+    require(tx.outputs[5].nftCommitment == proposalId + threadCount + proposedScriptHash);
+    require(tx.outputs[5].lockingBytecode == new LockingBytecodeP2SH32(projectScriptHash));
+    require(tx.outputs[5].nftCommitment.length == 39);
+    require(tx.outputs[5].tokenCategory == projectCategory);
+
+    if(tx.outputs.length == 7) {
+      // Output6: Change pure BCH
+      require(tx.outputs[6].tokenCategory == 0x);
+    }
+
+  }
+}

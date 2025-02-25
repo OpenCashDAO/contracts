@@ -9,21 +9,25 @@ contract Controller(
   /**
    * The Controller holds:
    * - AuthorizedThreadNFTs (immutable, daoCategory, 35 bytes)
-   *   - AddProposal:           		[~x threads]
-   *   - RemoveProposal:        		[~x threads]
-   *   - ReplaceProposal:      	  	[~x threads]
-   *   - AddApplyProposal:     	  	[~x threads]
-   *   - RemoveApplyProposal:  	  	[~x threads]
-   *   - ReplaceApplyProposal:	  	[~x threads]
-   *   - Vote:                 	  	[~x threads]
-   *   - RetractVote:          	  	[~x threads]
-   * - ProposalCounterNFT, (minting, daoCategory, 4 bytes)                     [1 thread]
-   * - TimeProposalNFT, (immutable, daoCategory, 4 bytes)                      [1 thread for each proposal]
+   *   - Submit:AddProposal:       		[1 thread]
+   *   - Submit:RemoveProposal:    		[1 thread]
+   *   - Submit:ReplaceProposal:     	[1 thread]
+   *   - Apply:AddProposal:     	  	[1 thread]
+   *   - Apply:RemoveProposal:  	  	[1 thread]
+   *   - Apply:ReplaceProposal:	  	  [1 thread]
+   *   - Apply:FailProposal:	       	[1 thread]
+   *   - Vote:                 	  	  [~x threads]
+   *   - RetractVote:          	  	  [~x threads]
+   * - ProposalCounterNFT, (minting, daoCategory, 4 bytes)                      [1 thread]
+   * - TimeProposalNFT, (immutable, daoCategory, 29 bytes)                      [1 thread for each proposal]
    * - VoteProposalNFTs are mutable/immutable NFTs of daoCategory
    *   - NFT created by `AddProposal` Contract the commitment length is 40 bytes and is mutable.
    *   - NFT created by `RemoveProposal` Contract the commitment length is 6 bytes and is immutable.
    *   - NFT created by `ReplaceProposal` Contract the commitment length is 36 bytes and is mutable.
-   * - UpgradableContractNFT, (minting, upgradableCategory, 0 bytes)           [1 thread]
+   * - UpgradableContractNFT, (minting, upgradableCategory, 0 bytes)            [1 thread]
+   *
+   * Each votes has a voteNFT issued when they cast a vote.
+   * - VoteNFT, (immutable, daoCategory, 12 bytes) <ProposalId><VoteAmount>
    *
    * Once the voting is over, the proposalNFT becomes immutable, making it un-usable for any other contract
    * It also means that the proposal has ended.
@@ -60,6 +64,7 @@ contract Controller(
     // Authorized Contract
 
     // Expect the NFT commitment that contains the lockingBytecode of the authorized contract.
+    require(tx.inputs[0].nftCommitment.length == 35);
     require(tx.inputs[1].lockingBytecode == tx.inputs[0].nftCommitment);
     // With these prerequisites met, we just need to make sure that all the contracts that are deployed are written
     // and initialized properly, and they expect this structure and handle the inputs and outputs as expected.
