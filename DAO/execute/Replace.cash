@@ -21,7 +21,7 @@ contract ReplaceContractInProject(
    * - Output0: DAO Contract's authorizedThreadNFT back to DAO Contract
    * - Output1: Input1 back to this contract without any change.
    */
-  function call() {
+  function executeProposal() {
     //  * If the proposalNFT is mutable AND threadLeft is 0 then the voting is still happening.
     //  * If the proposalNFT is mutable AND threadLeft is not 0 then the proposal has passed and the threadCount is updated and it needs to go through the ExecuteProposal contract.
     //  * If the proposalNFT is immutable then it's finalised and all the threads are dealt with.
@@ -95,6 +95,10 @@ contract ReplaceContractInProject(
       // Output6: Change pure BCH
       require(tx.outputs[6].tokenCategory == 0x);
     }
+
+  }
+
+  function replaceThreads() {
 
   }
 }

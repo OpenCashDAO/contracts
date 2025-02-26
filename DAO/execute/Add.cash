@@ -6,26 +6,32 @@ pragma cashscript ^0.11.0;
  * @param projectCategory - The category of the project for which the proposal is being applied. [reversed]
  * @param projectScriptHash - The script hash of the project for which the proposal is being applied.
  */
-contract RemoveContractFromProject(
+contract AddProposalToProject(
   int voteThreshold,
   int voteWindow,
   bytes32 projectCategory,
   bytes32 projectScriptHash
 ) {
   /**
+   * This is called when the proposal intends to add a new contract to the project.
    * @inputs
    * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
    * - Input1: Any input from this contract.
+   * - Input2: Minting NFT of the project
+   * - Input3: VoteProposalNFT
+   * - Input4: TimeProposalNFT
+   * - Input5: Funding UTXO
    * 
    * @outputs
    * - Output0: DAO Contract's authorizedThreadNFT back to DAO Contract
    * - Output1: Input1 back to this contract without any change.
+   * - Output2: Minting NFT back to DAO Contract
+   * - Output3: VoteProposalNFT back to DAO Contract
+   * - Output4: TimeProposalNFT back to DAO Contract
+   * - Output5: authorizedThreadNFT to the Project Contract
+   * - Output6: Change pure BCH
    */
-  function call() {
-    //  * If the proposalNFT is mutable AND threadLeft is 0 then the voting is still happening.
-    //  * If the proposalNFT is mutable AND threadLeft is not 0 then the proposal has passed and the threadCount is updated and it needs to go through the ExecuteProposal contract.
-    //  * If the proposalNFT is immutable then it's finalised and all the threads are dealt with.
-
+  function executeProposal() {
     require(tx.inputs.length == 5);
     require(tx.outputs.length <= 7);
 
@@ -66,6 +72,9 @@ contract RemoveContractFromProject(
     // The vote amount should stay the same.
     require(tx.inputs[3].tokenAmount == tx.outputs[3].tokenAmount);
 
+    // This condition is responsible for the proposal passing.
+    require(tx.inputs[3].tokenAmount >= voteThreshold);
+
     // TimeProposalNFT
     // The min wait time for the proposal has been crossed and now the proposal can be executed.
     require(tx.inputs[4].sequenceNumber >= voteWindow);
@@ -95,6 +104,10 @@ contract RemoveContractFromProject(
       // Output6: Change pure BCH
       require(tx.outputs[6].tokenCategory == 0x);
     }
+
+  }
+
+  function mintThreads() {
 
   }
 }

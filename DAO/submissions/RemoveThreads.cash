@@ -7,7 +7,7 @@ pragma cashscript ^0.11.0;
  * If the proposal passes, the creator will get back the commitmentDeposit.
  * If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
  */
-contract ProposalToRemoveContract(int commitmentDeposit) {
+contract ProposalToRemove(int commitmentDeposit) {
 
   /**
    * ProposalNFT structure:
