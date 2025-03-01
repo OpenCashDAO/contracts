@@ -12,8 +12,8 @@ import {
   cashAddressToLockingBytecode
 } from '@bitauth/libauth';
 
-import { alicePriv, aliceAddress, aliceTokenAddress, alicePkh } from './common.js';
-export { alicePriv, aliceAddress, aliceTokenAddress, alicePkh };
+import { alicePriv, aliceAddress, aliceTokenAddress, alicePkh, alicePub } from './common.js';
+export { alicePriv, aliceAddress, aliceTokenAddress, alicePkh, alicePub };
 
 // Upgradable Project contract
 const Upgradable = compileFile(new URL('../Upgradable/Upgradable.cash', import.meta.url));
@@ -34,7 +34,6 @@ export const randomNFTForDAOUtxo = randomNFT({satoshis: 10_000n, nft: {commitmen
 
 export const daoCategory = randomNFTForDAOUtxo.category
 export const reverseDaoTokenCategory = binToHex(hexToBin(daoCategory).reverse())
-
 
 
 // Export all the contracts
@@ -62,7 +61,9 @@ provider.addUtxo(ExecuteProposalContract.address, randomUtxo());
 // Create authorizedThreadNFT
 
 const authorizedThreadNFTUtxo = {
-  ...randomNFT({category: daoCategory, nft: { commitment: ExecuteProposalContractLockingBytecode, capability: 'none'}}),
+  token: {
+    ...randomNFT({category: daoCategory, nft: { commitment: ExecuteProposalContractLockingBytecode, capability: 'none'}})
+  },
   ...randomUtxo()
 };
 

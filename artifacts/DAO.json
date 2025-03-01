@@ -12,12 +12,46 @@
       "inputs": []
     }
   ],
-  "bytecode": "OP_TXVERSION OP_2 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_UTXOBYTECODE OP_0 OP_UTXOBYTECODE OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_NUMEQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_0 OP_UTXOTOKENCOMMITMENT OP_EQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_SIZE OP_NIP 23 OP_NUMEQUALVERIFY OP_1 OP_UTXOBYTECODE OP_0 OP_UTXOTOKENCOMMITMENT OP_EQUAL",
-  "source": "pragma cashscript ^0.11.0;\n\n/**\n  * @param daoCategory - The category of the DAO NFTs. [In reverse order]\n */\ncontract Controller(\n  bytes32 daoCategory\n) {\n  /**\n   * The Controller holds:\n   * - AuthorizedThreadNFTs (immutable, daoCategory, 35 bytes)\n   *   - Submit:AddProposal:       \t\t[1 thread]\n   *   - Submit:RemoveProposal:    \t\t[1 thread]\n   *   - Submit:ReplaceProposal:     \t[1 thread]\n   *   - Apply:AddProposal:     \t  \t[1 thread]\n   *   - Apply:RemoveProposal:  \t  \t[1 thread]\n   *   - Apply:ReplaceProposal:\t  \t  [1 thread]\n   *   - Apply:FailProposal:\t       \t[1 thread]\n   *   - Vote:                 \t  \t  [~x threads]\n   *   - RetractVote:          \t  \t  [~x threads]\n   * - ProposalCounterNFT, (minting, daoCategory, 4 bytes)                      [1 thread]\n   * - TimeProposalNFT, (immutable, daoCategory, 29 bytes)                      [1 thread for each proposal]\n   * - VoteProposalNFTs are mutable/immutable NFTs of daoCategory\n   *   - NFT created by `AddProposal` Contract the commitment length is 40 bytes and is mutable.\n   *   - NFT created by `RemoveProposal` Contract the commitment length is 6 bytes and is immutable.\n   *   - NFT created by `ReplaceProposal` Contract the commitment length is 36 bytes and is mutable.\n   * - UpgradableContractNFT, (minting, upgradableCategory, 0 bytes)            [1 thread]\n   *\n   * Each votes has a voteNFT issued when they cast a vote.\n   * - VoteNFT, (immutable, daoCategory, 12 bytes) <ProposalId><VoteAmount>\n   *\n   * Once the voting is over, the proposalNFT becomes immutable, making it un-usable for any other contract\n   * It also means that the proposal has ended.\n   *\n   * The users are not allowed to retractVotes when proposal is being executed.\n   *\n   * @inputs\n   * - Input0: AuthorizedThreadNFT from self\n   * - Input1: Any UTXO from Authorized contract\n   * \n   * @outputs\n   * - Output0: AuthorizedThreadNFT back to self\n   * - Output1: Output back to Authorized contract to be reused again\n   */\n  function call(){\n    // Added as safeguard.\n    require(tx.version == 2);\n\n    // Controller Contract\n\n    bytes selfLockingBytecode = tx.inputs[this.activeInputIndex].lockingBytecode;\n    // authorizedThreadNFT must stay with the DAO Contract.\n    require(tx.inputs[0].lockingBytecode == selfLockingBytecode);\n    require(tx.outputs[0].lockingBytecode == selfLockingBytecode);\n\n    require(tx.inputs[0].tokenCategory == daoCategory);\n    require(tx.outputs[0].tokenCategory == daoCategory);\n    // Keeping the value same to not influence any satoshi movement in authorized contracts\n    require(tx.outputs[0].value == tx.inputs[0].value);\n    // The commitment that has the lockingbytecode of the authorized contract should never change.\n    require(tx.outputs[0].nftCommitment == tx.inputs[0].nftCommitment);\n    // Not checking the tokenAmount as it changes.\n\n    // Authorized Contract\n\n    // Expect the NFT commitment that contains the lockingBytecode of the authorized contract.\n    require(tx.inputs[0].nftCommitment.length == 35);\n    require(tx.inputs[1].lockingBytecode == tx.inputs[0].nftCommitment);\n    // With these prerequisites met, we just need to make sure that all the contracts that are deployed are written\n    // and initialized properly, and they expect this structure and handle the inputs and outputs as expected.\n  }\n}\n",
+  "bytecode": "OP_TXVERSION OP_2 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_UTXOBYTECODE OP_0 OP_UTXOBYTECODE OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_NUMEQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_0 OP_UTXOTOKENCOMMITMENT OP_EQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_SIZE OP_NIP 23 OP_NUMEQUALVERIFY OP_0 OP_UTXOBYTECODE OP_1 OP_UTXOBYTECODE OP_0 OP_UTXOTOKENCOMMITMENT OP_1 OP_UTXOBYTECODE OP_0 OP_UTXOTOKENCOMMITMENT OP_EQUAL OP_NIP OP_NIP OP_NIP",
+  "source": "pragma cashscript ^0.11.0;\n\n/**\n  * @param daoCategory - The category of the DAO NFTs. [In reverse order]\n */\ncontract Controller(\n  bytes32 daoCategory\n) {\n  /**\n   * The Controller holds:\n   * - AuthorizedThreadNFTs (immutable, daoCategory, 35 bytes)\n   *   - Submit:AddProposal:       \t\t[1 thread]\n   *   - Submit:RemoveProposal:    \t\t[1 thread]\n   *   - Submit:ReplaceProposal:     \t[1 thread]\n   *   - Apply:AddProposal:     \t  \t[1 thread]\n   *   - Apply:RemoveProposal:  \t  \t[1 thread]\n   *   - Apply:ReplaceProposal:\t  \t  [1 thread]\n   *   - Apply:FailProposal:\t       \t[1 thread]\n   *   - Vote:                 \t  \t  [~x threads]\n   *   - RetractVote:          \t  \t  [~x threads]\n   * - ProposalCounterNFT, (minting, daoCategory, 4 bytes)                      [1 thread]\n   * - TimeProposalNFT, (immutable, daoCategory, 29 bytes)                      [1 thread for each proposal]\n   * - VoteProposalNFTs are mutable/immutable NFTs of daoCategory\n   *   - NFT created by `AddProposal` Contract the commitment length is 40 bytes and is mutable.\n   *   - NFT created by `RemoveProposal` Contract the commitment length is 6 bytes and is immutable.\n   *   - NFT created by `ReplaceProposal` Contract the commitment length is 36 bytes and is mutable.\n   * - UpgradableContractNFT, (minting, upgradableCategory, 0 bytes)            [1 thread]\n   *\n   * Each votes has a voteNFT issued when they cast a vote.\n   * - VoteNFT, (immutable, daoCategory, 12 bytes) <ProposalId><VoteAmount>\n   *\n   * Once the voting is over, the proposalNFT becomes immutable, making it un-usable for any other contract\n   * It also means that the proposal has ended.\n   *\n   * The users are not allowed to retractVotes when proposal is being executed.\n   *\n   * @inputs\n   * - Input0: AuthorizedThreadNFT from self\n   * - Input1: Any UTXO from Authorized contract\n   * \n   * @outputs\n   * - Output0: AuthorizedThreadNFT back to self\n   * - Output1: Output back to Authorized contract to be reused again\n   */\n  function call(){\n    // Added as safeguard.\n    require(tx.version == 2);\n\n    // Controller Contract\n\n    bytes selfLockingBytecode = tx.inputs[this.activeInputIndex].lockingBytecode;\n    // authorizedThreadNFT must stay with the DAO Contract.\n    require(tx.inputs[0].lockingBytecode == selfLockingBytecode);\n    require(tx.outputs[0].lockingBytecode == selfLockingBytecode);\n\n    require(tx.inputs[0].tokenCategory == daoCategory);\n    require(tx.outputs[0].tokenCategory == daoCategory);\n    // Keeping the value same to not influence any satoshi movement in authorized contracts\n    require(tx.outputs[0].value == tx.inputs[0].value);\n    // The commitment that has the lockingbytecode of the authorized contract should never change.\n    require(tx.outputs[0].nftCommitment == tx.inputs[0].nftCommitment);\n    // Not checking the tokenAmount as it changes.\n\n    // Authorized Contract\n\n    // Expect the NFT commitment that contains the lockingBytecode of the authorized contract.\n    require(tx.inputs[0].nftCommitment.length == 35);\n\n    bytes lb0 = tx.inputs[0].lockingBytecode;\n    bytes lb = tx.inputs[1].lockingBytecode;\n    bytes nc = tx.inputs[0].nftCommitment;\n\n    console.log(lb0);\n    console.log(lb);\n    console.log(nc);\n\n    require(tx.inputs[1].lockingBytecode == tx.inputs[0].nftCommitment);\n    // With these prerequisites met, we just need to make sure that all the contracts that are deployed are written\n    // and initialized properly, and they expect this structure and handle the inputs and outputs as expected.\n  }\n}\n",
   "debug": {
-    "bytecode": "c2529c69c0c700c75179876900cd517a876900ce5179876900d1517a876900cc00c69c6900d200cf876900cf827701239c6951c700cf87",
-    "sourceMap": "47:12:47:22;:26::27;:12:::1;:4::29;51:42:51:63:0;:32::80:1;53:22:53:23:0;:12::40:1;:44::63:0;;:12:::1;:4::65;54:23:54:24:0;:12::41:1;:45::64:0;;:12:::1;:4::66;56:22:56:23:0;:12::38:1;:42::53:0;;:12:::1;:4::55;57:23:57:24:0;:12::39:1;:43::54:0;;:12:::1;:4::56;59:23:59:24:0;:12::31:1;:45::46:0;:35::53:1;:12;:4::55;61:23:61:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;67:22:67:23:0;:12::38:1;:::45;;:49::51:0;:12:::1;:4::53;68:22:68:23:0;:12::40:1;:54::55:0;:44::70:1;:12",
-    "logs": [],
+    "bytecode": "c2529c69c0c700c75179876900cd517a876900ce5179876900d1517a876900cc00c69c6900d200cf876900cf827701239c6900c751c700cf51c700cf87777777",
+    "sourceMap": "47:12:47:22;:26::27;:12:::1;:4::29;51:42:51:63:0;:32::80:1;53:22:53:23:0;:12::40:1;:44::63:0;;:12:::1;:4::65;54:23:54:24:0;:12::41:1;:45::64:0;;:12:::1;:4::66;56:22:56:23:0;:12::38:1;:42::53:0;;:12:::1;:4::55;57:23:57:24:0;:12::39:1;:43::54:0;;:12:::1;:4::56;59:23:59:24:0;:12::31:1;:45::46:0;:35::53:1;:12;:4::55;61:23:61:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;67:22:67:23:0;:12::38:1;:::45;;:49::51:0;:12:::1;:4::53;69:26:69:27:0;:16::44:1;70:25:70:26:0;:15::43:1;71:25:71:26:0;:15::41:1;77:22:77:23:0;:12::40:1;:54::55:0;:44::70:1;:12;45:2:80:3;;",
+    "logs": [
+      {
+        "ip": 56,
+        "line": 73,
+        "data": [
+          {
+            "stackIndex": 2,
+            "type": "bytes lb0",
+            "ip": 56
+          }
+        ]
+      },
+      {
+        "ip": 56,
+        "line": 74,
+        "data": [
+          {
+            "stackIndex": 1,
+            "type": "bytes lb",
+            "ip": 56
+          }
+        ]
+      },
+      {
+        "ip": 56,
+        "line": 75,
+        "data": [
+          {
+            "stackIndex": 0,
+            "type": "bytes nc",
+            "ip": 56
+          }
+        ]
+      }
+    ],
     "requires": [
       {
         "ip": 4,
@@ -52,8 +86,8 @@
         "line": 67
       },
       {
-        "ip": 55,
-        "line": 68
+        "ip": 61,
+        "line": 77
       }
     ]
   },
@@ -61,5 +95,5 @@
     "name": "cashc",
     "version": "0.11.0-next.1"
   },
-  "updatedAt": "2025-03-01T14:39:46.826Z"
+  "updatedAt": "2025-03-01T18:05:58.534Z"
 }
