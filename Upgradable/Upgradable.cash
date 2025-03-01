@@ -1,7 +1,8 @@
 pragma cashscript ^0.11.0;
 
-contract Upgradable(bytes baseCategory, bytes32 daoScriptHash) {
+contract Upgradable(bytes baseCategory, bytes daoLockingBytecode) {
   function RemoveOrReplaceAuthorizedThread(){
+    require(tx.inputs[this.activeInputIndex +1].lockingBytecode == daoLockingBytecode);
     // Allow a thread to be used by the DAO to create a proposal.
   }
 
@@ -36,7 +37,7 @@ contract Upgradable(bytes baseCategory, bytes32 daoScriptHash) {
     // Authorized Contract
 
     // <4 bytes of proposalID><2 bytes of threadCount><32 bytes of scriptHash>
-    bytes scriptHash = tx.inputs[1].nftCommitment.split(6)[1];
+    bytes32 scriptHash = bytes32(tx.inputs[1].nftCommitment.split(6)[1]);
     // Expect the NFT commitment that contains the lockingBytecode of the authorized contract.
     require(tx.inputs[1].lockingBytecode == new LockingBytecodeP2SH32(scriptHash));
     // With these prerequisites met, we just need to make sure that all the contracts that are deployed are written
