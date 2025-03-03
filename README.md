@@ -6,9 +6,16 @@
 
 OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) template, designed to empower stakeholders to influence the project's direction. It serves as a proposal and voting platform for the community, enabling them to vote on various proposals to modify the project's functionality.
 
+- DAO
+- Proposals
+- Voting on Proposals by stakeholders
+- Upgradable Project
+
+## Summary
+
 - Anyone is allowed to submit new proposals to the DAO. The proposals can only have one of three properties i.e to add, remove, or replace functionality.
-- Once a proposal is submitted, the timer starts and the proposal is open for voting. Votes can choose to vote themselves or delegate their votes to other community members.
-- The proposal run for a set period of time and once the timer is up, the proposal can be executed. Depending upon the number of votes, the proposal the proposal is considered passed or failed. Once a proposal is passed, it can be executed by anyone, applying the new changes to the project.
+- Once a proposal is submitted, the timer starts and the proposal is open for voting.
+- The proposal runs for a set period of time and once the timer is up, the proposal can be executed. Depending upon the number of votes, the proposal is considered passed or failed. Once a proposal is passed, it can be executed by anyone, applying the new changes to the project.
 - The DAO's contracts are static, but the projects it controls is upgradable in nature.
 
 ## Table of Contents
@@ -26,9 +33,8 @@ OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) templa
       - [Remove.cash](#removecash)
       - [Replace.cash](#replacecash)
       - [Fail.cash](#failcash)
-2. [Delegate contract](#delegate-contract)
-3. [Upgradable Project Contract](#upgradable-project-contract)
-4. [Cashtokens](#cashtokens)
+2. [Upgradable Project Contract](#upgradable-project-contract)
+3. [Cashtokens](#cashtokens)
     - [AuthorizedThreadNFTs](#authorizedthreadnfts)
     - [MintingNFTs](#mintingnfts)
     - [ProposalCounterNFT](#proposalcounternft)
@@ -36,7 +42,7 @@ OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) templa
     - [VoteProposalNFTs](#voteproposalnfts)
     - [UpgradableContractNFT](#upgradablecontractnft)
     - [VoteNFT](#votenft)
-5. [FAQs](#faqs)
+4. [FAQs](#faqs)
 
 ### DAO contracts
 
@@ -55,9 +61,6 @@ The RemoveThreads.cash contract is used to submit proposal that removes authoriz
 
 #### ReplaceThreads.cash
 The ReplaceThreads.cash contract is used to submit proposal that replaces authorizedThreadNFTs in the Upgradable Project Contract.
-
-#### Delegate Vote contract
-Allows the tokenHolder to delegate their votes to another user.
 
 #### Voting contract
 Allows anyone to vote on an active proposal.

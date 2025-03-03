@@ -7,38 +7,60 @@ pragma cashscript ^0.11.0;
  * If the proposal passes, the creator will get back the commitmentDeposit.
  * If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
  */
-contract ProposalToReplace(int commitmentDeposit) {
-
+contract ProposalToAdd(int minCommitmentDeposit) {
   /**
-   * ProposalNFT structure:
-   * - ProposalID: 4 bytes
-   * - ThreadLeft: 2 bytes
-   * - ProposedScriptHash: 32 bytes
    *
    * @inputs
    * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
-   * - Input1: Any input from this contract.
-   * - Input2: Minting NFT of the project
-   * - Input3: Proposal NFT (mutable)
-   * - Input4: Funding UTXO
+   *   - capability: immutable
+   *   - length: 35 bytes
+   *   - category: daoCategory
+   * - Input1: Any input from this contract
+   * - Input2: ProposalCounterNFT from DAO Contract
+   *   - capability: minting
+   *   - length: 4 bytes
+   *   - category: daoCategory
+   * - Input3: Funding UTXO
+   *   - value: >= commitmentDeposit
    * 
    * @outputs
    * - Output0: DAO Contract's authorizedThreadNFT back to DAO Contract
-   * - Output1: Input1 back to this contract without any change.
-   * - Output2: Minting NFT back to DAO Contract
-   * - Output3: Immutable Proposal NFT sent to the DAO Contract for voters to get back their tokens
-   * - Output4: Proposal NFT with lockingBytecode to the Project Contract
-   * - Output5: Change pure BCH
+   *   - capability: immutable
+   *   - length: 35 bytes
+   *   - category: daoCategory
+   * - Output1: Input1 back to this contract without any change
+   * - Output2: ProposalCounterNFT back to DAO Contract
+   *   - capability: minting
+   *   - length: 4 bytes
+   *   - category: daoCategory
+   * - Output3: VoteProposalNFT to DAO contract
+   *   - capability: mutable
+   *   - length: 40 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
+   *   - category: daoCategory
+   * - Output4: TimeProposalNFT to DAO contract
+   *   - capability: immutable
+   *   - length: >=29 bytes <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)>
+   *   - category: daoCategory
+   *   - satoshis >= commitmentDeposit
+   * - Output5: OP_RETURN with the proposal data
+   * - Output6: Change pure BCH
    */
-  function call() {
+  function call(bytes proposalScriptHash, bytes threadCount) {
     require(tx.inputs.length == 4);
-    require(tx.outputs.length <= 6);
+    require(tx.outputs.length <= 7);
 
     // This contract can only be used at input1 and it should return the input1 back to itself.
     require(this.activeInputIndex == 1);
     require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);
     // Ensure that the domainCategory in not minted here.
     require(tx.outputs[this.activeInputIndex].tokenCategory == 0x);
+    
+    // Add Proposal requires a 32 byte script hash and 2 byte thread count
+    require(proposalScriptHash.length == 32);
+    require(threadCount.length == 2);
+
+    // Proposal NFT ID increases by 1 with each transaction.
+    require(int(tx.outputs[2].nftCommitment) == int(tx.inputs[2].nftCommitment) + 1);
 
     // This contract can only be used with the 'lockingbytecode' used in the 0th input.
     // Note: This contract can be used with any contract that fulfills these conditions, and that is fine
@@ -50,11 +72,8 @@ contract ProposalToReplace(int commitmentDeposit) {
     require(tx.outputs[3].lockingBytecode == daoInputLockingBytecode);
     require(tx.outputs[4].lockingBytecode == daoInputLockingBytecode);
 
-    // Proposal NFT ID increases by 1 with each transaction.
-    require(int(tx.outputs[2].nftCommitment) == int(tx.inputs[2].nftCommitment) + 1);
     // ProposalCounterNFT should always be 4 bytes
     require(tx.outputs[2].nftCommitment.length == 4);
-
     // ProposalCounterNFT should keep the same category and capability.
     require(tx.outputs[2].tokenCategory == tx.inputs[2].tokenCategory);
 
@@ -75,22 +94,21 @@ contract ProposalToReplace(int commitmentDeposit) {
     
     // Ensure funding is pure BCH and is >= commitmentDeposit
     require(tx.inputs[3].tokenCategory == 0x);
-    require(tx.inputs[3].value >= commitmentDeposit);
+    require(tx.inputs[3].value >= minCommitmentDeposit);
+    // Ensure the TimeProposalNFT has the same value as the commitmentDeposit
+    require(tx.outputs[4].value >= minCommitmentDeposit);
 
-    // Set the commitment for the VoteProposalNFT
+    // ADD: Create the proposalID<4 bytes> + threadLeft<2 bytes> + threadCount<2 bytes> + proposalScriptHash<32 bytes>
     require(tx.outputs[3].nftCommitment == tx.outputs[2].nftCommitment + threadCount + threadCount + proposalScriptHash);
     require(tx.outputs[3].nftCommitment.length == 40);
 
-    // Set the commitment for the TimeProposalNFT
+    // Set the commitment for the TimeProposalNFT <proposalID<4 bytes>, CreatorLockingBytecode<any length bytes>>
     require(tx.outputs[4].nftCommitment == tx.outputs[2].nftCommitment + tx.inputs[3].lockingBytecode);
-    require(tx.outputs[4].nftCommitment.length == 29);
 
     // Force OP_RETURN output
     require(tx.outputs[5].value == 0);    
 
-    if(tx.outputs.length == 6) {
-      // Ensure change is pure BCH
-      require(tx.outputs[5].tokenCategory == 0x);
-    }
+    // Ensure change is pure BCH
+    require(tx.outputs[5].tokenCategory == 0x);
   }
 }
