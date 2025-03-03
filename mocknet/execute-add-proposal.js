@@ -1,7 +1,7 @@
 import { randomUtxo, TransactionBuilder } from 'cashscript';
 import {
   DAOControllerContract,
-  ExecuteProposalContract,
+  ExecuteAddProposalContract,
   provider,
 } from './setup.js';
 import { binToHex, cashAddressToLockingBytecode } from '@bitauth/libauth';
@@ -9,22 +9,22 @@ export const main = async () => {
 
   const contractUtxos = await provider.getUtxos(DAOControllerContract.address);
   const authorizedThreadUtxo = contractUtxos[0];
-  const executeProposalUtxos = await provider.getUtxos(ExecuteProposalContract.address);
-  const executeProposalUtxo = executeProposalUtxos[0];
+  const executeAddProposalUtxos = await provider.getUtxos(ExecuteAddProposalContract.address);
+  const executeAddProposalUtxo = executeAddProposalUtxos[0];
 
   const daoControllerLockingBytecode = binToHex(cashAddressToLockingBytecode(DAOControllerContract.address).bytecode);
-  const executeProposalLockingBytecode = binToHex(cashAddressToLockingBytecode(ExecuteProposalContract.address).bytecode);
+  const executeAddProposalLockingBytecode = binToHex(cashAddressToLockingBytecode(ExecuteAddProposalContract.address).bytecode);
 
 
   // nft commitment should have execute proposal's locking bytecode
   console.log('authorizedThreadUtxo: ', authorizedThreadUtxo)
-  console.log('executeProposalUtxo: ', executeProposalUtxo)
+  console.log('executeAddProposalUtxo: ', executeAddProposalUtxo)
   console.log('daoControllerLockingBytecode: ', daoControllerLockingBytecode)
-  console.log('executeProposalLockingBytecode: ', executeProposalLockingBytecode)
+  console.log('executeAddProposalLockingBytecode: ', executeAddProposalLockingBytecode)
 
   const tx = await new TransactionBuilder({ provider })
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())
-    .addInput(executeProposalUtxo, ExecuteProposalContract.unlock.test())
+    .addInput(executeAddProposalUtxo, ExecuteAddProposalContract.unlock.test())
     .addOutput({
       to: DAOControllerContract.tokenAddress,
       amount: authorizedThreadUtxo.satoshis,
@@ -37,7 +37,7 @@ export const main = async () => {
         }
       },
     })
-    .addOutput({ to: ExecuteProposalContract.address, amount: 800n })
+    .addOutput({ to: ExecuteAddProposalContract.address, amount: 800n })
     .send()
     // .bitauthUri()
 

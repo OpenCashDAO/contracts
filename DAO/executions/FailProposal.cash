@@ -1,0 +1,82 @@
+/**
+ * @param voteThreshold - The minimum number of votes required for the proposal to pass.
+ * @param voteWindow - The minimum time window during which votes can be cast.
+ */
+contract FailProposal(
+  int voteThreshold,
+  int voteWindow
+) {
+
+ /**
+   * This is called when the proposal intends to add a new contract to the project.
+   * @inputs
+   * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
+   *   - capability: immutable
+   *   - length: 35 bytes
+   *   - category: daoCategory
+   * - Input1: Any input from this contract.
+   * - Input2: Any VoteProposalNFT from the DAO Contract
+   *   - capability: mutable
+   *   - length: x bytes <ProposalID (4 bytes), ...bytes>
+   *   - category: daoCategory
+   * - Input3: TimeProposalNFT from the DAO Contract
+   *   - capability: immutable
+   *   - length: >=29 bytes <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)>
+   *   - category: daoCategory
+   *   - satoshis >= commitmentDeposit [This will fund the transaction]
+   *
+   * @outputs
+   * - Output0: DAO Contract's authorizedThreadNFT back to DAO Contract
+   *   - capability: immutable
+   *   - length: 35 bytes
+   *   - category: daoCategory
+   * - Output1: Input1 back to this contract without any change.
+   * - Output2: VoteProposalNFT from the DAO Contract
+   *   - capability: immmutable
+   *   - length: x bytes <ProposalID (4 bytes), ...bytes>
+   *   - category: daoCategory
+   * - Output3: Change pure BCH
+   */
+  function call() {
+    require(tx.inputs.length == 4);
+    require(tx.outputs.length == 4);
+
+    // This contract can only be used at input1 and it should return the input1 back to itself.
+    require(this.activeInputIndex == 1);
+    require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);
+    // Ensure that the domainCategory in not minted here.
+    require(tx.outputs[this.activeInputIndex].tokenCategory == 0x);
+
+    // This contract can only be used with the 'lockingbytecode' used in the 0th input.
+    // Note: This contract can be used with any contract that fulfills these conditions, and that is fine
+    // because those contracts will not be manipulating the utxos of the Registry contract. Instead, they will
+    // be manipulating their own utxos.
+    bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;
+    require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);
+    require(tx.inputs[3].lockingBytecode == daoInputLockingBytecode);
+
+    // Check ProposalNFTs categories
+    bytes daoInputCategory = tx.inputs[0].tokenCategory;
+    // VoteProposalNFT should be mutable
+    bytes voteProposalCategory, bytes voteProposalCapability = tx.inputs[2].tokenCategory.split(32);
+    require(voteProposalCategory == daoInputCategory);
+    require(voteProposalCapability == 0x01); // Mutable
+    // VoteProposalNFT should be immutable in output
+    require(tx.outputs[2].tokenCategory == daoInputCategory);
+    require(tx.outputs[2].nftCommitment.length == tx.inputs[2].nftCommitment.length);
+
+    // TimeProposalNFT
+    require(tx.inputs[3].sequenceNumber >= voteWindow);
+    require(tx.inputs[3].tokenCategory == daoInputCategory);
+    // The vote amount should stay the same.
+    require(tx.inputs[3].tokenAmount == tx.outputs[3].tokenAmount);
+    // This condition is responsible for the proposal passing.
+    require(tx.inputs[3].tokenAmount < voteThreshold);
+    // VoteProposalNFT and timeNFT should have the same proposalId
+    require(tx.inputs[3].nftCommitment.split(4)[0] == tx.inputs[2].nftCommitment.split(4)[0]);
+
+    // Output3: Change pure BCH
+    require(tx.outputs[3].tokenCategory == 0x);
+  }
+
+}
