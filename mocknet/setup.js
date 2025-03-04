@@ -20,9 +20,9 @@ const Upgradable = compileFile(new URL('../Upgradable/Upgradable.cash', import.m
 
 // DAO contracts
 const Controller = compileFile(new URL('../DAO/Controller.cash', import.meta.url));
-const ExecuteAddProposal = compileFile(new URL('../DAO/executions/ExecuteAddProposal.cash', import.meta.url));
-const ExecuteRemoveProposal = compileFile(new URL('../DAO/executions/ExecuteRemoveProposal.cash', import.meta.url));
-const ExecuteReplaceProposal = compileFile(new URL('../DAO/executions/ExecuteReplaceProposal.cash', import.meta.url));
+const AddThreads = compileFile(new URL('../DAO/executions/AddThreads.cash', import.meta.url));
+const RemoveThreads = compileFile(new URL('../DAO/executions/RemoveThreads.cash', import.meta.url));
+const ReplaceThreads = compileFile(new URL('../DAO/executions/ReplaceThreads.cash', import.meta.url));
 const FailProposal = compileFile(new URL('../DAO/executions/FailProposal.cash', import.meta.url));
 const ProposalToAdd = compileFile(new URL('../DAO/submissions/ProposalToAdd.cash', import.meta.url));
 const ProposalToRemove = compileFile(new URL('../DAO/submissions/ProposalToRemove.cash', import.meta.url));
@@ -60,17 +60,17 @@ const projectCategory = reverseDaoTokenCategory;
 export const UpgradableContractLockingBytecode = cashAddressToLockingBytecode(UpgradableContract.address)
 const projectLockingBytecode = UpgradableContractLockingBytecode.bytecode;
 
-export const ExecuteAddProposalContract = new Contract(ExecuteAddProposal, [voteThreshold, voteWindow, projectCategory, projectLockingBytecode], options);
-export const ExecuteAddProposalContractLockingBytecode = binToHex(cashAddressToLockingBytecode(ExecuteAddProposalContract.address).bytecode);
-provider.addUtxo(ExecuteAddProposalContract.address, randomUtxo());
+export const AddThreadsContract = new Contract(AddThreads, [voteThreshold, voteWindow, projectCategory, projectLockingBytecode], options);
+export const AddThreadsContractLockingBytecode = binToHex(cashAddressToLockingBytecode(AddThreadsContract.address).bytecode);
+provider.addUtxo(AddThreadsContract.address, randomUtxo());
 
-export const ExecuteRemoveProposalContract = new Contract(ExecuteRemoveProposal, [voteThreshold, voteWindow, projectCategory, projectLockingBytecode], options);
-export const ExecuteRemoveProposalContractLockingBytecode = binToHex(cashAddressToLockingBytecode(ExecuteRemoveProposalContract.address).bytecode);
-provider.addUtxo(ExecuteRemoveProposalContract.address, randomUtxo());
+export const RemoveThreadsContract = new Contract(RemoveThreads, [voteThreshold, voteWindow, projectCategory, projectLockingBytecode], options);
+export const RemoveThreadsContractLockingBytecode = binToHex(cashAddressToLockingBytecode(RemoveThreadsContract.address).bytecode);
+provider.addUtxo(RemoveThreadsContract.address, randomUtxo());
 
-export const ExecuteReplaceProposalContract = new Contract(ExecuteReplaceProposal, [voteThreshold, voteWindow, projectCategory, projectLockingBytecode], options);
-export const ExecuteReplaceProposalContractLockingBytecode = binToHex(cashAddressToLockingBytecode(ExecuteReplaceProposalContract.address).bytecode);
-provider.addUtxo(ExecuteReplaceProposalContract.address, randomUtxo());
+export const ReplaceThreadsContract = new Contract(ReplaceThreads, [voteThreshold, voteWindow, projectCategory, projectLockingBytecode], options);
+export const ReplaceThreadsContractLockingBytecode = binToHex(cashAddressToLockingBytecode(ReplaceThreadsContract.address).bytecode);
+provider.addUtxo(ReplaceThreadsContract.address, randomUtxo());
 
 export const FailProposalContract = new Contract(FailProposal, [voteThreshold, voteWindow], options);
 export const FailProposalContractLockingBytecode = binToHex(cashAddressToLockingBytecode(FailProposalContract.address).bytecode);
@@ -96,7 +96,7 @@ let authorizedThreadNFTUtxo = {
     ...randomNFT({
       category: daoCategory,
       nft: {
-        commitment: ExecuteAddProposalContractLockingBytecode,
+        commitment: AddThreadsContractLockingBytecode,
         capability: 'none'
       }
     })
@@ -112,7 +112,7 @@ authorizedThreadNFTUtxo = {
     ...randomNFT({
       category: daoCategory,
       nft: {
-        commitment: ExecuteRemoveProposalContractLockingBytecode,
+        commitment: RemoveThreadsContractLockingBytecode,
         capability: 'none'
       }
     })
@@ -128,7 +128,7 @@ authorizedThreadNFTUtxo = {
     ...randomNFT({
       category: daoCategory,
       nft: {
-        commitment: ExecuteReplaceProposalContractLockingBytecode,
+        commitment: ReplaceThreadsContractLockingBytecode,
         capability: 'none'
       }
     })

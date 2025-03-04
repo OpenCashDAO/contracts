@@ -4,7 +4,7 @@
  * @param projectCategory - The category of the project for which the proposal is being applied. [reversed]
  * @param projectScriptHash - The script hash of the project for which the proposal is being applied.
  */
-contract ExecuteReplaceProposal(
+contract RemoveThreads(
   int voteThreshold,
   int voteWindow,
   bytes projectCategory,
@@ -53,7 +53,7 @@ contract ExecuteReplaceProposal(
    *   - category: projectCategory
    * - Output5: commitmentDeposit back to the creator
    */
-  function toAdd() {
+  function call() {
     require(tx.inputs.length == 5);
     require(tx.outputs.length <= 6);
 

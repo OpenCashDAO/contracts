@@ -10,17 +10,17 @@
     "compile:proposalToAdd": "cashc ./DAO/submissions/ProposalToAdd.cash -o ./artifacts/ProposalToAdd.json",
     "compile:proposalToRemove": "cashc ./DAO/submissions/ProposalToRemove.cash -o ./artifacts/ProposalToRemove.json",
     "compile:proposalToReplace": "cashc ./DAO/submissions/ProposalToReplace.cash -o ./artifacts/ProposalToReplace.json",
-    "compile:executeAddProposal": "cashc ./DAO/executions/ExecuteAddProposal.cash -o ./artifacts/ExecuteAddProposal.json",
-    "compile:executeRemoveProposal": "cashc ./DAO/executions/ExecuteRemoveProposal.cash -o ./artifacts/ExecuteRemoveProposal.json",
-    "compile:executeReplaceProposal": "cashc ./DAO/executions/ExecuteReplaceProposal.cash -o ./artifacts/ExecuteReplaceProposal.json",
+    "compile:addThreads": "cashc ./DAO/executions/AddThreads.cash -o ./artifacts/AddThreads.json",
+    "compile:removeThreads": "cashc ./DAO/executions/RemoveThreads.cash -o ./artifacts/RemoveThreads.json",
+    "compile:replaceThreads": "cashc ./DAO/executions/ReplaceThreads.cash -o ./artifacts/ReplaceThreads.json",
     "compile:upgradable": "cashc ./Upgradable/Upgradable.cash -o ./artifacts/Upgradable.json",
-    "compile": "npm run compile:dao && npm run compile:proposalToAdd && npm run compile:proposalToRemove && npm run compile:proposalToReplace && npm run compile:executeAddProposal && npm run compile:executeRemoveProposal && npm run compile:executeReplaceProposal && npm run compile:upgradable",
+    "compile": "npm run compile:dao && npm run compile:proposalToAdd && npm run compile:proposalToRemove && npm run compile:proposalToReplace && npm run compile:addThreads && npm run compile:removeThreads && npm run compile:replaceThreads && npm run compile:upgradable",
     "build": "npm run compile && node index.js"
   },
   "dependencies": {
     "@bitauth/libauth": "^3.1.0-next.4",
-    "cashc": "^0.11.0-next.1",
-    "cashscript": "^0.11.0-next.1",
+    "cashc": "^0.11.0-next.2",
+    "cashscript": "^0.11.0-next.2",
     "dotenv": "^16.4.7"
   }
 }
