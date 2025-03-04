@@ -8,8 +8,8 @@ import { main as failProposal } from './mocknet/transactions/fail-proposal.js';
 
 const main = async () => {
   // await proposalToAdd();
-  await proposalToRemove();
-  // await proposalToReplace();
+  // await proposalToRemove();
+  await proposalToReplace();
 
   // await addThreads();
   // await removeThreads();
