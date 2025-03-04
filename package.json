@@ -6,15 +6,18 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run compile && node index.js",
-    "compile:dao": "cashc ./DAO/Controller.cash -o ./artifacts/Controller.json",
+    "compile:controller": "cashc ./DAO/Controller.cash -o ./artifacts/Controller.json",
     "compile:proposalToAdd": "cashc ./DAO/proposals/Add.cash -o ./artifacts/proposals/Add.json",
     "compile:proposalToRemove": "cashc ./DAO/proposals/Remove.cash -o ./artifacts/proposals/Remove.json",
     "compile:proposalToReplace": "cashc ./DAO/proposals/Replace.cash -o ./artifacts/proposals/Replace.json",
     "compile:addThreads": "cashc ./DAO/executions/AddThreads.cash -o ./artifacts/executions/AddThreads.json",
     "compile:removeThreads": "cashc ./DAO/executions/RemoveThreads.cash -o ./artifacts/executions/RemoveThreads.json",
     "compile:replaceThreads": "cashc ./DAO/executions/ReplaceThreads.cash -o ./artifacts/executions/ReplaceThreads.json",
+    "compile:failProposal": "cashc ./DAO/executions/FailProposal.cash -o ./artifacts/executions/FailProposal.json",
+    "compile:vote": "cashc ./DAO/voting/Vote.cash -o ./artifacts/voting/Vote.json",
+    "compile:retractVote": "cashc ./DAO/voting/RetractVote.cash -o ./artifacts/voting/RetractVote.json",
     "compile:upgradable": "cashc ./Upgradable/Upgradable.cash -o ./artifacts/Upgradable.json",
-    "compile": "npm run compile:dao && npm run compile:proposalToAdd && npm run compile:proposalToRemove && npm run compile:proposalToReplace && npm run compile:addThreads && npm run compile:removeThreads && npm run compile:replaceThreads && npm run compile:upgradable",
+    "compile": "npm run compile:controller && npm run compile:proposalToAdd && npm run compile:proposalToRemove && npm run compile:proposalToReplace && npm run compile:addThreads && npm run compile:removeThreads && npm run compile:replaceThreads && npm run compile:failProposal && npm run compile:vote && npm run compile:retractVote && npm run compile:upgradable",
     "build": "npm run compile && node index.js"
   },
   "dependencies": {

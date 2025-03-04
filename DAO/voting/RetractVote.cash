@@ -46,7 +46,7 @@ contract RetractVote() {
     require(voteProposalCategory == daoInputCategory);
     require(voteProposalCapability == 0x01); // Mutable
 
-    require(tx.outputs[3].tokenAmount == tx.inputs[3].tokenAmount + voteAmount);
+    require(tx.outputs[3].tokenAmount == tx.inputs[3].tokenAmount);
 
     // The nftCommitment of the funding UTXO should be 40 bytes for AddProposal, 6 bytes for RemoveProposal and 36 bytes for ReplaceProposal
     int voteProposalLength = tx.inputs[3].nftCommitment.length;
@@ -58,8 +58,7 @@ contract RetractVote() {
     require(tx.inputs[4].tokenCategory == daoInputCategory);
     require(tx.outputs[5].tokenCategory == daoInputCategory);
 
-    require(tx.inputs[4].value >= voteAmount);
-    require(tx.outputs[5].value == tx.inputs[4].value - voteAmount);
+    require(tx.outputs[5].value == tx.inputs[4].value);
     require(tx.outputs[5].nftCommitment == 0x);
   }
 }

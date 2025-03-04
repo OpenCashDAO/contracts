@@ -27,7 +27,8 @@ const FailProposal = compileFile(new URL('../DAO/executions/FailProposal.cash', 
 const ProposalToAdd = compileFile(new URL('../DAO/proposals/Add.cash', import.meta.url));
 const ProposalToRemove = compileFile(new URL('../DAO/proposals/Remove.cash', import.meta.url));
 const ProposalToReplace = compileFile(new URL('../DAO/proposals/Replace.cash', import.meta.url));
-
+const Vote = compileFile(new URL('../DAO/voting/Vote.cash', import.meta.url));
+const RetractVote = compileFile(new URL('../DAO/voting/RetractVote.cash', import.meta.url));
 
 export const provider = new MockNetworkProvider();
 export const addressType = 'p2sh32';
@@ -88,6 +89,13 @@ export const ProposalToReplaceContract = new Contract(ProposalToReplace, [commit
 export const ProposalToReplaceContractLockingBytecode = binToHex(cashAddressToLockingBytecode(ProposalToReplaceContract.address).bytecode);
 provider.addUtxo(ProposalToReplaceContract.address, randomUtxo());
 
+export const VoteContract = new Contract(Vote, [], options);
+export const VoteContractLockingBytecode = binToHex(cashAddressToLockingBytecode(VoteContract.address).bytecode);
+provider.addUtxo(VoteContract.address, randomUtxo());
+
+export const RetractVoteContract = new Contract(RetractVote, [], options);
+export const RetractVoteContractLockingBytecode = binToHex(cashAddressToLockingBytecode(RetractVoteContract.address).bytecode);
+provider.addUtxo(RetractVoteContract.address, randomUtxo());
 
 // Create authorizedThreadNFT
 
@@ -203,3 +211,34 @@ authorizedThreadNFTUtxo = {
 // Add threads
 provider.addUtxo(DAOControllerContract.address, authorizedThreadNFTUtxo);
 
+authorizedThreadNFTUtxo = {
+  token: {
+    ...randomNFT({
+      category: daoCategory,
+      nft: {
+        commitment: VoteContractLockingBytecode,
+        capability: 'none'
+      }
+    })
+  },
+  ...randomUtxo()
+};
+
+// Add threads
+provider.addUtxo(DAOControllerContract.address, authorizedThreadNFTUtxo);
+
+authorizedThreadNFTUtxo = {
+  token: {
+    ...randomNFT({
+      category: daoCategory,
+      nft: {
+        commitment: RetractVoteContractLockingBytecode,
+        capability: 'none'
+      }
+    })
+  },
+  ...randomUtxo()
+};
+
+// Add threads
+provider.addUtxo(DAOControllerContract.address, authorizedThreadNFTUtxo);

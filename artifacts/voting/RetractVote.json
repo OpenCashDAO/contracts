@@ -1,0 +1,100 @@
+{
+  "contractName": "RetractVote",
+  "constructorInputs": [],
+  "abi": [
+    {
+      "name": "call",
+      "inputs": []
+    }
+  ],
+  "bytecode": "OP_TXINPUTCOUNT OP_5 OP_NUMEQUALVERIFY OP_TXOUTPUTCOUNT OP_5 OP_LESSTHANOREQUAL OP_VERIFY OP_INPUTINDEX OP_1 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_UTXOBYTECODE OP_INPUTINDEX OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_0 OP_UTXOBYTECODE OP_2 OP_UTXOBYTECODE OP_OVER OP_EQUALVERIFY OP_3 OP_UTXOBYTECODE OP_OVER OP_EQUALVERIFY OP_2 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_3 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_2 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_2 OP_EQUALVERIFY OP_3 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_1 OP_EQUALVERIFY OP_3 OP_OUTPUTTOKENAMOUNT OP_3 OP_UTXOTOKENAMOUNT OP_NUMEQUALVERIFY OP_3 OP_UTXOTOKENCOMMITMENT OP_SIZE OP_NIP OP_DUP 28 OP_NUMEQUAL OP_OVER OP_6 OP_NUMEQUAL OP_BOOLOR OP_SWAP 24 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_4 OP_OUTPUTTOKENCOMMITMENT OP_3 OP_UTXOTOKENCOMMITMENT OP_4 OP_SPLIT OP_DROP OP_EQUALVERIFY OP_4 OP_UTXOTOKENCATEGORY OP_OVER OP_EQUALVERIFY OP_5 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_5 OP_OUTPUTVALUE OP_4 OP_UTXOVALUE OP_NUMEQUALVERIFY OP_5 OP_OUTPUTTOKENCOMMITMENT OP_0 OP_EQUAL",
+  "source": "pragma cashscript ^0.11.0;\n\ncontract RetractVote() {\n  /**\n   * @inputs\n   * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract\n   * - Input1: Any input from this contract.\n   * - Input2: VoteProposalNFT (with tokenAmount)\n   * - Input3: RecieptNFT used to cast vote\n   * - Input4: Funding UTXO\n   * \n   * @outputs\n   * - Output0: DAO Contract's authorizedThreadNFT back to self\n   * - Output1: Input1 back to this contract without any change.\n   * - Output2: VoteProposalNFT back to DAO (minus the tokenAmount in the recieptNFT)\n   * - Output3: tokenAmount to the recieptNFT provider\n   * - Output4: Change pure BCH\n   */\n  function call() {\n    require(tx.inputs.length == 5);\n    require(tx.outputs.length <= 5);\n\n    // This contract can only be used at input1 and it should return the input1 back to itself.\n    require(this.activeInputIndex == 1);\n    require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);\n  \n    // This contract can only be used with the 'lockingbytecode' used in the 0th input.\n    // Note: This contract can be used with any contract that fulfills these conditions, and that is fine\n    // because those contracts will not be manipulating the utxos of the Registry contract. Instead, they will\n    // be manipulating their own utxos.\n    bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;\n    require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.inputs[3].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[3].lockingBytecode == daoInputLockingBytecode);\n\n    bytes daoInputCategory = tx.inputs[0].tokenCategory;\n\n    // daoMintingNFT should be minting and of the 'daoInputCategory'\n    bytes daoMintingCategory, bytes daoMintingCapability = tx.outputs[2].tokenCategory.split(32);\n    require(daoMintingCategory == daoInputCategory);\n    require(daoMintingCapability == 0x02); // Minting\n\n    // VoteProposalNFT should be mutable\n    bytes voteProposalCategory, bytes voteProposalCapability = tx.outputs[3].tokenCategory.split(32);\n    require(voteProposalCategory == daoInputCategory);\n    require(voteProposalCapability == 0x01); // Mutable\n\n    require(tx.outputs[3].tokenAmount == tx.inputs[3].tokenAmount);\n\n    // The nftCommitment of the funding UTXO should be 40 bytes for AddProposal, 6 bytes for RemoveProposal and 36 bytes for ReplaceProposal\n    int voteProposalLength = tx.inputs[3].nftCommitment.length;\n    require(voteProposalLength == 40 || voteProposalLength == 6 || voteProposalLength == 36);\n\n    // Split the nftCommitment of the proposalNFT and take the first 4 bytes as the proposalId\n    require(tx.outputs[4].nftCommitment == tx.inputs[3].nftCommitment.split(4)[0]);\n\n    require(tx.inputs[4].tokenCategory == daoInputCategory);\n    require(tx.outputs[5].tokenCategory == daoInputCategory);\n\n    require(tx.outputs[5].value == tx.inputs[4].value);\n    require(tx.outputs[5].nftCommitment == 0x);\n  }\n}",
+  "debug": {
+    "bytecode": "c3559c69c455a169c0519c69c0c7c0cd876900c752c75179876953c75179876952cd5179876953cd517a876900ce52d101207f517a52798769007a52876953d101207f517a52798769007a51876953d353d09c6953cf8277007901289c5179569c9b517a01249c9b6954d253cf547f75876954ce5179876955d1517a876955cc54c69c6955d20087",
+    "sourceMap": "20:12:20:28;:32::33;:12:::1;:4::35;21:12:21:29:0;:33::34;:12:::1;:4::36;24:12:24:33:0;:37::38;:12:::1;:4::40;25:22:25:43:0;:12::60:1;:75::96:0;:64::113:1;:12;:4::115;31:46:31:47:0;:36::64:1;32:22:32:23:0;:12::40:1;:44::67:0;;:12:::1;:4::69;33:22:33:23:0;:12::40:1;:44::67:0;;:12:::1;:4::69;34:23:34:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;35:23:35:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;37:39:37:40:0;:29::55:1;40:70:40:71:0;:59::86:1;:93::95:0;:59::96:1;41:12:41:30:0;;:34::50;;:12:::1;:4::52;42:12:42:32:0;;:36::40;:12:::1;:4::42;45:74:45:75:0;:63::90:1;:97::99:0;:63::100:1;46:12:46:32:0;;:36::52;;:12:::1;:4::54;47:12:47:34:0;;:38::42;:12:::1;:4::44;49:23:49:24:0;:12::37:1;:51::52:0;:41::65:1;:12;:4::67;52:39:52:40:0;:29::55:1;:::62;;53:12:53:30:0;;:34::36;:12:::1;:40::58:0;;:62::63;:40:::1;:12;:67::85:0;;:89::91;:67:::1;:12;:4::93;56:23:56:24:0;:12::39:1;:53::54:0;:43::69:1;:76::77:0;:43::78:1;:::81;:12;:4::83;58:22:58:23:0;:12::38:1;:42::58:0;;:12:::1;:4::60;59:23:59:24:0;:12::39:1;:43::59:0;;:12:::1;:4::61;61:23:61:24:0;:12::31:1;:45::46:0;:35::53:1;:12;:4::55;62:23:62:24:0;:12::39:1;:43::45:0;:12:::1",
+    "logs": [],
+    "requires": [
+      {
+        "ip": 3,
+        "line": 20
+      },
+      {
+        "ip": 7,
+        "line": 21
+      },
+      {
+        "ip": 11,
+        "line": 24
+      },
+      {
+        "ip": 17,
+        "line": 25
+      },
+      {
+        "ip": 25,
+        "line": 32
+      },
+      {
+        "ip": 31,
+        "line": 33
+      },
+      {
+        "ip": 37,
+        "line": 34
+      },
+      {
+        "ip": 43,
+        "line": 35
+      },
+      {
+        "ip": 55,
+        "line": 41
+      },
+      {
+        "ip": 60,
+        "line": 42
+      },
+      {
+        "ip": 70,
+        "line": 46
+      },
+      {
+        "ip": 75,
+        "line": 47
+      },
+      {
+        "ip": 81,
+        "line": 49
+      },
+      {
+        "ip": 100,
+        "line": 53
+      },
+      {
+        "ip": 109,
+        "line": 56
+      },
+      {
+        "ip": 115,
+        "line": 58
+      },
+      {
+        "ip": 121,
+        "line": 59
+      },
+      {
+        "ip": 127,
+        "line": 61
+      },
+      {
+        "ip": 132,
+        "line": 62
+      }
+    ]
+  },
+  "compiler": {
+    "name": "cashc",
+    "version": "0.11.0-next.2"
+  },
+  "updatedAt": "2025-03-04T15:05:29.387Z"
+}
