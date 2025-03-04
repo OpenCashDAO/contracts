@@ -5,9 +5,9 @@ contract RetractVote() {
    * @inputs
    * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
    * - Input1: Any input from this contract.
-   * - Input2: VoteProposalNFT (with tokenAmount)
+   * - Input2: VoteProposalNFT from DAO
    * - Input3: RecieptNFT used to cast vote
-   * - Input4: Funding UTXO
+   * - Input4: Funding UTXO               
    * 
    * @outputs
    * - Output0: DAO Contract's authorizedThreadNFT back to self
@@ -30,35 +30,29 @@ contract RetractVote() {
     // be manipulating their own utxos.
     bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;
     require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);
-    require(tx.inputs[3].lockingBytecode == daoInputLockingBytecode);
     require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);
-    require(tx.outputs[3].lockingBytecode == daoInputLockingBytecode);
 
     bytes daoInputCategory = tx.inputs[0].tokenCategory;
-
-    // daoMintingNFT should be minting and of the 'daoInputCategory'
-    bytes daoMintingCategory, bytes daoMintingCapability = tx.outputs[2].tokenCategory.split(32);
-    require(daoMintingCategory == daoInputCategory);
-    require(daoMintingCapability == 0x02); // Minting
+    require(tx.inputs[3].tokenCategory == daoInputCategory);
+    require(tx.outputs[3].tokenCategory == daoInputCategory);
 
     // VoteProposalNFT should be mutable
-    bytes voteProposalCategory, bytes voteProposalCapability = tx.outputs[3].tokenCategory.split(32);
+    bytes voteProposalCategory, bytes voteProposalCapability = tx.outputs[2].tokenCategory.split(32);
     require(voteProposalCategory == daoInputCategory);
-    require(voteProposalCapability == 0x01); // Mutable
+    require(voteProposalCapability == 0x01 || voteProposalCapability == 0x); // Mutable or immutable
 
-    require(tx.outputs[3].tokenAmount == tx.inputs[3].tokenAmount);
+    bytes proposalId, bytes voteAmountBytes = tx.inputs[3].nftCommitment.split(4);
+    require(tx.inputs[3].nftCommitment.length == 12);
 
-    // The nftCommitment of the funding UTXO should be 40 bytes for AddProposal, 6 bytes for RemoveProposal and 36 bytes for ReplaceProposal
-    int voteProposalLength = tx.inputs[3].nftCommitment.length;
-    require(voteProposalLength == 40 || voteProposalLength == 6 || voteProposalLength == 36);
+    int voteAmount = int(voteAmountBytes);
 
-    // Split the nftCommitment of the proposalNFT and take the first 4 bytes as the proposalId
-    require(tx.outputs[4].nftCommitment == tx.inputs[3].nftCommitment.split(4)[0]);
+    require(tx.outputs[3].tokenAmount == tx.inputs[3].tokenAmount - voteAmount);
+    require(tx.outputs[2].tokenAmount == tx.inputs[2].tokenAmount + voteAmount);
 
-    require(tx.inputs[4].tokenCategory == daoInputCategory);
-    require(tx.outputs[5].tokenCategory == daoInputCategory);
+    // Compare projectID i.e the first 4 bytes of the nftCommitment
+    require(proposalId == tx.inputs[2].nftCommitment.split(4)[0]);
 
-    require(tx.outputs[5].value == tx.inputs[4].value);
-    require(tx.outputs[5].nftCommitment == 0x);
+    require(tx.outputs[4].value == tx.inputs[3].value);
+    require(tx.outputs[4].nftCommitment == 0x);
   }
 }

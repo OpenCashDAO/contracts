@@ -2,6 +2,7 @@ import { main as proposalToAdd } from './mocknet/transactions/proposal-to-add.js
 import { main as proposalToRemove } from './mocknet/transactions/proposal-to-remove.js';
 import { main as proposalToReplace } from './mocknet/transactions/proposal-to-replace.js';
 import { main as vote } from './mocknet/transactions/vote.js';
+import { main as retractVote } from './mocknet/transactions/retract-vote.js';
 
 import { main as addThreads } from './mocknet/transactions/add-threads.js';
 import { main as removeThreads } from './mocknet/transactions/remove-threads.js';
@@ -12,7 +13,8 @@ const main = async () => {
   // await proposalToAdd();
   // await proposalToRemove();
   // await proposalToReplace();
-  await vote();
+  // await vote();
+  await retractVote();
   // await addThreads();
   // await removeThreads();
   // await replaceThreads();

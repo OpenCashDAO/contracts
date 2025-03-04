@@ -7,6 +7,17 @@ import {
   binToHex
 } from '@bitauth/libauth';
 import { numberToBinUint16BE } from '@bitauth/libauth';
+import { commitmentLengthForProposalType, daoCategory } from './setup.js';
+
+export const getProposalUtxo = ({ contractUtxos, proposalType }) => {
+  const proposalUtxo = contractUtxos.find(utxo => 
+    utxo.token?.category === daoCategory &&
+    utxo.token?.nft?.capability === 'mutable' &&
+    utxo.token?.nft?.commitment.length === commitmentLengthForProposalType[proposalType]
+  );
+  if (!proposalUtxo) { throw new Error('Proposal utxo not found'); }
+  return proposalUtxo
+}
 
 export function intToBytesToHex({value, length}) {
   const bin = numberToBinUint16BE(value);

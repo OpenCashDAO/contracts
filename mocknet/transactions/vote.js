@@ -6,21 +6,10 @@ import {
   daoCategory,
   aliceAddress,
   aliceTemplate,
-  commitmentLengthForProposalType,
   aliceTokenAddress
 } from '../setup.js';
-import { intToBytesToHex } from '../utils.js';
+import { intToBytesToHex, getProposalUtxo } from '../utils.js';
 
-
-const getProposalUtxo = ({ contractUtxos, proposalType }) => {
-  const proposalUtxo = contractUtxos.find(utxo => 
-    utxo.token?.category === daoCategory &&
-    utxo.token?.nft?.capability === 'mutable' &&
-    utxo.token?.nft?.commitment.length === commitmentLengthForProposalType[proposalType]
-  );
-  if (!proposalUtxo) { throw new Error('Proposal utxo not found'); }
-  return proposalUtxo
-}
 
 export const main = async () => {
   const contractUtxos = await provider.getUtxos(DAOControllerContract.address);
