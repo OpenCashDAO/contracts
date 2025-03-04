@@ -11,7 +11,7 @@ import {
   binToHex,
   cashAddressToLockingBytecode
 } from '@bitauth/libauth';
-import { intToBytesToHex } from './utils.js';
+import { intToBytesToHex, hexToInt } from './utils.js';
 import { alicePriv, aliceAddress, aliceTokenAddress, alicePkh, alicePub } from './common.js';
 export { alicePriv, aliceAddress, aliceTokenAddress, alicePkh, alicePub };
 
@@ -36,7 +36,8 @@ const ProposalToRemove = compileFile(new URL('../DAO/proposals/Remove.cash', imp
 const ProposalToReplace = compileFile(new URL('../DAO/proposals/Replace.cash', import.meta.url));
 const Vote = compileFile(new URL('../DAO/voting/Vote.cash', import.meta.url));
 const RetractVote = compileFile(new URL('../DAO/voting/RetractVote.cash', import.meta.url));
-const Dummy = compileFile(new URL('../DAO/Dummy.cash', import.meta.url));
+const ContractA = compileFile(new URL('../Upgradable/ContractA.cash', import.meta.url));
+const ContractNew = compileFile(new URL('../Upgradable/ContractNew.cash', import.meta.url));
 
 export const minVoteThreshold = BigInt(1);
 export const minWait = BigInt(10);
@@ -55,10 +56,10 @@ provider.addUtxo(aliceAddress, randomUtxo());
 export const DAOControllerNFT = randomNFT({nft: {commitment: intToBytesToHex({value: 0, length: 4}), capability: 'minting'}});
 export const UpgradableProjectNFT = randomNFT({nft: {commitment: undefined, capability: 'minting'}});
 
-
 export const daoCategory = DAOControllerNFT.category
 export const reverseDaoTokenCategory = binToHex(hexToBin(daoCategory).reverse())
-export const reverseUpgradableProjectCategory = binToHex(hexToBin(UpgradableProjectNFT.category).reverse())
+export const upgradableProjectCategory = UpgradableProjectNFT.category
+export const reverseUpgradableProjectCategory = binToHex(hexToBin(upgradableProjectCategory).reverse())
 
 // Export all the contracts
 
@@ -104,20 +105,15 @@ export const RetractVoteContract = new Contract(RetractVote, [], options);
 export const retractVoteContractLockingBytecode = binToHex(cashAddressToLockingBytecode(RetractVoteContract.address).bytecode);
 provider.addUtxo(RetractVoteContract.address, randomUtxo());
 
-export const DummyContract = new Contract(Dummy, [], options);
-export const dummyContractLockingBytecode = binToHex(cashAddressToLockingBytecode(DummyContract.address).bytecode);
+export const ContractAContract = new Contract(ContractA, [], options);
+export const contractALockingBytecode = binToHex(cashAddressToLockingBytecode(ContractAContract.address).bytecode);
 
+export const ContractNewContract = new Contract(ContractNew, [], options);
+export const contractNewLockingBytecode = binToHex(cashAddressToLockingBytecode(ContractNewContract.address).bytecode);
 
-const m =  {
-  token: {
-    ...DAOControllerNFT,
-  },
-  ...randomUtxo()
-}
-
-console.log(m);
 
 // Minting NFTs to the DAO controller
+
 provider.addUtxo(DAOControllerContract.address, {
   token: {
     ...DAOControllerNFT,
@@ -126,14 +122,35 @@ provider.addUtxo(DAOControllerContract.address, {
 });
 
 provider.addUtxo(DAOControllerContract.address, {
-  ...UpgradableProjectNFT,
+  token: {
+    ...UpgradableProjectNFT,
+  },
   ...randomUtxo()
 });
 
+// Create authorizedThreadNFT for the Upgradable Project
 
-// Create authorizedThreadNFT
-
+const proposalId = intToBytesToHex({value: hexToInt(DAOControllerNFT.nft.commitment) + 1, length: 4});
+const threadCount = intToBytesToHex({value: 1, length: 2});
 let authorizedThreadNFTUtxo = {
+  token: {
+    ...randomNFT({
+      category: upgradableProjectCategory,
+      nft: {
+        commitment: proposalId + threadCount + contractALockingBytecode.slice(4, -2),
+        capability: 'none'
+      }
+    })
+  },
+  ...randomUtxo()
+};
+
+// Add threads
+provider.addUtxo(UpgradableProjectContract.address, authorizedThreadNFTUtxo);
+
+// Create authorizedThreadNFT for the DAO
+
+authorizedThreadNFTUtxo = {
   token: {
     ...randomNFT({
       category: daoCategory,

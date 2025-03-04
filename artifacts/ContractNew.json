@@ -1,5 +1,5 @@
 {
-  "contractName": "Dummy",
+  "contractName": "ContractNew",
   "constructorInputs": [],
   "abi": [
     {
@@ -8,7 +8,7 @@
     }
   ],
   "bytecode": "OP_2 OP_2 OP_NUMEQUAL",
-  "source": "pragma cashscript ^0.11.0;\n\ncontract Dummy() {\n  function call() {\n    require(2==2);\n  }\n}",
+  "source": "pragma cashscript ^0.11.0;\n\ncontract ContractNew() {\n  function call() {\n    require(2==2);\n  }\n}",
   "debug": {
     "bytecode": "52529c",
     "sourceMap": "5:12:5:13;:15::16;:12:::1",
@@ -24,5 +24,5 @@
     "name": "cashc",
     "version": "0.11.0-next.2"
   },
-  "updatedAt": "2025-03-04T18:00:31.668Z"
+  "updatedAt": "2025-03-04T18:32:22.236Z"
 }

@@ -6,7 +6,7 @@ import {
   provider,
   daoCategory,
   proposalToAddContractLockingBytecode,
-  dummyContractLockingBytecode,
+  contractNewLockingBytecode,
   aliceAddress,
   aliceTemplate,
   aliceAddressLockingBytecode,
@@ -23,29 +23,26 @@ export const main = async () => {
   );
   if(!authorizedThreadUtxo) { throw new Error('Authorized thread utxo not found'); }
   
+  const proposalToAddUtxos = await provider.getUtxos(ProposalToAddContract.address);
+  const proposalToAddUtxo = proposalToAddUtxos[0];
+  if(!proposalToAddUtxo) { throw new Error('Proposal to add utxo not found'); }
+
   const daoMintingUtxo = contractUtxos.find(utxo => 
     utxo.token?.category === daoCategory &&
     utxo.token?.nft?.capability === 'minting'
   );
   if(!daoMintingUtxo) { throw new Error('DAO minting utxo not found'); }
 
-  const proposalToAddUtxos = await provider.getUtxos(ProposalToAddContract.address);
-  const proposalToAddUtxo = proposalToAddUtxos[0];
-  if(!proposalToAddUtxo) { throw new Error('Proposal to add utxo not found'); }
-
   const aliceUtxos = await provider.getUtxos(aliceAddress);
   const aliceUtxo = aliceUtxos.find(utxo => utxo.satoshis > minCommitmentDeposit + 2000n);
   if(!aliceUtxo) { throw new Error('Alice utxo not found'); }
 
   // Variables
-  const dummyLockingBytecode = dummyContractLockingBytecode;
-  const proposalScriptHash = hexToBin(dummyLockingBytecode.slice(4, -2));
+  const proposalScriptHash = hexToBin(contractNewLockingBytecode.slice(4, -2));
   const threadCount = intToBytesToHex({value: 2, length: 2});
 
   const proposalId = intToBytesToHex({value: hexToInt(daoMintingUtxo.token.nft.commitment) + 1, length: 4});
   const proposalCommitment = proposalId + threadCount + threadCount + binToHex(proposalScriptHash);
-  console.log(proposalCommitment);
-  console.log('alice bytecode', binToHex(aliceAddressLockingBytecode));
 
   const tx = await new TransactionBuilder({ provider })
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())
@@ -102,6 +99,10 @@ export const main = async () => {
       },
     })
     .addOpReturnOutput([])
+    .addOutput({
+      to: aliceAddress,
+      amount: aliceUtxo.satoshis - BigInt(minCommitmentDeposit) - BigInt(2000n),
+    })
     .send();
 
   console.log(tx);

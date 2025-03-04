@@ -12,7 +12,7 @@
   ],
   "abi": [
     {
-      "name": "RemoveOrReplaceAuthorizedThread",
+      "name": "useAuthorizedThread",
       "inputs": []
     },
     {
@@ -20,48 +20,56 @@
       "inputs": []
     }
   ],
-  "bytecode": "OP_2 OP_PICK OP_0 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_1ADD OP_UTXOBYTECODE OP_ROT OP_EQUAL OP_NIP OP_NIP OP_ELSE OP_ROT OP_1 OP_NUMEQUALVERIFY OP_TXVERSION OP_2 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_UTXOBYTECODE OP_0 OP_UTXOBYTECODE OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_NUMEQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_0 OP_UTXOTOKENCOMMITMENT OP_EQUALVERIFY OP_1 OP_UTXOTOKENCOMMITMENT OP_6 OP_SPLIT OP_NIP OP_1 OP_UTXOBYTECODE aa20 OP_ROT OP_CAT 87 OP_CAT OP_EQUAL OP_NIP OP_ENDIF",
-  "source": "pragma cashscript ^0.11.0;\n\ncontract Upgradable(bytes baseCategory, bytes daoLockingBytecode) {\n  function RemoveOrReplaceAuthorizedThread(){\n    require(tx.inputs[this.activeInputIndex +1].lockingBytecode == daoLockingBytecode);\n    // Allow a thread to be used by the DAO to create a proposal.\n  }\n\n  /**\n   * @inputs\n   * - Input0: AuthorizedThreadNFT from self\n   * - Input1: Any UTXO from Authorized contract\n   * \n   * @outputs\n   * - Output0: AuthorizedThreadNFT back to self\n   * - Output1: Output back to Authorized contract to be reused again\n   */\n  function call(){\n    // Added as safeguard.\n    require(tx.version == 2);\n\n    // Registry Contract\n\n    bytes selfLockingBytecode = tx.inputs[this.activeInputIndex].lockingBytecode;\n    // authorizedThreadNFT must stay with the Registry Contract.\n    require(tx.inputs[0].lockingBytecode == selfLockingBytecode);\n    require(tx.outputs[0].lockingBytecode == selfLockingBytecode);\n\n    require(tx.inputs[0].tokenCategory == baseCategory);\n    require(tx.outputs[0].tokenCategory == baseCategory);\n    // Keeping the value same to not influence any satoshi movement in authorized contracts\n    require(tx.outputs[0].value == tx.inputs[0].value);\n    // The commitment that has the lockingbytecode of the authorized contract should never change.\n    require(tx.outputs[0].nftCommitment == tx.inputs[0].nftCommitment);\n    // Not checking the tokenAmount as it changes.\n\n    // Authorized Contract\n\n    // <4 bytes of proposalID><2 bytes of threadCount><32 bytes of scriptHash>\n    bytes32 scriptHash = bytes32(tx.inputs[1].nftCommitment.split(6)[1]);\n    // Expect the NFT commitment that contains the lockingBytecode of the authorized contract.\n    require(tx.inputs[1].lockingBytecode == new LockingBytecodeP2SH32(scriptHash));\n    // With these prerequisites met, we just need to make sure that all the contracts that are deployed are written\n    // and initialized properly, and they expect this structure and handle the inputs and outputs as expected.\n  }\n\n}\n",
+  "bytecode": "OP_2 OP_PICK OP_0 OP_NUMEQUAL OP_IF OP_2DROP OP_DROP OP_1 OP_ELSE OP_ROT OP_1 OP_NUMEQUALVERIFY OP_TXVERSION OP_2 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_UTXOBYTECODE OP_0 OP_UTXOBYTECODE OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_NUMEQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_0 OP_UTXOTOKENCOMMITMENT OP_EQUALVERIFY OP_1 OP_UTXOTOKENCOMMITMENT OP_6 OP_SPLIT OP_NIP OP_1 OP_UTXOBYTECODE aa20 OP_ROT OP_CAT 87 OP_CAT OP_EQUAL OP_NIP OP_ENDIF",
+  "source": "pragma cashscript ^0.11.0;\n\ncontract Upgradable(bytes baseCategory, bytes daoLockingBytecode) {\n  \n  // Allow a thread to be used by the DAO to create a proposal.\n  function useAuthorizedThread(){\n    console.log(daoLockingBytecode);\n    // @todo: Uncomment this, commented out because of cashscript bug\n    // require(tx.inputs[this.activeInputIndex +1].lockingBytecode == daoLockingBytecode);\n  }\n\n  /**\n   * @inputs\n   * - Input0: AuthorizedThreadNFT from self\n   * - Input1: Any UTXO from Authorized contract\n   * \n   * @outputs\n   * - Output0: AuthorizedThreadNFT back to self\n   * - Output1: Output back to Authorized contract to be reused again\n   */\n  function call(){\n    // Added as safeguard.\n    require(tx.version == 2);\n\n    // Registry Contract\n\n    bytes selfLockingBytecode = tx.inputs[this.activeInputIndex].lockingBytecode;\n    // authorizedThreadNFT must stay with the Registry Contract.\n    require(tx.inputs[0].lockingBytecode == selfLockingBytecode);\n    require(tx.outputs[0].lockingBytecode == selfLockingBytecode);\n\n    require(tx.inputs[0].tokenCategory == baseCategory);\n    require(tx.outputs[0].tokenCategory == baseCategory);\n    // Keeping the value same to not influence any satoshi movement in authorized contracts\n    require(tx.outputs[0].value == tx.inputs[0].value);\n    // The commitment that has the lockingbytecode of the authorized contract should never change.\n    require(tx.outputs[0].nftCommitment == tx.inputs[0].nftCommitment);\n    // Not checking the tokenAmount as it changes.\n\n    // Authorized Contract\n\n    // <4 bytes of proposalID><2 bytes of threadCount><32 bytes of scriptHash>\n    bytes32 scriptHash = bytes32(tx.inputs[1].nftCommitment.split(6)[1]);\n    // Expect the NFT commitment that contains the lockingBytecode of the authorized contract.\n    require(tx.inputs[1].lockingBytecode == new LockingBytecodeP2SH32(scriptHash));\n    // With these prerequisites met, we just need to make sure that all the contracts that are deployed are written\n    // and initialized properly, and they expect this structure and handle the inputs and outputs as expected.\n  }\n\n}\n",
   "debug": {
-    "bytecode": "5279009c63c05193c7527a87777767527a519c69c2529c69c0c700c75179876900cd517a876900ce5179876900d1517a876900cc00c69c6900d200cf876951cf567f7751c702aa20527a7e01877e877768",
-    "sourceMap": "4:2:7:3;;;;;5:22:5:43;:45::46;:22:::1;:12::63;:67::85:0;;:12:::1;4:2:7:3;;;18::45::0;;;;;20:12:20:22;:26::27;:12:::1;:4::29;24:42:24:63:0;:32::80:1;26:22:26:23:0;:12::40:1;:44::63:0;;:12:::1;:4::65;27:23:27:24:0;:12::41:1;:45::64:0;;:12:::1;:4::66;29:22:29:23:0;:12::38:1;:42::54:0;;:12:::1;:4::56;30:23:30:24:0;:12::39:1;:43::55:0;;:12:::1;:4::57;32:23:32:24:0;:12::31:1;:45::46:0;:35::53:1;:12;:4::55;34:23:34:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;40:43:40:44:0;:33::59:1;:66::67:0;:33::68:1;:::71;42:22:42:23:0;:12::40:1;:44::81:0;:70::80;;:44::81:1;;;:12;18:2:45:3;3:0:47:1",
-    "logs": [],
+    "bytecode": "5279009c635177777767527a519c69c2529c69c0c700c75179876900cd517a876900ce5179876900d1517a876900cc00c69c6900d200cf876951cf567f7751c702aa20527a7e01877e877768",
+    "sourceMap": "6:2:10:3;;;;::::1;;;;;;21::48::0;;;;;23:12:23:22;:26::27;:12:::1;:4::29;27:42:27:63:0;:32::80:1;29:22:29:23:0;:12::40:1;:44::63:0;;:12:::1;:4::65;30:23:30:24:0;:12::41:1;:45::64:0;;:12:::1;:4::66;32:22:32:23:0;:12::38:1;:42::54:0;;:12:::1;:4::56;33:23:33:24:0;:12::39:1;:43::55:0;;:12:::1;:4::57;35:23:35:24:0;:12::31:1;:45::46:0;:35::53:1;:12;:4::55;37:23:37:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;43:43:43:44:0;:33::59:1;:66::67:0;:33::68:1;:::71;45:22:45:23:0;:12::40:1;:44::81:0;:70::80;;:44::81:1;;;:12;21:2:48:3;3:0:50:1",
+    "logs": [
+      {
+        "ip": 7,
+        "line": 7,
+        "data": [
+          {
+            "stackIndex": 1,
+            "type": "bytes daoLockingBytecode",
+            "ip": 7
+          }
+        ]
+      }
+    ],
     "requires": [
       {
-        "ip": 14,
-        "line": 5
+        "ip": 20,
+        "line": 23
       },
       {
-        "ip": 25,
-        "line": 20
-      },
-      {
-        "ip": 33,
-        "line": 26
-      },
-      {
-        "ip": 39,
-        "line": 27
-      },
-      {
-        "ip": 45,
+        "ip": 28,
         "line": 29
       },
       {
-        "ip": 51,
+        "ip": 34,
         "line": 30
       },
       {
-        "ip": 57,
+        "ip": 40,
         "line": 32
       },
       {
-        "ip": 63,
-        "line": 34
+        "ip": 46,
+        "line": 33
       },
       {
-        "ip": 78,
-        "line": 42
+        "ip": 52,
+        "line": 35
+      },
+      {
+        "ip": 58,
+        "line": 37
+      },
+      {
+        "ip": 73,
+        "line": 45
       }
     ]
   },
@@ -69,5 +77,5 @@
     "name": "cashc",
     "version": "0.11.0-next.2"
   },
-  "updatedAt": "2025-03-04T17:15:30.188Z"
+  "updatedAt": "2025-03-04T18:32:21.692Z"
 }

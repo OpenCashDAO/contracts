@@ -7,8 +7,8 @@ import { main as replaceThreads } from './mocknet/transactions/replace-threads.j
 import { main as failProposal } from './mocknet/transactions/fail-proposal.js';
 
 const main = async () => {
-  await proposalToAdd();
-  // await proposalToRemove();
+  // await proposalToAdd();
+  await proposalToRemove();
   // await proposalToReplace();
 
   // await addThreads();

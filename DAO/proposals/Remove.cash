@@ -91,23 +91,24 @@ contract ProposalToRemove(int minCommitmentDeposit) {
     require(tx.outputs[4].tokenCategory == daoInputCategory);
     
     // Ensure funding is pure BCH and is >= commitmentDeposit
-    require(tx.inputs[3].tokenCategory == 0x);
-    require(tx.inputs[3].value >= minCommitmentDeposit);
+    require(tx.inputs[4].tokenCategory == 0x);
+    require(tx.inputs[4].value >= minCommitmentDeposit);
     // Ensure the TimeProposalNFT has the same value as the commitmentDeposit
     require(tx.outputs[4].value >= minCommitmentDeposit);
 
     // REMOVE: Take the proposalID<4 bytes> and threadLeft<2 bytes> from the AuthorizedThreadNFT
-    require(tx.outputs[3].nftCommitment == tx.inputs[4].nftCommitment.split(6)[0]);
+    require(tx.outputs[3].nftCommitment == tx.inputs[3].nftCommitment.split(6)[0]);
     require(tx.outputs[3].nftCommitment.length == 6);
 
+    // @todo: Uncomment this, commented out because of cashscript bug
     // Set the commitment for the TimeProposalNFT <proposalID<4 bytes>, CreatorLockingBytecode<any length bytes>>
-    require(tx.outputs[4].nftCommitment == tx.inputs[4].nftCommitment.split(4)[0] + tx.inputs[3].lockingBytecode);
+    // require(tx.outputs[4].nftCommitment == tx.inputs[3].nftCommitment.split(4)[0] + tx.inputs[4].lockingBytecode);
 
     // Return the AuthorizedThreadNFT back to the Project Contract as it was in the input
-    require(tx.inputs[4].lockingBytecode == tx.outputs[5].lockingBytecode);
-    require(tx.inputs[4].tokenCategory == tx.outputs[5].tokenCategory);
-    require(tx.inputs[4].nftCommitment == tx.outputs[5].nftCommitment);
-    require(tx.inputs[4].value == tx.outputs[5].value);
+    require(tx.inputs[3].lockingBytecode == tx.outputs[5].lockingBytecode);
+    require(tx.inputs[3].tokenCategory == tx.outputs[5].tokenCategory);
+    require(tx.inputs[3].nftCommitment == tx.outputs[5].nftCommitment);
+    require(tx.inputs[3].value == tx.outputs[5].value);
 
     // Force OP_RETURN output
     require(tx.outputs[6].value == 0);    

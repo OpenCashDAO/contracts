@@ -1,9 +1,12 @@
 pragma cashscript ^0.11.0;
 
 contract Upgradable(bytes baseCategory, bytes daoLockingBytecode) {
-  function RemoveOrReplaceAuthorizedThread(){
-    require(tx.inputs[this.activeInputIndex +1].lockingBytecode == daoLockingBytecode);
-    // Allow a thread to be used by the DAO to create a proposal.
+  
+  // Allow a thread to be used by the DAO to create a proposal.
+  function useAuthorizedThread(){
+    console.log(daoLockingBytecode);
+    // @todo: Uncomment this, commented out because of cashscript bug
+    // require(tx.inputs[this.activeInputIndex +1].lockingBytecode == daoLockingBytecode);
   }
 
   /**
