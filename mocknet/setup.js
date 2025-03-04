@@ -24,9 +24,9 @@ const AddThreads = compileFile(new URL('../DAO/executions/AddThreads.cash', impo
 const RemoveThreads = compileFile(new URL('../DAO/executions/RemoveThreads.cash', import.meta.url));
 const ReplaceThreads = compileFile(new URL('../DAO/executions/ReplaceThreads.cash', import.meta.url));
 const FailProposal = compileFile(new URL('../DAO/executions/FailProposal.cash', import.meta.url));
-const ProposalToAdd = compileFile(new URL('../DAO/submissions/ProposalToAdd.cash', import.meta.url));
-const ProposalToRemove = compileFile(new URL('../DAO/submissions/ProposalToRemove.cash', import.meta.url));
-const ProposalToReplace = compileFile(new URL('../DAO/submissions/ProposalToReplace.cash', import.meta.url));
+const ProposalToAdd = compileFile(new URL('../DAO/proposals/Add.cash', import.meta.url));
+const ProposalToRemove = compileFile(new URL('../DAO/proposals/Remove.cash', import.meta.url));
+const ProposalToReplace = compileFile(new URL('../DAO/proposals/Replace.cash', import.meta.url));
 
 
 export const provider = new MockNetworkProvider();

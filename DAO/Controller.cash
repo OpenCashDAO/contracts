@@ -9,13 +9,13 @@ contract Controller(
   /**
    * The Controller holds:
    * - AuthorizedThreadNFTs (immutable, daoCategory, 35 bytes)
-   *   - ProposalToAdd:       	   	[1 thread]
-   *   - ProposalToRemove:    	   	[1 thread]
-   *   - ProposalToReplace:     	  [1 thread]
-   *   - ExecuteAddProposal:     		[1 thread]
-   *   - ExecuteRemoveProposal:  		[1 thread]
-   *   - ExecuteReplaceProposal:	  [1 thread]
-   *   - FailProposal:	       	    [1 thread]
+   *   - ProposalToAdd:       	   	[~x threads]
+   *   - ProposalToRemove:    	   	[~x threads]
+   *   - ProposalToReplace:     	  [~x threads]
+   *   - ExecuteAddProposal:     		[~x threads]
+   *   - ExecuteRemoveProposal:  		[~x threads]
+   *   - ExecuteReplaceProposal:	  [~x threads]
+   *   - FailProposal:	       	    [~x threads]
    *   - Vote:                 	  	[~x threads]
    *   - RetractVote:          	    [~x threads]
    * - ProposalCounterNFT, (minting, daoCategory, 4 bytes)                      [1 thread]
