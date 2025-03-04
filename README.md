@@ -192,4 +192,65 @@ Once a proposal is passed, it can be executed by anyone. There are three differe
 
 The DelegateNFT is used to manage delegates. It allows a user to delegate their votes to another user.
 
-###
+### How to identify what an NFT represents?
+
+VoteProposalNFT:
+  - AddProposalNFT:
+    - ActiveVoting:
+      - `category`: daoCategory
+      - `commitment`: 40 bytes
+      - `capability`: mutable
+    - CompletedVoting:
+      - `category`: daoCategory
+      - `commitment`: 40 bytes
+      - `capability`: immutable
+
+  - RemoveProposalNFT:
+    - ActiveVoting:
+      - `category`: daoCategory
+      - `commitment`: 6 bytes
+      - `capability`: mutable
+    - CompletedVoting:
+      - `category`: daoCategory
+      - `commitment`: 6 bytes
+      - `capability`: immutable
+
+  - ReplaceProposalNFT:
+    - ActiveVoting:
+      - `category`: daoCategory
+      - `commitment`: 36 bytes
+      - `capability`: mutable
+    - CompletedVoting:
+      - `category`: daoCategory
+      - `commitment`: 36 bytes
+      - `capability`: immutable
+
+TimeProposalNFT:
+  - `category`: daoCategory
+  - `commitment`: 29 bytes
+  - `capability`: immutable
+
+VoteNFT:
+  - `category`: daoCategory
+  - `commitment`: 12 bytes
+  - `capability`: immutable
+
+ProposalCounterNFT:
+  - `category`: daoCategory
+  - `commitment`: 4 bytes
+  - `capability`: immutable
+
+AuthorizedThreadNFT:
+  - `category`: daoCategory
+  - `commitment`: 35 bytes
+  - `capability`: immutable
+
+ProjectAuthorizedThreadNFT:
+  - `category`: projectCategory
+  - `commitment`: 39 bytes
+  - `capability`: immutable
+
+ProjectMintingNFT:
+  - `category`: projectCategory
+  - `commitment`: 0 bytes
+  - `capability`: immutable

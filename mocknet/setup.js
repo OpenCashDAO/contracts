@@ -42,16 +42,15 @@ const ContractNew = compileFile(new URL('../Upgradable/ContractNew.cash', import
 export const minVoteThreshold = BigInt(1);
 export const minWait = BigInt(10);
 export const minCommitmentDeposit = BigInt(1000);
+export const commitmentLengthForProposalType = {
+  ADD: 80,
+  REMOVE: 12,
+  REPLACE: 72
+}
 
 export const provider = new MockNetworkProvider();
 export const addressType = 'p2sh32';
 export const options = { provider, addressType }
-
-export const aliceTemplate = new SignatureTemplate(alicePriv);
-export const aliceAddressLockingBytecode = cashAddressToLockingBytecode(aliceAddress).bytecode;
-provider.addUtxo(aliceAddress, randomUtxo());
-provider.addUtxo(aliceAddress, randomUtxo());
-provider.addUtxo(aliceAddress, randomUtxo());
 
 export const DAOControllerNFT = randomNFT({nft: {commitment: intToBytesToHex({value: 0, length: 4}), capability: 'minting'}});
 export const UpgradableProjectNFT = randomNFT({nft: {commitment: undefined, capability: 'minting'}});
@@ -60,6 +59,16 @@ export const daoCategory = DAOControllerNFT.category
 export const reverseDaoTokenCategory = binToHex(hexToBin(daoCategory).reverse())
 export const upgradableProjectCategory = UpgradableProjectNFT.category
 export const reverseUpgradableProjectCategory = binToHex(hexToBin(upgradableProjectCategory).reverse())
+
+export const aliceTemplate = new SignatureTemplate(alicePriv);
+export const aliceAddressLockingBytecode = cashAddressToLockingBytecode(aliceAddress).bytecode;
+provider.addUtxo(aliceAddress, randomUtxo());
+provider.addUtxo(aliceAddress, randomUtxo());
+provider.addUtxo(aliceAddress, randomUtxo());
+provider.addUtxo(aliceTokenAddress, {... randomUtxo(), token: { category: daoCategory, amount: 1000000n }});
+
+const proposalId = intToBytesToHex({value: hexToInt(DAOControllerNFT.nft.commitment) + 1, length: 4});
+const threadCount = intToBytesToHex({value: 1, length: 2});
 
 // Export all the contracts
 
@@ -128,11 +137,51 @@ provider.addUtxo(DAOControllerContract.address, {
   ...randomUtxo()
 });
 
-// Create authorizedThreadNFT for the Upgradable Project
+// Add Proposal NFTs
 
-const proposalId = intToBytesToHex({value: hexToInt(DAOControllerNFT.nft.commitment) + 1, length: 4});
-const threadCount = intToBytesToHex({value: 1, length: 2});
-let authorizedThreadNFTUtxo = {
+const proposalNFTUtxoAdd = {
+  token: {
+    ...randomNFT({
+      category: daoCategory,
+      nft: {
+        commitment: proposalId + threadCount + threadCount + contractALockingBytecode.slice(4, -2),
+        capability: 'mutable'
+      }
+    })
+  },
+  ...randomUtxo()
+};
+const proposalNFTUtxoRemove = {
+  token: {
+    ...randomNFT({
+      category: daoCategory,
+      nft: {
+        commitment: proposalId + threadCount,
+        capability: 'mutable'
+      }
+    })
+  },
+  ...randomUtxo()
+};
+const proposalNFTUtxoReplace = {
+  token: {
+    ...randomNFT({
+      category: daoCategory,
+      nft: {
+        commitment: proposalId + threadCount + contractALockingBytecode.slice(4, -2),
+        capability: 'mutable'
+      }
+    })
+  },
+  ...randomUtxo()
+};
+provider.addUtxo(DAOControllerContract.address, proposalNFTUtxoAdd);
+provider.addUtxo(DAOControllerContract.address, proposalNFTUtxoRemove);
+provider.addUtxo(DAOControllerContract.address, proposalNFTUtxoReplace);
+
+
+// Create authorizedThreadNFT for the Upgradable Project
+const authorizedThreadNFTUtxoForProject = {
   token: {
     ...randomNFT({
       category: upgradableProjectCategory,
@@ -146,11 +195,11 @@ let authorizedThreadNFTUtxo = {
 };
 
 // Add threads
-provider.addUtxo(UpgradableProjectContract.address, authorizedThreadNFTUtxo);
+provider.addUtxo(UpgradableProjectContract.address, authorizedThreadNFTUtxoForProject);
 
 // Create authorizedThreadNFT for the DAO
 
-authorizedThreadNFTUtxo = {
+let authorizedThreadNFTUtxo = {
   token: {
     ...randomNFT({
       category: daoCategory,
