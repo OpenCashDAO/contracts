@@ -67,7 +67,7 @@ contract Controller(
     // Expect the NFT commitment that contains the lockingBytecode of the authorized contract.
     require(tx.inputs[0].nftCommitment.length == 35);
 
-    // TODO: Uncomment this, commented out because of cashscript bug
+    // @todo: Uncomment this, commented out because of cashscript bug
     // require(tx.inputs[1].lockingBytecode == tx.inputs[0].nftCommitment);
     // With these prerequisites met, we just need to make sure that all the contracts that are deployed are written
     // and initialized properly, and they expect this structure and handle the inputs and outputs as expected.

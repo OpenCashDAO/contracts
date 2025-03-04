@@ -1,0 +1,7 @@
+pragma cashscript ^0.11.0;
+
+contract Dummy() {
+  function call() {
+    require(2==2);
+  }
+}

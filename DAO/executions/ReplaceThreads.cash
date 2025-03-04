@@ -11,6 +11,11 @@ contract ReplaceThreads(
   bytes projectLockingBytecode
 ) {
 
+
+  function test(){
+    require(2==2);
+  }
+
  /**
    * This is called when the proposal intends to add a new contract to the project.
    * @inputs

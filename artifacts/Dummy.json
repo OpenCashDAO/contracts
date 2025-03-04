@@ -1,0 +1,28 @@
+{
+  "contractName": "Dummy",
+  "constructorInputs": [],
+  "abi": [
+    {
+      "name": "call",
+      "inputs": []
+    }
+  ],
+  "bytecode": "OP_2 OP_2 OP_NUMEQUAL",
+  "source": "pragma cashscript ^0.11.0;\n\ncontract Dummy() {\n  function call() {\n    require(2==2);\n  }\n}",
+  "debug": {
+    "bytecode": "52529c",
+    "sourceMap": "5:12:5:13;:15::16;:12:::1",
+    "logs": [],
+    "requires": [
+      {
+        "ip": 3,
+        "line": 5
+      }
+    ]
+  },
+  "compiler": {
+    "name": "cashc",
+    "version": "0.11.0-next.2"
+  },
+  "updatedAt": "2025-03-04T17:15:30.461Z"
+}

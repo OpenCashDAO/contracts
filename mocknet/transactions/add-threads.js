@@ -27,7 +27,7 @@ export const main = async () => {
         }
       },
     })
-    .addOutput({ to: AddThreadsContract.address, amount: 800n })
+    .addOutput({ to: AddThreadsContract.address, amount: addThreadsUtxo.satoshis })
     .send()
     // .bitauthUri()
 
