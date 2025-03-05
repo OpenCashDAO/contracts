@@ -2,10 +2,10 @@ import { TransactionBuilder } from 'cashscript';
 import { hexToBin, binToHex } from '@bitauth/libauth';
 import {
   DAOControllerContract,
-  ProposalToAddContract,
+  ProposalContract,
   provider,
   daoCategory,
-  proposalToAddContractLockingBytecode,
+  proposalContractLockingBytecode,
   contractNewLockingBytecode,
   aliceAddress,
   aliceTemplate,
@@ -19,13 +19,13 @@ export const main = async () => {
   const authorizedThreadUtxo = contractUtxos.find(utxo => 
     utxo.token?.category === daoCategory &&
     utxo.token?.nft?.capability === 'none' &&
-    utxo.token?.nft?.commitment === proposalToAddContractLockingBytecode
+    utxo.token?.nft?.commitment === proposalContractLockingBytecode
   );
   if(!authorizedThreadUtxo) { throw new Error('Authorized thread utxo not found'); }
   
-  const proposalToAddUtxos = await provider.getUtxos(ProposalToAddContract.address);
-  const proposalToAddUtxo = proposalToAddUtxos[0];
-  if(!proposalToAddUtxo) { throw new Error('Proposal to add utxo not found'); }
+  const proposalUtxos = await provider.getUtxos(ProposalContract.address);
+  const proposalUtxo = proposalUtxos[0];
+  if(!proposalUtxo) { throw new Error('Proposal utxo not found'); }
 
   const daoMintingUtxo = contractUtxos.find(utxo => 
     utxo.token?.category === daoCategory &&
@@ -46,7 +46,7 @@ export const main = async () => {
 
   const tx = await new TransactionBuilder({ provider })
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())
-    .addInput(proposalToAddUtxo, ProposalToAddContract.unlock.call(proposalScriptHash, threadCount))
+    .addInput(proposalUtxo, ProposalContract.unlock.add(proposalScriptHash, threadCount))
     .addInput(daoMintingUtxo, DAOControllerContract.unlock.call())
     .addInput(aliceUtxo, aliceTemplate.unlockP2PKH())
     .addOutput({
@@ -61,7 +61,7 @@ export const main = async () => {
         }
       },
     })
-    .addOutput({ to: ProposalToAddContract.address, amount: proposalToAddUtxo.satoshis })
+    .addOutput({ to: ProposalContract.address, amount: proposalUtxo.satoshis })
     .addOutput({
       to: DAOControllerContract.tokenAddress,
       amount: daoMintingUtxo.satoshis,
@@ -106,4 +106,5 @@ export const main = async () => {
     .send();
 
   console.log(tx);
+  // console.log(tx.hex.length);
 } 

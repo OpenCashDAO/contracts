@@ -10,11 +10,8 @@ import {
   removeThreadsContractLockingBytecode,
   replaceThreadsContractLockingBytecode,
   failProposalContractLockingBytecode,
-  proposalToAddContractLockingBytecode,
-  proposalToRemoveContractLockingBytecode,
-  proposalToReplaceContractLockingBytecode,
-  voteContractLockingBytecode,
-  retractVoteContractLockingBytecode,
+  proposalContractLockingBytecode,
+  votingContractLockingBytecode,
   provider
 } from './index.js';
 
@@ -98,7 +95,7 @@ export const main = async () => {
       ...randomNFT({
         category: daoCategory,
         nft: {
-          commitment: proposalToAddContractLockingBytecode,
+          commitment: proposalContractLockingBytecode,
           capability: 'none'
         }
       })
@@ -114,62 +111,11 @@ export const main = async () => {
       ...randomNFT({
         category: daoCategory,
         nft: {
-          commitment: proposalToRemoveContractLockingBytecode,
+          commitment: votingContractLockingBytecode,
           capability: 'none'
         }
       })
     },
     ...randomUtxo()
   };
-
-  // Add threads
-  provider.addUtxo(DAOControllerContract.address, authorizedThreadNFTUtxo);
-
-  authorizedThreadNFTUtxo = {
-    token: {
-      ...randomNFT({
-        category: daoCategory,
-        nft: {
-          commitment: proposalToReplaceContractLockingBytecode,
-          capability: 'none'
-        }
-      })
-    },
-    ...randomUtxo()
-  };
-
-  // Add threads
-  provider.addUtxo(DAOControllerContract.address, authorizedThreadNFTUtxo);
-
-  authorizedThreadNFTUtxo = {
-    token: {
-      ...randomNFT({
-        category: daoCategory,
-        nft: {
-          commitment: voteContractLockingBytecode,
-          capability: 'none'
-        }
-      })
-    },
-    ...randomUtxo()
-  };
-
-  // Add threads
-  provider.addUtxo(DAOControllerContract.address, authorizedThreadNFTUtxo);
-
-  authorizedThreadNFTUtxo = {
-    token: {
-      ...randomNFT({
-        category: daoCategory,
-        nft: {
-          commitment: retractVoteContractLockingBytecode,
-          capability: 'none'
-        }
-      })
-    },
-    ...randomUtxo()
-  };
-
-  // Add threads
-  provider.addUtxo(DAOControllerContract.address, authorizedThreadNFTUtxo);
 }

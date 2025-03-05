@@ -1,7 +1,7 @@
 import { TransactionBuilder } from 'cashscript';
 import {
   DAOControllerContract,
-  VoteContract,
+  VotingContract,
   provider,
   daoCategory,
   aliceAddress,
@@ -22,9 +22,9 @@ export const main = async () => {
   );
   if (!authorizedThreadUtxo) { throw new Error('Authorized thread utxo not found'); }
 
-  const voteUtxos = await provider.getUtxos(VoteContract.address);
-  const voteUtxo = voteUtxos[0];
-  if (!voteUtxo) { throw new Error('Vote utxo not found'); }
+  const votingUtxos = await provider.getUtxos(VotingContract.address);
+  const votingUtxo = votingUtxos[0];
+  if (!votingUtxo) { throw new Error('Vote utxo not found'); }
 
   const daoMintingUtxo = contractUtxos.find(utxo => 
     utxo.token?.category === daoCategory &&
@@ -45,7 +45,7 @@ export const main = async () => {
 
   const tx = await new TransactionBuilder({ provider })
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())
-    .addInput(voteUtxo, VoteContract.unlock.call(voteAmount))
+    .addInput(votingUtxo, VotingContract.unlock.vote(voteAmount))
     .addInput(daoMintingUtxo, DAOControllerContract.unlock.call())
     .addInput(proposalUtxo, DAOControllerContract.unlock.call())
     .addInput(aliceUtxo, aliceTemplate.unlockP2PKH())
@@ -61,7 +61,7 @@ export const main = async () => {
         }
       },
     })
-    .addOutput({ to: VoteContract.address, amount: voteUtxo.satoshis })
+    .addOutput({ to: VotingContract.address, amount: votingUtxo.satoshis })
     .addOutput({
       to: DAOControllerContract.tokenAddress,
       amount: daoMintingUtxo.satoshis,

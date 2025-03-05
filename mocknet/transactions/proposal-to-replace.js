@@ -3,12 +3,12 @@ import { binToHex, hexToBin } from '@bitauth/libauth';
 import {
   DAOControllerContract,
   UpgradableProjectContract,
-  ProposalToReplaceContract,
+  ProposalContract,
   provider,
   daoCategory,
   contractNewLockingBytecode,
   upgradableProjectCategory,
-  proposalToReplaceContractLockingBytecode,
+  proposalContractLockingBytecode,
   aliceAddress,
   aliceTemplate,
   aliceAddressLockingBytecode,
@@ -21,13 +21,13 @@ export const main = async () => {
   const authorizedThreadUtxo = contractUtxos.find(utxo => 
     utxo.token?.category === daoCategory &&
     utxo.token?.nft?.capability === 'none' &&
-    utxo.token?.nft?.commitment === proposalToReplaceContractLockingBytecode
+    utxo.token?.nft?.commitment === proposalContractLockingBytecode
   );
   if(!authorizedThreadUtxo) { throw new Error('Authorized thread utxo not found'); }
   
-  const proposalToReplaceUtxos = await provider.getUtxos(ProposalToReplaceContract.address);
-  const proposalToReplaceUtxo = proposalToReplaceUtxos[0];
-  if(!proposalToReplaceUtxo) { throw new Error('Proposal to replace utxo not found'); }
+  const proposalUtxos = await provider.getUtxos(ProposalContract.address);
+  const proposalUtxo = proposalUtxos[0];
+  if(!proposalUtxo) { throw new Error('Proposal utxo not found'); }
 
   const daoMintingUtxo = contractUtxos.find(utxo => 
     utxo.token?.category === daoCategory &&
@@ -53,7 +53,7 @@ export const main = async () => {
 
   const tx = await new TransactionBuilder({ provider })
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())
-    .addInput(proposalToReplaceUtxo, ProposalToReplaceContract.unlock.call(proposalScriptHash))
+    .addInput(proposalUtxo, ProposalContract.unlock.replace(proposalScriptHash))
     .addInput(daoMintingUtxo, DAOControllerContract.unlock.call())
     .addInput(projectAuthorizedUtxo, UpgradableProjectContract.unlock.useAuthorizedThread())
     .addInput(aliceUtxo, aliceTemplate.unlockP2PKH())
@@ -69,7 +69,7 @@ export const main = async () => {
         }
       },
     })
-    .addOutput({ to: ProposalToReplaceContract.address, amount: proposalToReplaceUtxo.satoshis })
+    .addOutput({ to: ProposalContract.address, amount: proposalUtxo.satoshis })
     .addOutput({
       to: DAOControllerContract.tokenAddress,
       amount: daoMintingUtxo.satoshis,

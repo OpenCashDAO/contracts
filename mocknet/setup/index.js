@@ -33,11 +33,8 @@ const AddThreads = compileFile(new URL('../../DAO/executions/AddThreads.cash', i
 const RemoveThreads = compileFile(new URL('../../DAO/executions/RemoveThreads.cash', import.meta.url));
 const ReplaceThreads = compileFile(new URL('../../DAO/executions/ReplaceThreads.cash', import.meta.url));
 const FailProposal = compileFile(new URL('../../DAO/executions/FailProposal.cash', import.meta.url));
-const ProposalToAdd = compileFile(new URL('../../DAO/proposals/Add.cash', import.meta.url));
-const ProposalToRemove = compileFile(new URL('../../DAO/proposals/Remove.cash', import.meta.url));
-const ProposalToReplace = compileFile(new URL('../../DAO/proposals/Replace.cash', import.meta.url));
-const Vote = compileFile(new URL('../../DAO/voting/Vote.cash', import.meta.url));
-const RetractVote = compileFile(new URL('../../DAO/voting/RetractVote.cash', import.meta.url));
+const Proposal = compileFile(new URL('../../DAO/Proposal.cash', import.meta.url));
+const Voting = compileFile(new URL('../../DAO/Voting.cash', import.meta.url));
 
 
 export const minVoteThreshold = BigInt(1);
@@ -97,25 +94,13 @@ export const FailProposalContract = new Contract(FailProposal, [minVoteThreshold
 export const failProposalContractLockingBytecode = binToHex(cashAddressToLockingBytecode(FailProposalContract.address).bytecode);
 provider.addUtxo(FailProposalContract.address, randomUtxo());
 
-export const ProposalToAddContract = new Contract(ProposalToAdd, [minCommitmentDeposit], options);
-export const proposalToAddContractLockingBytecode = binToHex(cashAddressToLockingBytecode(ProposalToAddContract.address).bytecode);
-provider.addUtxo(ProposalToAddContract.address, randomUtxo());
+export const ProposalContract = new Contract(Proposal, [minCommitmentDeposit], options);
+export const proposalContractLockingBytecode = binToHex(cashAddressToLockingBytecode(ProposalContract.address).bytecode);
+provider.addUtxo(ProposalContract.address, randomUtxo());
 
-export const ProposalToRemoveContract = new Contract(ProposalToRemove, [minCommitmentDeposit], options);
-export const proposalToRemoveContractLockingBytecode = binToHex(cashAddressToLockingBytecode(ProposalToRemoveContract.address).bytecode);
-provider.addUtxo(ProposalToRemoveContract.address, randomUtxo());
-
-export const ProposalToReplaceContract = new Contract(ProposalToReplace, [minCommitmentDeposit], options);
-export const proposalToReplaceContractLockingBytecode = binToHex(cashAddressToLockingBytecode(ProposalToReplaceContract.address).bytecode);
-provider.addUtxo(ProposalToReplaceContract.address, randomUtxo());
-
-export const VoteContract = new Contract(Vote, [], options);
-export const voteContractLockingBytecode = binToHex(cashAddressToLockingBytecode(VoteContract.address).bytecode);
-provider.addUtxo(VoteContract.address, randomUtxo());
-
-export const RetractVoteContract = new Contract(RetractVote, [], options);
-export const retractVoteContractLockingBytecode = binToHex(cashAddressToLockingBytecode(RetractVoteContract.address).bytecode);
-provider.addUtxo(RetractVoteContract.address, randomUtxo());
+export const VotingContract = new Contract(Voting, [], options);
+export const votingContractLockingBytecode = binToHex(cashAddressToLockingBytecode(VotingContract.address).bytecode);
+provider.addUtxo(VotingContract.address, randomUtxo());
 
 // Upgradable Project Contracts
 export const ContractAContract = new Contract(ContractA, [], options);
