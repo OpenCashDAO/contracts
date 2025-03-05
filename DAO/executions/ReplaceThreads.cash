@@ -112,7 +112,9 @@ contract ReplaceThreads(
     // The min wait time for the proposal has been crossed and now the proposal can be executed.
     require(tx.inputs[4].sequenceNumber >= voteWindow);
     require(tx.inputs[4].nftCommitment.split(4)[0] == proposalId);
-    require(tx.inputs[4].nftCommitment.length == 29);
+    
+    // <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)> or <ProposalID (4 bytes), CreatorLockingBytecode (35 bytes)>
+    require(tx.inputs[4].nftCommitment.length == 29 || tx.inputs[4].nftCommitment.length == 39);
 
     int newThreadLeft = int(threadLeft) - 1;
     require(newThreadLeft <= int(threadCount));

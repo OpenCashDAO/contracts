@@ -105,6 +105,10 @@ contract ProposalToReplace(int minCommitmentDeposit) {
     // @todo: Uncomment this, commented out because of cashscript bug
     // require(tx.outputs[3].nftCommitment == tx.inputs[3].nftCommitment.split(4)[0] + tx.inputs[4].lockingBytecode);
 
+    // Allow a P2SH32 contract or a P2PKH to initiate the proposal
+    require(tx.inputs[3].lockingBytecode.length == 35 || tx.inputs[3].lockingBytecode.length == 25);
+    require(tx.outputs[4].nftCommitment.length == 29 || tx.outputs[4].nftCommitment.length == 39);
+
     // Return the AuthorizedThreadNFT back to the Project Contract as it was in the input
     require(tx.inputs[3].lockingBytecode == tx.outputs[5].lockingBytecode);
     require(tx.inputs[3].tokenCategory == tx.outputs[5].tokenCategory);

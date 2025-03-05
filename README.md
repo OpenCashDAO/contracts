@@ -300,7 +300,7 @@ VoteProposalNFT:
 
 TimeProposalNFT:
   - `category`: daoCategory
-  - `commitment`: 29 bytes
+  - `commitment`: 29 bytes or 39 bytes
   - `capability`: immutable
 
 VoteNFT:
