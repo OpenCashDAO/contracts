@@ -26,7 +26,7 @@ contract RetractVote() {
   
     // This contract can only be used with the 'lockingbytecode' used in the 0th input.
     // Note: This contract can be used with any contract that fulfills these conditions, and that is fine
-    // because those contracts will not be manipulating the utxos of the Registry contract. Instead, they will
+    // because those contracts will not be manipulating the utxos of the Controller contract. Instead, they will
     // be manipulating their own utxos.
     bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;
     require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);

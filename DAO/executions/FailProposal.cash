@@ -1,3 +1,5 @@
+pragma cashscript ^0.11.0;
+
 /**
  * @param voteThreshold - The minimum number of votes required for the proposal to pass.
  * @param voteWindow - The minimum time window during which votes can be cast.
@@ -44,12 +46,12 @@ contract FailProposal(
     // This contract can only be used at input1 and it should return the input1 back to itself.
     require(this.activeInputIndex == 1);
     require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);
-    // Ensure that the domainCategory in not minted here.
+    // Ensure that the daoCategory or projectCategory in not minted here.
     require(tx.outputs[this.activeInputIndex].tokenCategory == 0x);
 
     // This contract can only be used with the 'lockingbytecode' used in the 0th input.
     // Note: This contract can be used with any contract that fulfills these conditions, and that is fine
-    // because those contracts will not be manipulating the utxos of the Registry contract. Instead, they will
+    // because those contracts will not be manipulating the utxos of the Controller contract. Instead, they will
     // be manipulating their own utxos.
     bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;
     require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);

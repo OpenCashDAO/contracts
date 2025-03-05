@@ -1,3 +1,5 @@
+pragma cashscript ^0.11.0;
+
 /**
  * @param voteThreshold - The minimum number of votes required for the proposal to pass.
  * @param voteWindow - The minimum time window during which votes can be cast.
@@ -10,10 +12,6 @@ contract AddThreads(
   bytes projectCategory,
   bytes projectLockingBytecode
 ) {
-
-  function test(){
-    require(2==2);
-  }
 
  /**
    * This is called when the proposal intends to add a new contract to the project.
@@ -36,6 +34,7 @@ contract AddThreads(
    *   - capability: minting
    *   - length: 0 bytes
    *   - category: projectCategory
+   * - Input5: Funding Utxo
    *
    * @outputs
    * - Output0: DAO Contract's authorizedThreadNFT back to DAO Contract
@@ -56,20 +55,21 @@ contract AddThreads(
    *   - length: 38 bytes <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
    *   - category: projectCategory
    * - Output5: commitmentDeposit back to the creator
+   * - Output6: Change Utxo
    */
   function call() {
-    require(tx.inputs.length == 5);
-    require(tx.outputs.length <= 6);
+    require(tx.inputs.length == 6);
+    require(tx.outputs.length <= 7);
 
     // This contract can only be used at input1 and it should return the input1 back to itself.
     require(this.activeInputIndex == 1);
     require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);
-    // Ensure that the domainCategory in not minted here.
+    // Ensure that the daoCategory or projectCategory in not minted here.
     require(tx.outputs[this.activeInputIndex].tokenCategory == 0x);
 
     // This contract can only be used with the 'lockingbytecode' used in the 0th input.
     // Note: This contract can be used with any contract that fulfills these conditions, and that is fine
-    // because those contracts will not be manipulating the utxos of the Registry contract. Instead, they will
+    // because those contracts will not be manipulating the utxos of the Controller contract. Instead, they will
     // be manipulating their own utxos.
     bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;
     require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);
@@ -77,6 +77,7 @@ contract AddThreads(
     require(tx.inputs[4].lockingBytecode == daoInputLockingBytecode);
     require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);
     require(tx.outputs[3].lockingBytecode == daoInputLockingBytecode);
+    require(tx.outputs[4].lockingBytecode == daoInputLockingBytecode);
 
     // Project minting NFT should be minting and of the 'projectCategory', used to mint the output[5]
     bytes projectInputCategory, bytes projectInputCapability = tx.inputs[2].tokenCategory.split(32);
@@ -133,7 +134,7 @@ contract AddThreads(
 
   }
 
-  // function mintThreads() {
+  // function continueMintingThreads() {
   //   // The proposalNFT would have different `threadLeft` and `threadCount` values.
   //   // Allow anyone to execute it until the `threadLeft` is 0 and then turn the mutable to immutable.
   //   // Allow all the voters to withdraw their votes from the thread and this NFT will stay here forever.

@@ -22,17 +22,16 @@ OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) templa
 1. [DAO contracts](#dao-contracts)
     - [Controller contract](#controller-contract)
     - [Submit Proposal Contracts](#submit-proposal-contracts)
+      - [Add.cash](#addthreadscash)
+      - [Remove.cash](#removethreadscash)
+      - [Replace.cash](#replacethreadscash)
+    - [Voting contract](#voting-contract)
+    - [Retract Vote Contract](#retract-vote-contract)
+    - [Execute Proposal Contracts](#execute-proposal-contracts)
       - [AddThreads.cash](#addthreadscash)
       - [RemoveThreads.cash](#removethreadscash)
       - [ReplaceThreads.cash](#replacethreadscash)
-    - [Voting contract](#voting-contract)
-    - [Retract Voting Contract](#retract-voting-contract)
-    - [DelegateFactory contract](#delegatefactory-contract)
-    - [Execute Proposal Contracts](#execute-proposal-contracts)
-      - [Add.cash](#addcash)
-      - [Remove.cash](#removecash)
-      - [Replace.cash](#replacecash)
-      - [Fail.cash](#failcash)
+      - [FailProposal.cash](#failproposalcash)
 2. [Upgradable Project Contract](#upgradable-project-contract)
 3. [Cashtokens](#cashtokens)
     - [AuthorizedThreadNFTs](#authorizedthreadnfts)
@@ -49,41 +48,126 @@ OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) templa
 DAO is a system of 11 contracts interacting with each other.
 
 #### Controller contract
-  - The Controller contract functions as the control and storage hub for the DAO. It holds authorizedThreadNFTs, proposalCounterNFTs and mintingNFTs.
+The Controller contract functions as the control and storage hub for the DAO. It holds authorizedThreadNFTs, proposalCounterNFTs and mintingNFTs.
+
+Constructor:
+  - `daoCategory`: The category of the DAO NFTs.
+
+Transaction Structure:
+| # | Inputs | Outputs |
+|---|--------|---------|
+| 0 | [AuthorizedThreadNFT](#authorizedthreadnfts) NFT with authorized contract's locking bytecode as commitment from self | [AuthorizedThreadNFT](#authorizedthreadnfts) back to self |
+| 1 | Any UTXO from Authorized contract | UTXO back to Authorized contract |
+
+
 
 ### Submit Proposal Contracts
 
-#### AddThreads.cash
-The AddThreads.cash contract is used to submit proposal that adds new authorizedThreadNFTs to the Upgradable Project Contract.
+#### Add.cash
+The Add proposal contract allows anyone to submit a proposal to add new authorizedThreadNFTs to the Upgradable Project Contract. The proposal requires a commitment deposit to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
 
-#### RemoveThreads.cash
-The RemoveThreads.cash contract is used to submit proposal that removes authorizedThreadNFTs from the Upgradable Project Contract.
+Constructor:
+  - minCommitmentDeposit: The minimum amount of sathoshis the creator has to commit to the proposal.
 
-#### ReplaceThreads.cash
-The ReplaceThreads.cash contract is used to submit proposal that replaces authorizedThreadNFTs in the Upgradable Project Contract.
+Parameters:
+  - proposalScriptHash: 32 bytes scriptHash of the new contract
+  - threadCount: 2 bytes thread count of the new contract
+
+Transaction Structure:
+| # | Inputs | Outputs |
+|---|--------|---------|
+| 0 | DAO Contract's authorizedThreadNFT | DAO Contract's authorizedThreadNFT back to DAO Contract |
+| 1 | Any input from this contract | Input1 back to this contract without any change |
+| 2 | ProposalCounterNFT from DAO Contract | ProposalCounterNFT back to DAO Contract |
+| 3 | Funding UTXO | VoteProposalNFT to DAO Contract |
+| 4 |                        | TimeProposalNFT to DAO Contract |
+| 5 |                        | OP_RETURN with the proposal data |
+| 6 |                        | Change pure BCH |
+
+
+#### Remove.cash
+The Remove proposal contract allows anyone to submit a proposal to remove authorizedThreadNFTs from the Upgradable Project Contract. The proposal requires a commitment deposit to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
+
+Constructor:
+  - minCommitmentDeposit: The minimum amount of sathoshis the creator has to commit to the proposal.
+
+Transaction Structure:
+| # | Inputs | Outputs |
+|---|--------|---------|
+| 0 | DAO Contract's authorizedThreadNFT | DAO Contract's authorizedThreadNFT back to DAO Contract |
+| 1 | Any input from this contract | Input1 back to this contract without any change |
+| 2 | ProposalCounterNFT from DAO Contract | ProposalCounterNFT back to DAO Contract |
+| 3 | AuthorizedThreadNFT from the Project Contract | VoteProposalNFT to DAO Contract |
+| 4 | Funding UTXO | TimeProposalNFT to DAO Contract |
+| 5 |                        | AuthorizedThreadNFT back to the Project Contract |
+| 6 |                        | OP_RETURN with the proposal data |
+| 7 |                        | Change pure BCH |
+
+
+#### Replace.cash
+The Replace proposal contract allows anyone to submit a proposal to replace authorizedThreadNFTs in the Upgradable Project Contract. The proposal requires a commitment deposit to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
+
+Constructor:
+  - minCommitmentDeposit: The minimum amount of sathoshis the creator has to commit to the proposal.
+
+Parameters:
+  - proposalScriptHash: 32 bytes scriptHash of the new contract
+
+Transaction Structure:
+| # | Inputs | Outputs |
+|---|--------|---------|
+| 0 | DAO Contract's authorizedThreadNFT | DAO Contract's authorizedThreadNFT back to DAO Contract |
+| 1 | Any input from this contract | Input1 back to this contract without any change |
+| 2 | ProposalCounterNFT from DAO Contract | ProposalCounterNFT back to DAO Contract |
+| 3 | AuthorizedThreadNFT from the Project Contract | VoteProposalNFT to DAO Contract |
+| 4 | Funding UTXO | TimeProposalNFT to DAO Contract |
+| 5 |                        | AuthorizedThreadNFT back to the Project Contract |
+| 6 |                        | OP_RETURN with the proposal data |
+| 7 |                        | Change pure BCH |
 
 #### Voting contract
-Allows anyone to vote on an active proposal.
+The Voting contract allows anyone to cast their vote on a proposal. The vote requires a certain amount of tokens to be committed to the proposal. The contract ensures that the vote is valid and updates the proposal's vote count accordingly.
+
+Parameters:
+  - voteAmount: The amount of tokens to be committed to the proposal.
+
+Transaction Structure:
+| # | Inputs | Outputs |
+|---|--------|---------|
+| 0 | DAO Contract's authorizedThreadNFT | DAO Contract's authorizedThreadNFT back to self |
+| 1 | Any input from this contract | Input1 back to this contract without any change |
+| 2 | Minting NFT of daoCategory from DAO | Minting NFT of daoCategory back to DAO |
+| 3 | Mutable Proposal NFT of daoCategory from DAO | Mutable Proposal NFT back to DAO with tokenAmount (Equal to `voteAmount`) |
+| 4 | Utxo to cast vote with tokenAmount | ReceiptNFT of Vote, to be used later to get back the tokens from proposal NFT to the bytecode of Input3 |
+| 5 |                        | Change tokenAmount and BCH |
+
 
 #### Retract Voting Contract
-Allows anyone to retract their votes from an proposal. Active or inactive.
+The Retract Voting contract allows anyone to retract their vote from a proposal. The contract ensures that the vote is valid and updates the proposal's vote count accordingly. The retraction process involves returning the committed tokens to the voter and updating the proposal's vote count.
+
+Transaction Structure:
+| # | Inputs | Outputs |
+|---|--------|---------|
+| 0 | DAO Contract's authorizedThreadNFT | DAO Contract's authorizedThreadNFT back to self |
+| 1 | Any input from this contract | Input1 back to this contract without any change |
+| 2 | VoteProposalNFT from DAO | VoteProposalNFT back to DAO (minus the tokenAmount in the recieptNFT) |
+| 3 | RecieptNFT used to cast vote | tokenAmount to the recieptNFT provider |
+| 4 | Funding UTXO | Change pure BCH |
+
 
 ### Execute Proposal Contracts
 
-#### Add.cash
-Adds new authorizedThreadNFTs to the Upgradable Project Contract.
+#### AddThreads.cash
+The AddThreads contract allows anyone to add new authorizedThreadNFTs to the Upgradable Project Contract. The contract ensures that the new threads are valid and updates the project's authorizedThreadNFTs accordingly.
 
-#### Remove.cash
-Removes authorizedThreadNFTs from the Upgradable Project Contract.
+#### RemoveThreads.cash
+The RemoveThreads contract allows anyone to remove authorizedThreadNFTs from the Upgradable Project Contract. The contract ensures that the removal is valid and updates the project's authorizedThreadNFTs accordingly.
 
-#### Replace.cash
-Replaces authorizedThreadNFTs in the Upgradable Project Contract.
+#### ReplaceThreads.cash
+The ReplaceThreads contract allows anyone to replace authorizedThreadNFTs in the Upgradable Project Contract. The contract ensures that the replacement is valid and updates the project's authorizedThreadNFTs accordingly.
 
-#### Fail.cash
+#### FailProposal.cash
 Disables the proposal and allows anyone to take the commitmentDeposit back.
-
-## DelegateFactory contract
-Each delagate has a Delegate Contract
 
 ## Upgradable Contract
 
@@ -97,17 +181,6 @@ The contracts talk to each other through cashtokens. There are a few types in th
 These are immutable NFTs used to manage threads for various proposal actions.
   - `category`: daoCategory
   - `commitment`: 35 bytes < lockingbytecode >
-
-AuthorizedThreadNFTs:
-  - **submissions:AddThreads**: (~x threads)
-  - **submissions:ReplaceThreads**: (~x threads)
-  - **submissions:RemoveThreads**: (~x threads)
-  - **execute:Add**: (~x threads)
-  - **execute:Remove**: (~x threads)
-  - **execute:Replace**: (~x threads)
-  - **execute:Fail**: (~x threads)
-  - **Vote**: (~x threads)
-  - **RetractVote**: (~x threads)
 
 #### MintingNFTs
 ProposalMintingNFT [~x threads]
@@ -254,3 +327,17 @@ ProjectMintingNFT:
   - `category`: projectCategory
   - `commitment`: 0 bytes
   - `capability`: immutable
+
+
+
+#### How does voting occur?
+
+Token holders cast their votes on proposals by submitting their tokenAmount to the proposalNFT. In exchange, they receive a VoteNFT, which they can later use to reclaim their tokens. Voters have the flexibility to retract their votes at any time, regardless of the proposal deadline.
+
+There is another NFT called timeProposalNFT, minted simultaneously with the proposalNFT. This NFT remains with the contract and cannot be included in any transaction until the minWait period has elapsed. Once this period is over, the proposal can be executed. Depending on the number of votes in the proposalNFT, the proposal will either be executed or fail.
+
+Upon reaching the deadline, anyone can execute the proposal and initiate the process of minting, replacing, or removing threads. When the proposal is executed, the tokenAmount from the proposalNFT is transferred to the timeNFT and locked until all threads are minted. During this period, votes cannot be withdrawn. Additionally, the commitment deposit is sent to the proposal creator.
+
+Once all threads are minted, removed, or replaced, the timeNFT is burned, and the tokenAmount from the timeNFT is returned to the proposalNFT, enabling withdrawals. At this point, the proposalNFT becomes immutable and remains permanently in the DAO contract, while the timeNFT is destroyed.
+
+In the event of a failure, only a single transaction occurs because the minThresholdAmount was not met. Consequently, the proposalNFT is made immutable, the timeNFT is burned, and the commitment deposit is sent to the recipient designated by the transaction initiator.
