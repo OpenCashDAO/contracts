@@ -13,7 +13,7 @@ import {
   aliceTemplate,
   aliceAddressLockingBytecode,
   minCommitmentDeposit
-} from '../setup.js';
+} from '../setup/index.js';
 
 
 export const main = async () => {

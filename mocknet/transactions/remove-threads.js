@@ -3,7 +3,7 @@ import {
   DAOControllerContract,
   RemoveThreadsContract,
   provider,
-} from '../setup.js';
+} from '../setup/index.js';
 
 export const main = async () => {
   const contractUtxos = await provider.getUtxos(DAOControllerContract.address);

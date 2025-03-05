@@ -3,7 +3,7 @@ import {
   DAOControllerContract,
   AddThreadsContract,
   provider,
-} from '../setup.js';
+} from '../setup/index.js';
 
 export const main = async () => {
 

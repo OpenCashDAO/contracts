@@ -2,7 +2,7 @@ import {
   randomUtxo,
   randomNFT
 } from 'cashscript';
-import { provider, DAOControllerContract, daoCategory, contractALockingBytecode, proposalId, threadCount } from '../setup.js';
+import { provider, DAOControllerContract, daoCategory, contractALockingBytecode, proposalId, threadCount } from './index.js';
 
 
 export const main = async () => {

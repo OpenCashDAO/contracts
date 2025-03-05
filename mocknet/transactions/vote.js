@@ -8,7 +8,7 @@ import {
   aliceTemplate,
   aliceTokenAddress,
   commitmentLengthForProposalType
-} from '../setup.js';
+} from '../setup/index.js';
 import { intToBytesToHex } from '../utils.js';
 
 

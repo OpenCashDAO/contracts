@@ -11,7 +11,7 @@ import {
   aliceTemplate,
   aliceAddressLockingBytecode,
   minCommitmentDeposit
-} from '../setup.js';
+} from '../setup/index.js';
 import { intToBytesToHex, hexToInt } from '../utils.js';
 
 export const main = async () => {

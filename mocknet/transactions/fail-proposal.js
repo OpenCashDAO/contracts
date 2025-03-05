@@ -3,7 +3,7 @@ import {
   DAOControllerContract,
   FailProposalContract,
   provider,
-} from '../setup.js';
+} from '../setup/index.js';
 import { binToHex, cashAddressToLockingBytecode } from '@bitauth/libauth';
 
 export const main = async () => {

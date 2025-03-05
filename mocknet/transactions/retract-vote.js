@@ -8,7 +8,7 @@ import {
   aliceTemplate,
   aliceTokenAddress,
   commitmentLengthForProposalType
-} from '../setup.js';
+} from '../setup/index.js';
 import { hexToInt  } from '../utils.js';
 
 
@@ -27,7 +27,8 @@ export const main = async () => {
   const proposalUtxo = contractUtxos.find(utxo => 
     utxo.token?.category === daoCategory &&
     utxo.token?.nft?.capability === 'mutable' &&
-    utxo.token?.nft?.commitment.length === commitmentLengthForProposalType['ADD']
+    utxo.token?.nft?.commitment.length === commitmentLengthForProposalType['ADD'] &&
+    utxo.token.amount > 0n
   );
   if (!proposalUtxo) { throw new Error('Proposal utxo not found'); }
 
