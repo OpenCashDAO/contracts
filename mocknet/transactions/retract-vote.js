@@ -6,9 +6,10 @@ import {
   daoCategory,
   aliceAddress,
   aliceTemplate,
-  aliceTokenAddress
+  aliceTokenAddress,
+  commitmentLengthForProposalType
 } from '../setup.js';
-import { intToBytesToHex, getProposalUtxo } from '../utils.js';
+import { hexToInt  } from '../utils.js';
 
 
 export const main = async () => {
@@ -23,23 +24,33 @@ export const main = async () => {
   const retractVoteUtxo = retractVoteUtxos[0];
   if (!retractVoteUtxo) { throw new Error('Vote utxo not found'); }
 
-  const daoMintingUtxo = contractUtxos.find(utxo => 
+  const proposalUtxo = contractUtxos.find(utxo => 
     utxo.token?.category === daoCategory &&
-    utxo.token?.nft?.capability === 'minting'
+    utxo.token?.nft?.capability === 'mutable' &&
+    utxo.token?.nft?.commitment.length === commitmentLengthForProposalType['ADD']
   );
-  if (!daoMintingUtxo) { throw new Error('DAO minting utxo not found'); }
-
-  const proposalUtxo = getProposalUtxo({ contractUtxos, proposalType: 'ADD' })
+  if (!proposalUtxo) { throw new Error('Proposal utxo not found'); }
 
   const aliceUtxos = await provider.getUtxos(aliceAddress);
   const aliceUtxo = aliceUtxos.find(utxo => utxo.satoshis >= 10000);
   if (!aliceUtxo) { throw new Error('Alice utxo not found'); }
 
+  const aliceVoteUtxo = aliceUtxos.find(utxo => 
+    utxo.token?.category === daoCategory &&
+    utxo?.token?.amount === 0n &&
+    (utxo.token?.nft?.capability === 'mutable' || utxo.token?.nft?.capability === 'none') &&
+    utxo.token?.nft?.commitment.length === 24 // 12 bytes
+  );
+  if (!aliceVoteUtxo) { throw new Error('Alice vote utxo not found'); }
+
+  const commitment = aliceVoteUtxo.token.nft.commitment;
+  const voteAmount = hexToInt(commitment.slice(8));
+
   const tx = await new TransactionBuilder({ provider })
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())
     .addInput(retractVoteUtxo, RetractVoteContract.unlock.call())
-    .addInput(daoMintingUtxo, DAOControllerContract.unlock.call())
     .addInput(proposalUtxo, DAOControllerContract.unlock.call())
+    .addInput(aliceVoteUtxo, aliceTemplate.unlockP2PKH())
     .addInput(aliceUtxo, aliceTemplate.unlockP2PKH())
     .addOutput({
       to: DAOControllerContract.tokenAddress,
@@ -53,25 +64,13 @@ export const main = async () => {
         }
       },
     })
-    .addOutput({ to: VoteContract.address, amount: retractVoteUtxo.satoshis })
-    .addOutput({
-      to: DAOControllerContract.tokenAddress,
-      amount: daoMintingUtxo.satoshis,
-      token: {
-        category: daoMintingUtxo.token.category,
-        amount: daoMintingUtxo.token.amount,
-        nft: {
-          commitment: daoMintingUtxo.token.nft.commitment,
-          capability: daoMintingUtxo.token.nft.capability
-        }
-      },
-    })
+    .addOutput({ to: RetractVoteContract.address, amount: retractVoteUtxo.satoshis })
     .addOutput({
       to: DAOControllerContract.tokenAddress,
       amount: proposalUtxo.satoshis,
       token: {
         category: proposalUtxo.token.category,
-        amount: proposalUtxo.token.amount + voteAmount,
+        amount: proposalUtxo.token.amount - BigInt(voteAmount),
         nft: {
           commitment: proposalUtxo.token.nft.commitment,
           capability: proposalUtxo.token.nft.capability
@@ -83,22 +82,14 @@ export const main = async () => {
       amount: BigInt(1000),
       token: {
         category: proposalUtxo.token.category,
-        amount: proposalUtxo.token.amount,
-        nft: {
-          commitment: proposalUtxo.token.nft.commitment.slice(0, 8) + intToBytesToHex({value: Number(voteAmount), length: 8}),
-          capability: 'none'
-        }
+        amount: BigInt(voteAmount),
       },
     })
     .addOutput({
       to: aliceTokenAddress,
-      amount: aliceUtxo.satoshis - BigInt(2000n),
-      token: {
-        category: aliceUtxo.token.category,
-        amount: aliceUtxo.token.amount - voteAmount
-      },
+      amount: aliceVoteUtxo.satoshis,
     })
     .send();
 
   console.log(tx);
-} 
+}

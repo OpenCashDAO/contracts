@@ -60,6 +60,9 @@ export const reverseDaoTokenCategory = binToHex(hexToBin(daoCategory).reverse())
 export const upgradableProjectCategory = UpgradableProjectNFT.category
 export const reverseUpgradableProjectCategory = binToHex(hexToBin(upgradableProjectCategory).reverse())
 
+export const proposalId = intToBytesToHex({value: hexToInt(DAOControllerNFT.nft.commitment) + 1, length: 4});
+export const threadCount = intToBytesToHex({value: 1, length: 2});
+
 export const aliceTemplate = new SignatureTemplate(alicePriv);
 export const aliceAddressLockingBytecode = cashAddressToLockingBytecode(aliceAddress).bytecode;
 provider.addUtxo(aliceAddress, randomUtxo());
@@ -67,8 +70,6 @@ provider.addUtxo(aliceAddress, randomUtxo());
 provider.addUtxo(aliceAddress, randomUtxo());
 provider.addUtxo(aliceTokenAddress, {... randomUtxo(), token: { category: daoCategory, amount: 1000000n }});
 
-const proposalId = intToBytesToHex({value: hexToInt(DAOControllerNFT.nft.commitment) + 1, length: 4});
-const threadCount = intToBytesToHex({value: 1, length: 2});
 
 // Export all the contracts
 
@@ -136,48 +137,6 @@ provider.addUtxo(DAOControllerContract.address, {
   },
   ...randomUtxo()
 });
-
-// Add Proposal NFTs
-
-const proposalNFTUtxoAdd = {
-  token: {
-    ...randomNFT({
-      category: daoCategory,
-      nft: {
-        commitment: proposalId + threadCount + threadCount + contractALockingBytecode.slice(4, -2),
-        capability: 'mutable'
-      }
-    })
-  },
-  ...randomUtxo()
-};
-const proposalNFTUtxoRemove = {
-  token: {
-    ...randomNFT({
-      category: daoCategory,
-      nft: {
-        commitment: proposalId + threadCount,
-        capability: 'mutable'
-      }
-    })
-  },
-  ...randomUtxo()
-};
-const proposalNFTUtxoReplace = {
-  token: {
-    ...randomNFT({
-      category: daoCategory,
-      nft: {
-        commitment: proposalId + threadCount + contractALockingBytecode.slice(4, -2),
-        capability: 'mutable'
-      }
-    })
-  },
-  ...randomUtxo()
-};
-provider.addUtxo(DAOControllerContract.address, proposalNFTUtxoAdd);
-provider.addUtxo(DAOControllerContract.address, proposalNFTUtxoRemove);
-provider.addUtxo(DAOControllerContract.address, proposalNFTUtxoReplace);
 
 
 // Create authorizedThreadNFT for the Upgradable Project

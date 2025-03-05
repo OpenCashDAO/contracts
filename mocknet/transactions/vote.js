@@ -6,12 +6,15 @@ import {
   daoCategory,
   aliceAddress,
   aliceTemplate,
-  aliceTokenAddress
+  aliceTokenAddress,
+  commitmentLengthForProposalType
 } from '../setup.js';
-import { intToBytesToHex, getProposalUtxo } from '../utils.js';
+import { intToBytesToHex } from '../utils.js';
 
 
 export const main = async () => {
+  // variables
+  const voteAmount = BigInt(1000);
   const contractUtxos = await provider.getUtxos(DAOControllerContract.address);
   const authorizedThreadUtxo = contractUtxos.find(utxo => 
     utxo.token?.category === daoCategory &&
@@ -29,10 +32,12 @@ export const main = async () => {
   );
   if (!daoMintingUtxo) { throw new Error('DAO minting utxo not found'); }
 
-  const proposalUtxo = getProposalUtxo({ contractUtxos, proposalType: 'ADD' })
-
-  // variables
-  const voteAmount = BigInt(1000);
+  const proposalUtxo = contractUtxos.find(utxo => 
+    utxo.token?.category === daoCategory &&
+    utxo.token?.nft?.capability === 'mutable' &&
+    utxo.token?.nft?.commitment.length === commitmentLengthForProposalType['ADD']
+  );
+  if (!proposalUtxo) { throw new Error('Proposal utxo not found'); }
 
   const aliceUtxos = await provider.getUtxos(aliceAddress);
   const aliceUtxo = aliceUtxos.find(utxo => utxo.token?.amount >= voteAmount);

@@ -32,27 +32,37 @@ contract RetractVote() {
     require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);
     require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);
 
+    // All NFTs should have the same category
     bytes daoInputCategory = tx.inputs[0].tokenCategory;
     require(tx.inputs[3].tokenCategory == daoInputCategory);
     require(tx.outputs[3].tokenCategory == daoInputCategory);
 
+    // This holds the commitmentDeposit.
+    require(tx.outputs[2].value == tx.inputs[2].value);
+
     // VoteProposalNFT should be mutable
     bytes voteProposalCategory, bytes voteProposalCapability = tx.outputs[2].tokenCategory.split(32);
     require(voteProposalCategory == daoInputCategory);
-    require(voteProposalCapability == 0x01 || voteProposalCapability == 0x); // Mutable or immutable
+    // Mutable when the voting is on-going and immutable when the voting is over
+    require(voteProposalCapability == 0x01 || voteProposalCapability == 0x);
 
+    // RecieptNFT should have 0 tokenAmount
+    require(tx.inputs[3].tokenAmount == 0);
+
+    // Get the proposalId and voteAmount from the VoteProposalNFT
     bytes proposalId, bytes voteAmountBytes = tx.inputs[3].nftCommitment.split(4);
     require(tx.inputs[3].nftCommitment.length == 12);
 
-    int voteAmount = int(voteAmountBytes);
-
-    require(tx.outputs[3].tokenAmount == tx.inputs[3].tokenAmount - voteAmount);
-    require(tx.outputs[2].tokenAmount == tx.inputs[2].tokenAmount + voteAmount);
-
     // Compare projectID i.e the first 4 bytes of the nftCommitment
     require(proposalId == tx.inputs[2].nftCommitment.split(4)[0]);
+    
+    int voteAmount = int(voteAmountBytes.reverse());
+    // VoteProposalNFT should have the voteAmount added to it
+    require(tx.outputs[2].tokenAmount == tx.inputs[2].tokenAmount - voteAmount);
+    // RecieptNFT should have the voteAmount subtracted from it
+    require(tx.outputs[3].tokenAmount == tx.inputs[3].tokenAmount + voteAmount);
 
-    require(tx.outputs[4].value == tx.inputs[3].value);
-    require(tx.outputs[4].nftCommitment == 0x);
+    // Pure BCH output
+    require(tx.outputs[4].tokenCategory == 0x);
   }
 }
