@@ -1,18 +1,19 @@
 import { TransactionBuilder } from 'cashscript';
-import { binToHex } from '@bitauth/libauth';
+import { binToHex, hexToBin } from '@bitauth/libauth';
 import {
   DAOControllerContract,
   UpgradableProjectContract,
   ProposalContract,
   provider,
   daoCategory,
+  contractNewLockingBytecode,
   upgradableProjectCategory,
   proposalContractLockingBytecode,
   aliceAddress,
   aliceTemplate,
   aliceAddressLockingBytecode,
   minCommitmentDeposit
-} from '../setup/index.js';
+} from '../../setup/index.js';
 
 
 export const main = async () => {
@@ -46,12 +47,13 @@ export const main = async () => {
   if(!aliceUtxo) { throw new Error('Alice utxo not found'); }
 
   // Variables
-  const proposalCommitment = projectAuthorizedUtxo.token.nft.commitment.slice(0, 12);
+  const proposalScriptHash = hexToBin(contractNewLockingBytecode.slice(4, -2));
+  const proposalCommitment = projectAuthorizedUtxo.token.nft.commitment.slice(0, 12) + binToHex(proposalScriptHash);
   const proposalId = projectAuthorizedUtxo.token.nft.commitment.slice(0, 8);
 
   const tx = await new TransactionBuilder({ provider })
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())
-    .addInput(proposalUtxo, ProposalContract.unlock.remove())
+    .addInput(proposalUtxo, ProposalContract.unlock.replace(proposalScriptHash))
     .addInput(daoMintingUtxo, DAOControllerContract.unlock.call())
     .addInput(projectAuthorizedUtxo, UpgradableProjectContract.unlock.useAuthorizedThread())
     .addInput(aliceUtxo, aliceTemplate.unlockP2PKH())

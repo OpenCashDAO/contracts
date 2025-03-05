@@ -1,9 +1,9 @@
 import { main as daoSetup } from './mocknet/setup/dao.js';
 import { main as upgradableProjectSetup } from './mocknet/setup/upgradable-project.js';
 
-import { main as proposalToAdd } from './mocknet/transactions/proposal-to-add.js';
-import { main as proposalToRemove } from './mocknet/transactions/proposal-to-remove.js';
-import { main as proposalToReplace } from './mocknet/transactions/proposal-to-replace.js';
+import { main as proposalToAdd } from './mocknet/transactions/proposals/add.js';
+import { main as proposalToRemove } from './mocknet/transactions/proposals/remove.js';
+import { main as proposalToReplace } from './mocknet/transactions/proposals/replace.js';
 
 import { main as setupForVote } from './mocknet/setup/vote.js';
 import { main as vote } from './mocknet/transactions/vote.js';
@@ -21,17 +21,17 @@ const main = async () => {
   await daoSetup();
   await upgradableProjectSetup();
 
-  await proposalToAdd();
-  await proposalToRemove();
-  await proposalToReplace();
+  // await proposalToAdd();
+  // await proposalToRemove();
+  // await proposalToReplace();
 
-  await setupForVote();
-  await vote();
+  // await setupForVote();
+  // await vote();
 
-  await setupForRetractVote();
-  await retractVote();
+  // await setupForRetractVote();
+  // await retractVote();
 
-  // await addThreads();
+  await addThreads();
   // await removeThreads();
   // await replaceThreads();
   // await failProposal();

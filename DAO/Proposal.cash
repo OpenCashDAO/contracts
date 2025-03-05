@@ -59,6 +59,9 @@ contract Proposal(int minCommitmentDeposit) {
     require(proposalScriptHash.length == 32);
     require(threadCount.length == 2);
 
+    // Thread count should not be 0
+    require(int(threadCount.reverse()) != 0);
+
     // Proposal NFT ID increases by 1 with each transaction.
     require(int(tx.outputs[2].nftCommitment.reverse()) == int(tx.inputs[2].nftCommitment.reverse()) + 1);
 

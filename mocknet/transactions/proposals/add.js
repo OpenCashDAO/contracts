@@ -11,8 +11,8 @@ import {
   aliceTemplate,
   aliceAddressLockingBytecode,
   minCommitmentDeposit
-} from '../setup/index.js';
-import { intToBytesToHex, hexToInt } from '../utils.js';
+} from '../../setup/index.js';
+import { intToBytesToHex, hexToInt } from '../../utils.js';
 
 export const main = async () => {
   const contractUtxos = await provider.getUtxos(DAOControllerContract.address);

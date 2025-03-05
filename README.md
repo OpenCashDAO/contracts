@@ -311,7 +311,7 @@ VoteNFT:
 ProposalCounterNFT:
   - `category`: daoCategory
   - `commitment`: 4 bytes
-  - `capability`: immutable
+  - `capability`: minting
 
 AuthorizedThreadNFT:
   - `category`: daoCategory
@@ -326,7 +326,7 @@ ProjectAuthorizedThreadNFT:
 ProjectMintingNFT:
   - `category`: projectCategory
   - `commitment`: 0 bytes
-  - `capability`: immutable
+  - `capability`: minting
 
 
 
