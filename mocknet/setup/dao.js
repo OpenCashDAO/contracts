@@ -7,7 +7,7 @@ import {
   DAOControllerNFT,
   daoCategory,
   executeProposalContractLockingBytecode,
-  proposalContractLockingBytecode,
+  submitProposalContractLockingBytecode,
   votingContractLockingBytecode,
   provider
 } from './index.js';
@@ -44,7 +44,7 @@ export const main = async () => {
       ...randomNFT({
         category: daoCategory,
         nft: {
-          commitment: proposalContractLockingBytecode,
+          commitment: submitProposalContractLockingBytecode,
           capability: 'none'
         }
       })

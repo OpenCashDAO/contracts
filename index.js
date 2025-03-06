@@ -1,9 +1,9 @@
 import { main as daoSetup } from './mocknet/setup/dao.js';
 import { main as upgradableProjectSetup } from './mocknet/setup/upgradable-project.js';
 
-import { main as proposalToAdd } from './mocknet/transactions/proposals/add.js';
-import { main as proposalToRemove } from './mocknet/transactions/proposals/remove.js';
-import { main as proposalToReplace } from './mocknet/transactions/proposals/replace.js';
+import { main as proposalToAdd } from './mocknet/transactions/submissions/add.js';
+import { main as proposalToRemove } from './mocknet/transactions/submissions/remove.js';
+import { main as proposalToReplace } from './mocknet/transactions/submissions/replace.js';
 
 import { main as setupForVote } from './mocknet/setup/vote.js';
 import { main as vote } from './mocknet/transactions/vote.js';

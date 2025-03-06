@@ -30,7 +30,7 @@ const ContractNew = compileFile(new URL('../../Upgradable/ContractNew.cash', imp
 // DAO contracts
 const Controller = compileFile(new URL('../../DAO/Controller.cash', import.meta.url));
 const ExecuteProposal = compileFile(new URL('../../DAO/ExecuteProposal.cash', import.meta.url));
-const Proposal = compileFile(new URL('../../DAO/Proposal.cash', import.meta.url));
+const SubmitProposal = compileFile(new URL('../../DAO/SubmitProposal.cash', import.meta.url));
 const Voting = compileFile(new URL('../../DAO/Voting.cash', import.meta.url));
 
 
@@ -79,9 +79,9 @@ export const ExecuteProposalContract = new Contract(ExecuteProposal, [minVoteThr
 export const executeProposalContractLockingBytecode = binToHex(cashAddressToLockingBytecode(ExecuteProposalContract.address).bytecode);
 provider.addUtxo(ExecuteProposalContract.address, randomUtxo());
 
-export const ProposalContract = new Contract(Proposal, [minCommitmentDeposit], options);
-export const proposalContractLockingBytecode = binToHex(cashAddressToLockingBytecode(ProposalContract.address).bytecode);
-provider.addUtxo(ProposalContract.address, randomUtxo());
+export const SubmitProposalContract = new Contract(SubmitProposal, [minCommitmentDeposit], options);
+export const submitProposalContractLockingBytecode = binToHex(cashAddressToLockingBytecode(SubmitProposalContract.address).bytecode);
+provider.addUtxo(SubmitProposalContract.address, randomUtxo());
 
 export const VotingContract = new Contract(Voting, [], options);
 export const votingContractLockingBytecode = binToHex(cashAddressToLockingBytecode(VotingContract.address).bytecode);

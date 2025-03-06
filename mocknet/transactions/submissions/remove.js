@@ -1,14 +1,13 @@
 import { TransactionBuilder } from 'cashscript';
-import { binToHex, hexToBin } from '@bitauth/libauth';
+import { binToHex } from '@bitauth/libauth';
 import {
   DAOControllerContract,
   UpgradableProjectContract,
-  ProposalContract,
+  SubmitProposalContract,
   provider,
   daoCategory,
-  contractNewLockingBytecode,
   upgradableProjectCategory,
-  proposalContractLockingBytecode,
+  submitProposalContractLockingBytecode,
   aliceAddress,
   aliceTemplate,
   aliceAddressLockingBytecode,
@@ -21,11 +20,11 @@ export const main = async () => {
   const authorizedThreadUtxo = contractUtxos.find(utxo => 
     utxo.token?.category === daoCategory &&
     utxo.token?.nft?.capability === 'none' &&
-    utxo.token?.nft?.commitment === proposalContractLockingBytecode
+    utxo.token?.nft?.commitment === submitProposalContractLockingBytecode
   );
   if(!authorizedThreadUtxo) { throw new Error('Authorized thread utxo not found'); }
   
-  const proposalUtxos = await provider.getUtxos(ProposalContract.address);
+  const proposalUtxos = await provider.getUtxos(SubmitProposalContract.address);
   const proposalUtxo = proposalUtxos[0];
   if(!proposalUtxo) { throw new Error('Proposal utxo not found'); }
 
@@ -47,13 +46,12 @@ export const main = async () => {
   if(!aliceUtxo) { throw new Error('Alice utxo not found'); }
 
   // Variables
-  const proposalScriptHash = hexToBin(contractNewLockingBytecode.slice(4, -2));
-  const proposalCommitment = projectAuthorizedUtxo.token.nft.commitment.slice(0, 12) + binToHex(proposalScriptHash);
+  const proposalCommitment = projectAuthorizedUtxo.token.nft.commitment.slice(0, 12);
   const proposalId = projectAuthorizedUtxo.token.nft.commitment.slice(0, 8);
 
   const tx = await new TransactionBuilder({ provider })
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())
-    .addInput(proposalUtxo, ProposalContract.unlock.replace(proposalScriptHash))
+    .addInput(proposalUtxo, SubmitProposalContract.unlock.remove())
     .addInput(daoMintingUtxo, DAOControllerContract.unlock.call())
     .addInput(projectAuthorizedUtxo, UpgradableProjectContract.unlock.useAuthorizedThread())
     .addInput(aliceUtxo, aliceTemplate.unlockP2PKH())
@@ -69,7 +67,7 @@ export const main = async () => {
         }
       },
     })
-    .addOutput({ to: ProposalContract.address, amount: proposalUtxo.satoshis })
+    .addOutput({ to: SubmitProposalContract.address, amount: proposalUtxo.satoshis })
     .addOutput({
       to: DAOControllerContract.tokenAddress,
       amount: daoMintingUtxo.satoshis,
