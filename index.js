@@ -26,24 +26,24 @@ const main = async () => {
   await daoSetup();
   await upgradableProjectSetup();
 
-  await proposalToAdd();
-  await proposalToRemove();
-  await proposalToReplace();
+  // await proposalToAdd();
+  // await proposalToRemove();
+  // await proposalToReplace();
 
-  await setupForVote();
-  await vote();
+  // await setupForVote();
+  // await vote();
 
-  await setupForRetractVote();
-  await retractVote();
+  // await setupForRetractVote();
+  // await retractVote();
 
-  // await setupForAddThreads();
-  // await addThreads();
+  await setupForAddThreads();
+  await addThreads();
   // await removeThreads();
   // await replaceThreads();
   // await failProposal();
 
-  await setupForEndExecution();
-  await endExecutionForAddThread();
+  // await setupForEndExecution();
+  // await endExecutionForAddThread();
 }
 
 main();

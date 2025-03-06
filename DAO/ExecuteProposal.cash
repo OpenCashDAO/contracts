@@ -134,20 +134,40 @@ contract ExecuteProposal(
    *   - length: 35 bytes
    *   - category: daoCategory
    * - Input1: Any input from this contract.
-   * - Input2: Minting NFT of the Upgradable Project from the DAO Contract
-   *   - capability: minting
-   *   - length: 0 bytes
-   *   - category: projectCategory
-   * - Input3: VoteProposalNFT from the DAO Contract
+   * - Input2: VoteProposalNFT from the DAO Contract
    *   - capability: mutable
    *   - length: 40 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
    *   - category: daoCategory
-   * - Input4: TimeProposalNFT from the DAO Contract
+   * - Input3: TimeProposalNFT from the DAO Contract
    *   - capability: immutable
    *   - length: 29 bytes or 39 bytes <ProposalID (4 bytes), CreatorLockingBytecode (25 or 35 bytes)>
    *   - category: daoCategory
    *   - satoshis >= commitmentDeposit
-   * - Input5: Funding Utxo
+   * - Input4: Funding Utxo
+   *
+   *  -----------------------------------------------
+   *
+   *  More inputs for ADD Proposal
+   * - Input5: Minting NFT of the Upgradable Project from the DAO Contract
+   *   - capability: minting
+   *   - length: 0 bytes
+   *   - category: projectCategory
+   *
+   *  More inputs for REMOVE Proposal
+   * - Input5: authorizedThreadNFT to the Project Contract
+   *   - capability: immutable
+   *   - length: 38 bytes <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
+   *   - category: projectCategory
+   *
+   *  More inputs for REPLACE Proposal
+   * - Input5: Minting NFT of the Upgradable Project back to DAO Contract
+   *   - capability: minting
+   *   - length: 0 bytes
+   *   - category: projectCategory
+   * - Input6: authorizedThreadNFT to the Project Contract
+   *   - capability: immutable
+   *   - length: 38 bytes <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
+   *   - category: projectCategory
    *
    * @outputs
    * - Output0: DAO Contract's authorizedThreadNFT back to DAO Contract
@@ -155,31 +175,42 @@ contract ExecuteProposal(
    *   - length: 35 bytes
    *   - category: daoCategory
    * - Output1: Input1 back to this contract without any change.
-   * - Output2: Minting NFT of the Upgradable Project back to DAO Contract
-   *   - capability: minting
-   *   - length: 0 bytes
-   *   - category: projectCategory
-   * - Output3: VoteProposalNFT back to DAO Contract
+   * - Output2: VoteProposalNFT back to DAO Contract
    *   - capability: mutable
    *   - length: 40 bytes <ProposalID (4 bytes), UpdatedThreadLeft (2 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
    *   - category: daoCategory
    *   - satoshis: >= commitmentDeposit (If the threadLeft is 0 and timeProposalNFT is burned)
    *   - tokenAmount: all votes (If the threadLeft is not 0 then this tokenAmount will be 0)
-   * - Output4 TimeProposalNFT back to DAO Contract
+   * - Output3 TimeProposalNFT back to DAO Contract
    *   - capability: immutable
    *   - length: >=29 bytes <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)>
    *   - category: daoCategory
    *   - tokenAmount: all votes (If the threadLeft is not 0 then this tokenAmount will have all the votes)
-   * - Output5: New authorizedThreadNFT to the Project Contract
+   * - Output4: Change Utxo
+   *
+   *  -----------------------------------------------
+   *
+   *  More outputs for ADD Proposal
+   * - Output5: Minting NFT of the Upgradable Project back to DAO Contract
+   *   - capability: minting
+   *   - length: 0 bytes
+   *   - category: projectCategory
+   * - Output6: New authorizedThreadNFT to the Project Contract
    *   - capability: immutable
    *   - length: 38 bytes <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
    *   - category: projectCategory
-   * - Output6: Change Utxo
+   *
+   *  More outputs for REPLACE Proposal
+   * - Output5: Minting NFT of the Upgradable Project back to DAO Contract
+   *   - capability: minting
+   *   - length: 0 bytes
+   *   - category: projectCategory
+   * - Output6: New authorizedThreadNFT to the Project Contract
+   *   - capability: immutable
+   *   - length: 38 bytes <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
+   *   - category: projectCategory
    */
-  function addThreads() {
-    require(tx.inputs.length == 6);
-    require(tx.outputs.length == 7);
-
+  function execute() {
     // This contract can only be used at input1 and it should return the input1 back to itself.
     require(this.activeInputIndex == 1);
     require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);
@@ -191,43 +222,38 @@ contract ExecuteProposal(
     // because those contracts will not be manipulating the utxos of the Controller contract. Instead, they will
     // be manipulating their own utxos.
     bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;
-    // Project Minting NFT from DAO Contract
-    require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);
     // VoteProposalNFT from DAO Contract
-    require(tx.inputs[3].lockingBytecode == daoInputLockingBytecode);
+    require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);
     // TimeProposalNFT from DAO Contract
-    require(tx.inputs[4].lockingBytecode == daoInputLockingBytecode);
-    // Project Minting NFT back to DAO Contract
-    require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);
+    require(tx.inputs[3].lockingBytecode == daoInputLockingBytecode);
     // VoteProposalNFT back to DAO Contract
-    require(tx.outputs[3].lockingBytecode == daoInputLockingBytecode);
+    require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);
     // TimeProposalNFT back to DAO Contract
-    require(tx.outputs[4].lockingBytecode == daoInputLockingBytecode);
-    // New authorizedThreadNFT to the Project Contract
-    require(tx.outputs[5].lockingBytecode == projectLockingBytecode);
-
-    // Project minting NFT should be minting and of the 'projectCategory', used to mint the output[4]
-    bytes projectInputCategory, bytes projectInputCapability = tx.inputs[2].tokenCategory.split(32);
-    require(projectInputCategory == projectCategory);
-    require(projectInputCapability == 0x02); // Minting
-
-    require(tx.outputs[5].tokenCategory == projectCategory);
-    // ProjectMinting NFT should preserve it's minting capability
-    require(tx.outputs[2].tokenCategory == tx.inputs[2].tokenCategory);
-    require(tx.outputs[2].nftCommitment == 0x);
+    require(tx.outputs[3].lockingBytecode == daoInputLockingBytecode);
 
     bytes daoInputCategory = tx.inputs[0].tokenCategory;
-    bytes voteProposalCategory, bytes voteProposalCapability = tx.inputs[3].tokenCategory.split(32);
+    bytes voteProposalCategory, bytes voteProposalCapability = tx.inputs[2].tokenCategory.split(32);
     require(voteProposalCategory == daoInputCategory);
     require(voteProposalCapability == 0x01); // Mutable
     // TimeProposalNFT should be immutable
-    require(tx.inputs[4].tokenCategory == daoInputCategory);
+    require(tx.inputs[3].tokenCategory == daoInputCategory);
     // VoteProposalNFT should preserve it's mutable capability
-    require(tx.outputs[3].tokenCategory == tx.inputs[3].tokenCategory);
+    require(tx.outputs[2].tokenCategory == tx.inputs[2].tokenCategory);
+    require(tx.outputs[2].nftCommitment.length == tx.inputs[2].nftCommitment.length);
+
+    // voteProposalNFTLength
+    // Proposal to Add
+    // - commitment length: 40 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
+    // Proposal to Remove
+    // - commitment length: 6 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes)>
+    // Proposal to Replace
+    // - commitment length: 38 bytes <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
+    int voteProposalNFTLength = tx.inputs[2].nftCommitment.length;
+    require(voteProposalNFTLength == 6 || voteProposalNFTLength == 38 || voteProposalNFTLength == 40);
 
     // Ensure that the timeProposalNFT is being used. Since each capability and length has different role.
     // When an NFT has daoCategory, nftCommitment length 29/39 and coming from DAO contract, it's a timeProposalNFT.
-    int timeProposalNFTLength = tx.inputs[4].nftCommitment.length;
+    int timeProposalNFTLength = tx.inputs[3].nftCommitment.length;
     // <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)> or <ProposalID (4 bytes), CreatorLockingBytecode (35 bytes)>
     require(timeProposalNFTLength == 29 || timeProposalNFTLength == 39);
 
@@ -236,294 +262,114 @@ contract ExecuteProposal(
     // Once all the threads are minted, the timeProposalNFT is burned and votes and commitmentDeposit are transferred to the voteProposalNFT.
     
     // If there are no votes in the timeProposalNFT then it means that this is the first time the proposal is being executed.
-    if(tx.inputs[4].tokenAmount == 0) {
+    if(tx.inputs[3].tokenAmount == 0) {
       // The proposal should have more than `voteThreshold` votes to be considered as passed.
-      require(tx.inputs[3].tokenAmount > voteThreshold);
+      require(tx.inputs[2].tokenAmount > voteThreshold);
       // The min wait time for the proposal has been crossed and now the proposal can be executed.
-      require(tx.inputs[4].sequenceNumber >= voteWindow);
+      require(tx.inputs[3].sequenceNumber >= voteWindow);
       // Transfer the vote from timeProposalNFT to voteProposalNFT
-      require(tx.outputs[4].tokenAmount == tx.inputs[3].tokenAmount);
+      require(tx.outputs[3].tokenAmount == tx.inputs[2].tokenAmount);
       // Transfer the commitmentDeposit from timeProposalNFT to voteProposalNFT
-      require(tx.outputs[4].value == tx.inputs[3].value);
+      require(tx.outputs[3].value == tx.inputs[2].value);
     } else {
       // If the execution comes here then it means that the proposal has already passed and
       // the thread minting is underway.
       // Keep the votes in the timeProposalNFT
-      require(tx.outputs[4].tokenAmount == tx.inputs[4].tokenAmount);
+      require(tx.outputs[3].tokenAmount == tx.inputs[3].tokenAmount);
       // Keep the commitmentDeposit in the timeProposalNFT
-      require(tx.outputs[4].value == tx.inputs[4].value);
+      require(tx.outputs[2].value == tx.inputs[2].value);
     }
 
-    // Ensure that the voteProposalNFT for 'ADD' operation is being used. Since each capability and length has different role.
-    // When an NFT has daoCategory, nftCommitment length 40, mutable capability and coming from DAO contract,
-    // it's a voteProposalNFT for 'ADD' operation.
-    require(tx.outputs[3].nftCommitment.length == 40);
-    require(tx.inputs[3].nftCommitment.length == 40);
-
-    // Break the voteProposalNFT into proposalId, threadLeft, threadCount and proposedScriptHash
-    bytes proposalId, bytes remainingBytes0 = tx.inputs[3].nftCommitment.split(4);
+    // Break the voteProposalNFT into proposalId, threadLeft + remainingBytes
+    bytes proposalId, bytes remainingBytes0 = tx.inputs[2].nftCommitment.split(4);
     // Ensure that the timeProposalNFT and voteProposalNFT have the same proposalId
-    require(tx.inputs[4].nftCommitment.split(4)[0] == proposalId);
+    require(tx.inputs[3].nftCommitment.split(4)[0] == proposalId);
 
-    bytes threadLeft, bytes remainingBytes1 = remainingBytes0.split(2);
+    bytes threadLeft = remainingBytes0.split(2)[0];
     // Since this transaction is going to create a new authorized threadNFT,
     // the threadLeft field in the voteProposalNFT should be decremented by 1.
     int threadLeftAfterMint = int(threadLeft.reverse()) - 1;
     require(threadLeftAfterMint >= 0);
     bytes2 threadLeftBytes = bytes2(threadLeftAfterMint).reverse();
 
-    // Set the values for the output voteProposalNFT i.e only update the `threadLeft`
-    require(tx.outputs[3].nftCommitment == proposalId + threadLeftBytes + remainingBytes1);
+    // Input4: Funding Utxo
+    require(tx.inputs[4].tokenCategory == 0x);
+    // Output4: Change pure BCH
+    require(tx.outputs[4].tokenCategory == 0x);
 
-    // last chunk of the voteProposalNFT
-    bytes threadCount, bytes proposedScriptHash = remainingBytes1.split(2);
-    
-    // New authorizedThreadNFT to the project contract
-    require(tx.outputs[5].nftCommitment == proposalId + threadCount + proposedScriptHash);
-    // The structure of the new authorizedThreadNFT for the project contract is
-    // <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
-    require(tx.outputs[5].nftCommitment.length == 38);
+    if(tx.inputs[2].nftCommitment.length == 40) {
+      require(tx.inputs.length == 6);
+      require(tx.outputs.length == 7);
 
-    // Output6: Change pure BCH
-    require(tx.outputs[6].tokenCategory == 0x);
-  }
+      // Project Minting NFT from DAO Contract
+      require(tx.outputs[5].lockingBytecode == daoInputLockingBytecode);
 
-   /**
-   * This is called when the proposal intends to remove the threads of the project.
-   * @inputs
-   * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
-   *   - capability: immutable
-   *   - length: 35 bytes
-   *   - category: daoCategory
-   * - Input1: Any input from this contract.
-   * - Input2: VoteProposalNFT from the DAO Contract
-   *   - capability: mutable
-   *   - length: 40 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
-   *   - category: daoCategory
-   * - Input3: TimeProposalNFT from the DAO Contract
-   *   - capability: immutable
-   *   - length: >=29 bytes <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)>
-   *   - category: daoCategory
-   *   - satoshis >= commitmentDeposit [This will fund the transaction]
-   * - Input4: Minting NFT of the Upgradable Project from the DAO Contract
-   *   - capability: minting
-   *   - length: 0 bytes
-   *   - category: projectCategory
-   *
-   * @outputs
-   * - Output0: DAO Contract's authorizedThreadNFT back to DAO Contract
-   *   - capability: immutable
-   *   - length: 35 bytes
-   *   - category: daoCategory
-   * - Output1: Input1 back to this contract without any change.
-   * - Output2: Updated VoteProposalNFT back to DAO Contract
-   *   - capability: mutable
-   *   - length: 40 bytes <ProposalID (4 bytes), UpdatedThreadLeft (2 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
-   *   - category: daoCategory
-   * - Output3: Minting NFT of the Upgradable Project back to DAO Contract
-   *   - capability: minting
-   *   - length: 0 bytes
-   *   - category: projectCategory
-   * - Output4: New authorizedThreadNFT to the Project Contract
-   *   - capability: immutable
-   *   - length: 38 bytes <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
-   *   - category: projectCategory
-   * - Output5: commitmentDeposit back to the creator
-   */
-  function removeThreads() {
-    require(tx.inputs.length == 5);
-    require(tx.outputs.length <= 6);
+      // ProjectMinting NFT should preserve it's minting capability
+      require(tx.outputs[5].tokenCategory == tx.inputs[5].tokenCategory);
+      require(tx.outputs[5].lockingBytecode == tx.inputs[5].lockingBytecode);
+      require(tx.outputs[5].nftCommitment == 0x);
 
-    // This contract can only be used at input1 and it should return the input1 back to itself.
-    require(this.activeInputIndex == 1);
-    require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);
-    // Ensure that the daoCategory or projectCategory in not minted here.
-    require(tx.outputs[this.activeInputIndex].tokenCategory == 0x);
+      bytes remainingBytes1 = tx.inputs[2].nftCommitment.split(6)[1];
 
-    // This contract can only be used with the 'lockingbytecode' used in the 0th input.
-    // Note: This contract can be used with any contract that fulfills these conditions, and that is fine
-    // because those contracts will not be manipulating the utxos of the Controller contract. Instead, they will
-    // be manipulating their own utxos.
-    bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;
-    require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);
-    require(tx.inputs[3].lockingBytecode == daoInputLockingBytecode);
-    require(tx.inputs[4].lockingBytecode == daoInputLockingBytecode);
-    require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);
-    require(tx.outputs[3].lockingBytecode == daoInputLockingBytecode);
+      // Set the values for the output voteProposalNFT i.e only update the `threadLeft`
+      require(tx.outputs[2].nftCommitment == proposalId + threadLeftBytes + remainingBytes1);
+      // last chunk of the voteProposalNFT
+      bytes threadCount, bytes proposedScriptHash = remainingBytes1.split(2);
+      // New authorizedThreadNFT to the project contract
+      require(tx.outputs[6].nftCommitment == proposalId + threadCount + proposedScriptHash);
+      // The structure of the new authorizedThreadNFT for the project contract is
+      // <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
+      require(tx.outputs[6].nftCommitment.length == 38);
 
-    // Project minting NFT should be minting and of the 'projectCategory', used to mint the output[5]
-    bytes projectInputCategory, bytes projectInputCapability = tx.inputs[2].tokenCategory.split(32);
-    require(projectInputCategory == projectCategory);
-    require(projectInputCapability == 0x02); // Minting
-    // ProjectMinting NFT should go back to the DAO Contract without change
-    require(tx.outputs[2].tokenCategory == tx.inputs[2].tokenCategory);
-    
-    // Check ProposalNFTs categories
-    bytes daoInputCategory = tx.inputs[0].tokenCategory;
-    // VoteProposalNFT should be mutable
-    bytes voteProposalCategory, bytes voteProposalCapability = tx.inputs[3].tokenCategory.split(32);
-    require(voteProposalCategory == daoInputCategory);
-    require(voteProposalCapability == 0x01); // Mutable
-    require(tx.inputs[4].tokenCategory == daoInputCategory);
-    require(tx.outputs[3].tokenCategory == daoInputCategory);
+      // Project minting NFT should be minting and of the 'projectCategory', used to mint the output[4]
+      bytes projectInputCategory, bytes projectInputCapability = tx.inputs[5].tokenCategory.split(32);
+      require(projectInputCategory == projectCategory);
+      require(projectInputCapability == 0x02); // Minting
 
-    // The vote amount should stay the same.
-    require(tx.inputs[3].tokenAmount == tx.outputs[3].tokenAmount);
-
-    // This condition is responsible for the proposal passing.
-    require(tx.inputs[3].tokenAmount >= voteThreshold);
-
-    // New authorizedThreadNFT to the project contract
-    bytes proposalId, bytes remainingBytes0 = tx.inputs[3].nftCommitment.split(4);
-    bytes threadLeft, bytes remainingBytes1 = remainingBytes0.split(2);
-    bytes threadCount, bytes proposedScriptHash = remainingBytes1.split(2);
-
-    // TimeProposalNFT
-    // The min wait time for the proposal has been crossed and now the proposal can be executed.
-    require(tx.inputs[4].sequenceNumber >= voteWindow);
-    require(tx.inputs[4].nftCommitment.split(4)[0] == proposalId);
-    // <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)> or <ProposalID (4 bytes), CreatorLockingBytecode (35 bytes)>
-    require(tx.inputs[4].nftCommitment.length == 29 || tx.inputs[4].nftCommitment.length == 39);
-
-    int newThreadLeft = int(threadLeft) - 1;
-    require(newThreadLeft <= int(threadCount));
-    bytes newThreadLeftBytes = bytes(newThreadLeft);
-    require(newThreadLeftBytes.length == 2);
-
-    require(tx.outputs[3].nftCommitment == proposalId + newThreadLeftBytes + remainingBytes1);
-    require(tx.outputs[3].nftCommitment.length == 40);
-    require(tx.inputs[3].nftCommitment.length == 40);
-    require(tx.outputs[3].nftCommitment.length == tx.inputs[3].nftCommitment.length);
-
-    require(tx.outputs[5].nftCommitment == proposalId + threadCount + proposedScriptHash);
-    require(tx.outputs[5].lockingBytecode == projectLockingBytecode);
-    require(tx.outputs[5].nftCommitment.length == 39);
-    require(tx.outputs[5].tokenCategory == projectCategory);
-
-    if(tx.outputs.length == 7) {
-      // Output6: Change pure BCH
-      require(tx.outputs[6].tokenCategory == 0x);
+      // New authorizedThreadNFT to the Project Contract
+      require(tx.outputs[6].lockingBytecode == projectLockingBytecode);
+      require(tx.outputs[6].tokenCategory == projectCategory);
     }
 
-  }
-
-  /**
-   * This is called when the proposal intends to replace the threads of the project.
-   * @inputs
-   * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
-   *   - capability: immutable
-   *   - length: 35 bytes
-   *   - category: daoCategory
-   * - Input1: Any input from this contract.
-   * - Input2: VoteProposalNFT from the DAO Contract
-   *   - capability: mutable
-   *   - length: 40 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
-   *   - category: daoCategory
-   * - Input3: TimeProposalNFT from the DAO Contract
-   *   - capability: immutable
-   *   - length: >=29 bytes <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)>
-   *   - category: daoCategory
-   *   - satoshis >= commitmentDeposit [This will fund the transaction]
-   * - Input4: Minting NFT of the Upgradable Project from the DAO Contract
-   *   - capability: minting
-   *   - length: 0 bytes
-   *   - category: projectCategory
-   *
-   * @outputs
-   * - Output0: DAO Contract's authorizedThreadNFT back to DAO Contract
-   *   - capability: immutable
-   *   - length: 35 bytes
-   *   - category: daoCategory
-   * - Output1: Input1 back to this contract without any change.
-   * - Output2: Updated VoteProposalNFT back to DAO Contract
-   *   - capability: mutable
-   *   - length: 40 bytes <ProposalID (4 bytes), UpdatedThreadLeft (2 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
-   *   - category: daoCategory
-   * - Output3: Minting NFT of the Upgradable Project back to DAO Contract
-   *   - capability: minting
-   *   - length: 0 bytes
-   *   - category: projectCategory
-   * - Output4: New authorizedThreadNFT to the Project Contract
-   *   - capability: immutable
-   *   - length: 38 bytes <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
-   *   - category: projectCategory
-   * - Output5: commitmentDeposit back to the creator
-   */
-  function replaceThreads() {
-    require(tx.inputs.length == 5);
-    require(tx.outputs.length <= 6);
-
-    // This contract can only be used at input1 and it should return the input1 back to itself.
-    require(this.activeInputIndex == 1);
-    require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);
-    // Ensure that the daoCategory or projectCategory in not minted here.
-    require(tx.outputs[this.activeInputIndex].tokenCategory == 0x);
-
-    // This contract can only be used with the 'lockingbytecode' used in the 0th input.
-    // Note: This contract can be used with any contract that fulfills these conditions, and that is fine
-    // because those contracts will not be manipulating the utxos of the Controller contract. Instead, they will
-    // be manipulating their own utxos.
-    bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;
-    require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);
-    require(tx.inputs[3].lockingBytecode == daoInputLockingBytecode);
-    require(tx.inputs[4].lockingBytecode == daoInputLockingBytecode);
-    require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);
-    require(tx.outputs[3].lockingBytecode == daoInputLockingBytecode);
-
-    // Project minting NFT should be minting and of the 'projectCategory', used to mint the output[5]
-    bytes projectInputCategory, bytes projectInputCapability = tx.inputs[2].tokenCategory.split(32);
-    require(projectInputCategory == projectCategory);
-    require(projectInputCapability == 0x02); // Minting
-    // ProjectMinting NFT should go back to the DAO Contract without change
-    require(tx.outputs[2].tokenCategory == tx.inputs[2].tokenCategory);
-    
-    // Check ProposalNFTs categories
-    bytes daoInputCategory = tx.inputs[0].tokenCategory;
-    // VoteProposalNFT should be mutable
-    bytes voteProposalCategory, bytes voteProposalCapability = tx.inputs[3].tokenCategory.split(32);
-    require(voteProposalCategory == daoInputCategory);
-    require(voteProposalCapability == 0x01); // Mutable
-    require(tx.inputs[4].tokenCategory == daoInputCategory);
-    require(tx.outputs[3].tokenCategory == daoInputCategory);
-
-    // The vote amount should stay the same.
-    require(tx.inputs[3].tokenAmount == tx.outputs[3].tokenAmount);
-
-    // This condition is responsible for the proposal passing.
-    require(tx.inputs[3].tokenAmount >= voteThreshold);
-
-    // New authorizedThreadNFT to the project contract
-    bytes proposalId, bytes remainingBytes0 = tx.inputs[3].nftCommitment.split(4);
-    bytes threadLeft, bytes remainingBytes1 = remainingBytes0.split(2);
-    bytes threadCount, bytes proposedScriptHash = remainingBytes1.split(2);
-
-    // TimeProposalNFT
-    // The min wait time for the proposal has been crossed and now the proposal can be executed.
-    require(tx.inputs[4].sequenceNumber >= voteWindow);
-    require(tx.inputs[4].nftCommitment.split(4)[0] == proposalId);
-    
-    // <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)> or <ProposalID (4 bytes), CreatorLockingBytecode (35 bytes)>
-    require(tx.inputs[4].nftCommitment.length == 29 || tx.inputs[4].nftCommitment.length == 39);
-
-    int newThreadLeft = int(threadLeft) - 1;
-    require(newThreadLeft <= int(threadCount));
-    bytes newThreadLeftBytes = bytes(newThreadLeft);
-    require(newThreadLeftBytes.length == 2);
-
-    require(tx.outputs[3].nftCommitment == proposalId + newThreadLeftBytes + remainingBytes1);
-    require(tx.outputs[3].nftCommitment.length == 40);
-    require(tx.inputs[3].nftCommitment.length == 40);
-    require(tx.outputs[3].nftCommitment.length == tx.inputs[3].nftCommitment.length);
-
-    require(tx.outputs[5].nftCommitment == proposalId + threadCount + proposedScriptHash);
-    require(tx.outputs[5].lockingBytecode == projectLockingBytecode);
-    require(tx.outputs[5].nftCommitment.length == 39);
-    require(tx.outputs[5].tokenCategory == projectCategory);
-
-    if(tx.outputs.length == 7) {
-      // Output6: Change pure BCH
-      require(tx.outputs[6].tokenCategory == 0x);
+    // REMOVE Proposal
+    if(tx.inputs[2].nftCommitment.length == 6) {
+      require(tx.inputs.length == 6);
+      require(tx.outputs.length == 5);
     }
 
+    // REPLACE Proposal
+    if(tx.inputs[2].nftCommitment.length == 38) {
+      require(tx.inputs.length == 7);
+      require(tx.outputs.length == 7);
+
+      // Project Minting NFT from DAO Contract
+      require(tx.outputs[5].lockingBytecode == daoInputLockingBytecode);
+
+      // ProjectMinting NFT should preserve it's minting capability
+      require(tx.outputs[5].tokenCategory == tx.inputs[5].tokenCategory);
+      require(tx.outputs[5].lockingBytecode == tx.inputs[5].lockingBytecode);
+      require(tx.outputs[5].nftCommitment == 0x);
+
+      bytes remainingBytes1 = tx.inputs[2].nftCommitment.split(6)[1];
+
+      // Set the values for the output voteProposalNFT i.e only update the `threadLeft`
+      require(tx.outputs[2].nftCommitment == proposalId + threadLeftBytes + remainingBytes1);
+      // last chunk of the voteProposalNFT
+      bytes threadCount, bytes proposedScriptHash = remainingBytes1.split(2);
+      // New authorizedThreadNFT to the project contract
+      require(tx.outputs[6].nftCommitment == proposalId + threadCount + proposedScriptHash);
+      // The structure of the new authorizedThreadNFT for the project contract is
+      // <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
+      require(tx.outputs[6].nftCommitment.length == 38);
+
+      // Project minting NFT should be minting and of the 'projectCategory', used to mint the output[4]
+      bytes projectInputCategory, bytes projectInputCapability = tx.inputs[5].tokenCategory.split(32);
+      require(projectInputCategory == projectCategory);
+      require(projectInputCapability == 0x02); // Minting
+
+      // New authorizedThreadNFT to the Project Contract
+      require(tx.outputs[6].lockingBytecode == projectLockingBytecode);
+      require(tx.outputs[6].tokenCategory == projectCategory);
+    }
   }
 }

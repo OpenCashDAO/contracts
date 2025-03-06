@@ -59,11 +59,11 @@ export const main = async () => {
 
   const tx = await new TransactionBuilder({ provider })
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())
-    .addInput(executeUtxo, ExecuteProposalContract.unlock.addThreads())
-    .addInput(projectMintingUtxo, DAOControllerContract.unlock.call())
+    .addInput(executeUtxo, ExecuteProposalContract.unlock.execute())
     .addInput(voteProposalUtxo, DAOControllerContract.unlock.call())
     .addInput(timeProposalUtxo, DAOControllerContract.unlock.call())
     .addInput(aliceUtxo, aliceTemplate.unlockP2PKH())
+    .addInput(projectMintingUtxo, DAOControllerContract.unlock.call())
     .addOutput({
       to: DAOControllerContract.tokenAddress,
       amount: authorizedThreadUtxo.satoshis,
@@ -77,18 +77,6 @@ export const main = async () => {
       },
     })
     .addOutput({ to: ExecuteProposalContract.address, amount: executeUtxo.satoshis })
-    .addOutput({
-      to: DAOControllerContract.tokenAddress,
-      amount: projectMintingUtxo.satoshis,
-      token: {
-        category: projectMintingUtxo.token.category,
-        amount: projectMintingUtxo?.token?.amount,
-        nft: {
-          commitment: projectMintingUtxo?.token?.nft?.commitment,
-          capability: projectMintingUtxo?.token?.nft?.capability
-        }
-      },
-    })
     .addOutput({
       to: DAOControllerContract.tokenAddress,
       amount: voteProposalUtxo.satoshis,
@@ -114,6 +102,22 @@ export const main = async () => {
       },
     })
     .addOutput({
+      to: aliceAddress,
+      amount: aliceUtxo.satoshis - BigInt(5000n),
+    })
+    .addOutput({
+      to: DAOControllerContract.tokenAddress,
+      amount: projectMintingUtxo.satoshis,
+      token: {
+        category: projectMintingUtxo.token.category,
+        amount: projectMintingUtxo?.token?.amount,
+        nft: {
+          commitment: projectMintingUtxo?.token?.nft?.commitment,
+          capability: projectMintingUtxo?.token?.nft?.capability
+        }
+      },
+    })
+    .addOutput({
       to: UpgradableProjectContract.tokenAddress,
       amount: BigInt(1000n),
       token: {
@@ -124,10 +128,6 @@ export const main = async () => {
           capability: 'none'
         }
       },
-    })
-    .addOutput({
-      to: aliceAddress,
-      amount: aliceUtxo.satoshis - BigInt(5000n),
     })
     .send()
     // .bitauthUri()
