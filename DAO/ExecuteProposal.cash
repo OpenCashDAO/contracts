@@ -259,8 +259,6 @@ contract ExecuteProposal(
     
     // If there are no votes in the timeProposalNFT then it means that this is the first time the proposal is being executed.
     if(tx.inputs[3].tokenAmount == 0) {
-      int amt = tx.inputs[2].tokenAmount;
-      console.log(amt);
       // The proposal should have more than `voteThreshold` votes to be considered as passed.
       require(tx.inputs[2].tokenAmount > voteThreshold);
       // The min wait time for the proposal has been crossed and now the proposal can be executed.
@@ -331,6 +329,7 @@ contract ExecuteProposal(
       require(projectInputCapability == 0x02); // Minting
 
       // New authorizedThreadNFT to the Project Contract
+      // @todo: Uncomment this, commented out because of cashscript bug
       console.log(projectLockingBytecode);
       // require(tx.outputs[6].lockingBytecode == projectLockingBytecode);
       require(tx.outputs[6].tokenCategory == projectCategory);

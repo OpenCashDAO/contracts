@@ -23,15 +23,15 @@ export { alicePriv, aliceAddress, aliceTokenAddress, alicePkh, alicePub };
 // - Create authorizedThreadNFT
 
 // Upgradable Project contract
-const Upgradable = compileFile(new URL('../../Upgradable/Upgradable.cash', import.meta.url));
-const ContractA = compileFile(new URL('../../Upgradable/ContractA.cash', import.meta.url));
-const ContractNew = compileFile(new URL('../../Upgradable/ContractNew.cash', import.meta.url));
+const Upgradable = compileFile(new URL('../../upgradable/Upgradable.cash', import.meta.url));
+const ContractA = compileFile(new URL('../../upgradable/ContractA.cash', import.meta.url));
+const ContractNew = compileFile(new URL('../../upgradable/ContractNew.cash', import.meta.url));
 
 // DAO contracts
-const Controller = compileFile(new URL('../../DAO/Controller.cash', import.meta.url));
-const ExecuteProposal = compileFile(new URL('../../DAO/ExecuteProposal.cash', import.meta.url));
-const SubmitProposal = compileFile(new URL('../../DAO/SubmitProposal.cash', import.meta.url));
-const Voting = compileFile(new URL('../../DAO/Voting.cash', import.meta.url));
+const Controller = compileFile(new URL('../../dao/Controller.cash', import.meta.url));
+const ExecuteProposal = compileFile(new URL('../../dao/ExecuteProposal.cash', import.meta.url));
+const SubmitProposal = compileFile(new URL('../../dao/SubmitProposal.cash', import.meta.url));
+const Voting = compileFile(new URL('../../dao/Voting.cash', import.meta.url));
 
 
 export const minVoteThreshold = BigInt(1);
