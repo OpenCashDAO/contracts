@@ -25,8 +25,6 @@ import { main as endExecutionForAddThread } from './mocknet/transactions/executi
 
 import { main as failProposal } from './mocknet/transactions/executions/fail-proposal.js';
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
 const main = async () => {
   await daoSetup();
   await upgradableProjectSetup();
@@ -47,8 +45,8 @@ const main = async () => {
   await setupForRemoveThreads();
   await removeThreads();
 
-  // await setupForReplaceThreads();
-  // await replaceThreads();
+  await setupForReplaceThreads();
+  await replaceThreads();
 
   await setupForEndExecution();
   await endExecutionForAddThread();

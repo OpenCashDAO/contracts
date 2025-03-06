@@ -35,20 +35,6 @@ export const main = async () => {
   const proposalCommitment = proposalId + threadCount + binToHex(newProposalScriptHash);
   const authThreadCommitment = proposalId + threadCount + binToHex(prevProposalScriptHash);
 
-  // Existing authorizedThreadNFT in Project
-  provider.addUtxo(UpgradableProjectContract.address, {
-    token: {
-    ...randomNFT({
-      category: upgradableProjectCategory,
-      nft: {
-          commitment: authThreadCommitment,
-          capability: 'none'
-        }
-      })
-    },
-    ...randomUtxo()
-  });
-
   // Proposal NFT
   provider.addUtxo(DAOControllerContract.address, {
     token: {
@@ -78,5 +64,17 @@ export const main = async () => {
     ...randomUtxo()
   });
 
-
+  // Existing authorizedThreadNFT in Project
+  provider.addUtxo(UpgradableProjectContract.address, {
+    token: {
+    ...randomNFT({
+      category: upgradableProjectCategory,
+      nft: {
+          commitment: authThreadCommitment,
+          capability: 'none'
+        }
+      })
+    },
+    ...randomUtxo()
+  });
 }

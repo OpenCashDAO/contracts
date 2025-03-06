@@ -30,7 +30,8 @@ export const main = async () => {
   const voteProposalUtxo = contractUtxos.find(utxo => 
     utxo.token?.category === daoCategory &&
     utxo.token?.nft?.capability === 'mutable' &&
-    utxo.token?.nft?.commitment.length === 38 * 2
+    utxo.token?.nft?.commitment.length === 38 * 2 &&
+    utxo.token?.amount > BigInt(0)
   );
   if(!voteProposalUtxo) { throw new Error('Vote proposal utxo not found'); }
 
@@ -58,8 +59,7 @@ export const main = async () => {
   const projectAuthorizedUtxo = projectUtxos.find(utxo => 
     utxo.token?.category === upgradableProjectCategory &&
     utxo.token?.nft?.capability === 'none' &&
-    utxo.token?.nft?.commitment.slice(0, 8) === proposalId &&
-    utxo.token?.amount > BigInt(0)
+    utxo.token?.nft?.commitment.slice(0, 8) === proposalId
   );
   if(!projectAuthorizedUtxo) { throw new Error('Project minting utxo not found'); }
 
