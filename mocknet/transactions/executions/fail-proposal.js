@@ -3,8 +3,7 @@ import {
   DAOControllerContract,
   FailProposalContract,
   provider,
-} from '../setup/index.js';
-import { binToHex, cashAddressToLockingBytecode } from '@bitauth/libauth';
+} from '../../setup/index.js';
 
 export const main = async () => {
   const contractUtxos = await provider.getUtxos(DAOControllerContract.address);

@@ -51,7 +51,7 @@ export const addressType = 'p2sh32';
 export const options = { provider, addressType }
 
 export const DAOControllerNFT = randomNFT({nft: {commitment: intToBytesToHex({value: 0, length: 4}), capability: 'minting'}});
-export const UpgradableProjectNFT = randomNFT({nft: {commitment: undefined, capability: 'minting'}});
+export const UpgradableProjectNFT = randomNFT({nft: {commitment: '', capability: 'minting'}});
 
 export const daoCategory = DAOControllerNFT.category
 export const reverseDaoTokenCategory = binToHex(hexToBin(daoCategory).reverse())

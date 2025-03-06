@@ -41,8 +41,11 @@ contract ExecuteProposal(
    *   - category: daoCategory
    * - Output1: Input1 back to this contract without any change.
    * - Output2: VoteProposalNFT back to DAO Contract
-   *   - capability: mutable
-   *   - length: 40 bytes <ProposalID (4 bytes), UpdatedThreadLeft (2 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
+   *   - capability: immutable
+   *   - length:
+   *     - ADD: 40 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
+   *     - REMOVE: 6 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes)>
+   *     - REPLACE: 38 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ProposedScriptHash (32 bytes)>
    *   - category: daoCategory
    *   - tokenAmount: all votes
    * - Output3: commitmentDeposit to the creator
@@ -254,9 +257,10 @@ contract ExecuteProposal(
     // the threadLeft field in the voteProposalNFT should be decremented by 1.
     int threadLeftAfterMint = int(threadLeft.reverse()) - 1;
     require(threadLeftAfterMint >= 0);
-    
+    bytes2 threadLeftBytes = bytes2(threadLeftAfterMint).reverse();
+
     // Set the values for the output voteProposalNFT i.e only update the `threadLeft`
-    require(tx.outputs[3].nftCommitment == proposalId + bytes(threadLeftAfterMint) + remainingBytes1);
+    require(tx.outputs[3].nftCommitment == proposalId + threadLeftBytes + remainingBytes1);
 
     // last chunk of the voteProposalNFT
     bytes threadCount, bytes proposedScriptHash = remainingBytes1.split(2);
@@ -265,7 +269,7 @@ contract ExecuteProposal(
     require(tx.outputs[5].nftCommitment == proposalId + threadCount + proposedScriptHash);
     // The structure of the new authorizedThreadNFT for the project contract is
     // <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
-    require(tx.outputs[5].nftCommitment.length == 39);
+    require(tx.outputs[5].nftCommitment.length == 38);
 
     // Output6: Change pure BCH
     require(tx.outputs[6].tokenCategory == 0x);
