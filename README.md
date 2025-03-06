@@ -1,9 +1,5 @@
 # OpenCashDAO
 
-> **Note:** This project is currently under active development. Features and functionalities are subject to change.
-
-## Summary
-
 OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) template, designed to empower stakeholders to influence the project's direction. It serves as a proposal and voting platform for the community, enabling them to vote on various proposals to modify the project's functionality.
 
 - DAO
@@ -11,27 +7,14 @@ OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) templa
 - Voting on Proposals by stakeholders
 - Upgradable Project
 
-## Summary
-
-- Anyone is allowed to submit new proposals to the DAO. The proposals can only have one of three properties i.e to add, remove, or replace functionality.
-- Once a proposal is submitted, the timer starts and the proposal is open for voting.
-- The proposal runs for a set period of time and once the timer is up, the proposal can be executed. Depending upon the number of votes, the proposal is considered passed or failed. Once a proposal is passed, it can be executed by anyone, applying the new changes to the project.
-- The DAO's contracts are static, but the projects it controls is upgradable in nature.
+Anyone is allowed to submit new proposals to the DAO. The proposals can only have one of three properties i.e to add, remove, or replace functionality. Once a proposal is submitted, the timer starts and the proposal is open for voting. The proposal runs for a set period of time and once the timer is up, the proposal can be executed. Depending upon the number of votes, the proposal is considered passed or failed. Once a proposal is passed, it can be executed by anyone, applying the new changes to the project. The DAO's contracts are static, but the projects it controls is upgradable in nature.
 
 ## Table of Contents
 1. [DAO contracts](#dao-contracts)
-    - [Controller contract](#controller-contract)
-    - [Submit Proposal Contracts](#submit-proposal-contracts)
-      - [Add.cash](#addthreadscash)
-      - [Remove.cash](#removethreadscash)
-      - [Replace.cash](#replacethreadscash)
-    - [Voting contract](#voting-contract)
-    - [Retract Vote Contract](#retract-vote-contract)
-    - [Execute Proposal Contracts](#execute-proposal-contracts)
-      - [AddThreads.cash](#addthreadscash)
-      - [RemoveThreads.cash](#removethreadscash)
-      - [ReplaceThreads.cash](#replacethreadscash)
-      - [FailProposal.cash](#failproposalcash)
+    - [Controller.cash](#controller.cash)
+    - [SubmitProposal.cash](#submitproposal.cash)
+    - [Voting.cash](#voting.cash)
+    - [ExecuteProposal.cash](#executeproposal.cash)
 2. [Upgradable Project Contract](#upgradable-project-contract)
 3. [Cashtokens](#cashtokens)
     - [AuthorizedThreadNFTs](#authorizedthreadnfts)
@@ -45,10 +28,11 @@ OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) templa
 
 ### DAO contracts
 
-DAO is a system of 11 contracts interacting with each other.
+DAO is a system of 4 contracts where the controller is the main contract that is part of every transaction that happens in the DAO.
 
-#### Controller contract
-The Controller contract functions as the control and storage hub for the DAO. It holds authorizedThreadNFTs, proposalCounterNFTs and mintingNFTs.
+
+#### Controller.cash
+The Controller contract functions as the control and storage hub for the DAO. 
 
 Constructor:
   - `daoCategory`: The category of the DAO NFTs.
@@ -60,14 +44,17 @@ Transaction Structure:
 | 1 | Any UTXO from Authorized contract | UTXO back to Authorized contract |
 
 
+#### SubmitProposal.cash
 
-### Submit Proposal Contracts
-
-#### Add.cash
-The Add proposal contract allows anyone to submit a proposal to add new authorizedThreadNFTs to the Upgradable Project Contract. The proposal requires a commitment deposit to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
+The SubmitProposal contract allows anyone to submit a proposal to add/ remove or replace authorizedThreadNFTs to/from the Upgradable Project Contract.
+The proposal requires a `commitmentDeposit` to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `completeOrFail` function of the [ExecuteProposal.cash](#executeproposalcash) contract.
 
 Constructor:
   - minCommitmentDeposit: The minimum amount of sathoshis the creator has to commit to the proposal.
+
+There are 3 functions in each Domain Contract:
+
+- **add** The Add proposal contract allows anyone to submit a proposal to add new authorizedThreadNFTs to the Upgradable Project Contract. The proposal requires a commitment deposit to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
 
 Parameters:
   - proposalScriptHash: 32 bytes scriptHash of the new contract
@@ -85,8 +72,7 @@ Transaction Structure:
 | 6 |                        | Change pure BCH |
 
 
-#### Remove.cash
-The Remove proposal contract allows anyone to submit a proposal to remove authorizedThreadNFTs from the Upgradable Project Contract. The proposal requires a commitment deposit to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
+ - **remove** The Remove proposal contract allows anyone to submit a proposal to remove authorizedThreadNFTs from the Upgradable Project Contract. The proposal requires a commitment deposit to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
 
 Constructor:
   - minCommitmentDeposit: The minimum amount of sathoshis the creator has to commit to the proposal.
@@ -104,8 +90,7 @@ Transaction Structure:
 | 7 |                        | Change pure BCH |
 
 
-#### Replace.cash
-The Replace proposal contract allows anyone to submit a proposal to replace authorizedThreadNFTs in the Upgradable Project Contract. The proposal requires a commitment deposit to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
+ - **replace** The Replace proposal contract allows anyone to submit a proposal to replace authorizedThreadNFTs in the Upgradable Project Contract. The proposal requires a commitment deposit to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
 
 Constructor:
   - minCommitmentDeposit: The minimum amount of sathoshis the creator has to commit to the proposal.
@@ -125,7 +110,7 @@ Transaction Structure:
 | 6 |                        | OP_RETURN with the proposal data |
 | 7 |                        | Change pure BCH |
 
-#### Voting contract
+#### Voting.cash
 The Voting contract allows anyone to cast their vote on a proposal. The vote requires a certain amount of tokens to be committed to the proposal. The contract ensures that the vote is valid and updates the proposal's vote count accordingly.
 
 Parameters:
@@ -155,19 +140,12 @@ Transaction Structure:
 | 4 | Funding UTXO | Change pure BCH |
 
 
-### Execute Proposal Contracts
+### ExecuteProposal.cash
 
-#### AddThreads.cash
-The AddThreads contract allows anyone to add new authorizedThreadNFTs to the Upgradable Project Contract. The contract ensures that the new threads are valid and updates the project's authorizedThreadNFTs accordingly.
+The ExecuteProposal contract allows anyone to execute a proposal. The contract ensures that the proposal is valid and updates the project's authorizedThreadNFTs accordingly.
 
-#### RemoveThreads.cash
-The RemoveThreads contract allows anyone to remove authorizedThreadNFTs from the Upgradable Project Contract. The contract ensures that the removal is valid and updates the project's authorizedThreadNFTs accordingly.
-
-#### ReplaceThreads.cash
-The ReplaceThreads contract allows anyone to replace authorizedThreadNFTs in the Upgradable Project Contract. The contract ensures that the replacement is valid and updates the project's authorizedThreadNFTs accordingly.
-
-#### FailProposal.cash
-Disables the proposal and allows anyone to take the commitmentDeposit back.
+ - **execute** The Execute function.
+ - **completeOrFail** The CompleteOrFail function.
 
 ## Upgradable Contract
 
@@ -176,6 +154,10 @@ This is a single contract with the ability to call multiple contracts. The DAO c
 ### Cashtokens
 
 The contracts talk to each other through cashtokens. There are a few types in this system:
+
+- [Controller.cash](#controllercash) holds [AuthorizedThreadNFTs](#authorizedthreadnfts), [ProposalCounterNFTs](#proposalcounternft) and [MintingNFTs](#mintingnfts), [VoteProposalNFTs](#voteproposalnfts), [TimeProposalNFTs](#timeproposaltnft)
+- [UpgradableProject.cash](#upgradableproject.cash) holds the project's authorizedThreadNFTs.
+- Each individual votes holds the [voteNFTs](#votenft)
 
 #### AuthorizedThreadNFTs
 These are immutable NFTs used to manage threads for various proposal actions.
