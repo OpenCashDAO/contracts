@@ -21,7 +21,7 @@ export const main = async () => {
 
   const tx = await new TransactionBuilder({ provider })
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())
-    .addInput(addThreadsUtxo, AddThreadsContract.unlock.call())
+    .addInput(addThreadsUtxo, AddThreadsContract.unlock.addThreads())
     .addOutput({
       to: DAOControllerContract.tokenAddress,
       amount: authorizedThreadUtxo.satoshis,
