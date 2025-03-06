@@ -90,13 +90,13 @@ contract ExecuteProposal(
     // 'ADD' type voteProposalNFT: daoCategory, nftCommitment length 40, mutable capability and coming from DAO contract,
     // 'ADD' type voteProposalNFT: daoCategory, nftCommitment length 40, mutable capability and coming from DAO contract,
     // 'ADD' type voteProposalNFT: daoCategory, nftCommitment length 40, mutable capability and coming from DAO contract,
-    int voteProposalNFTLength = tx.inputs[3].nftCommitment.length;
+    int voteProposalNFTLength = tx.inputs[2].nftCommitment.length;
     require(voteProposalNFTLength == 40 || voteProposalNFTLength == 6 || voteProposalNFTLength == 38);
     // Ensure that the voteProposalNFT has all the votes
     require(tx.outputs[2].tokenAmount == tx.inputs[3].tokenAmount);
 
     // Break the voteProposalNFT into proposalId, threadLeft, threadCount and proposedScriptHash
-    bytes voteProposalNFTByteschunk = tx.inputs[3].nftCommitment.split(6)[0];
+    bytes voteProposalNFTByteschunk = tx.inputs[2].nftCommitment.split(6)[0];
     bytes proposalIDFromVoteProposalNFT, bytes threadsLeft = voteProposalNFTByteschunk.split(4);
     bytes proposalIDFromTimeProposalNFT, bytes creatorLockingBytecode = tx.inputs[3].nftCommitment.split(4);
 

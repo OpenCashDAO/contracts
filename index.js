@@ -18,6 +18,9 @@ import { main as removeThreads } from './mocknet/transactions/executions/remove-
 import { main as replaceThreads } from './mocknet/transactions/executions/replace-threads.js';
 import { main as failProposal } from './mocknet/transactions/executions/fail-proposal.js';
 
+import { main as setupForEndExecution } from './mocknet/setup/end-execution.js';
+import { main as endExecutionForAddThread } from './mocknet/transactions/executions/end-add-thread.js';
+
 
 const main = async () => {
   await daoSetup();
@@ -33,11 +36,14 @@ const main = async () => {
   // await setupForRetractVote();
   // await retractVote();
 
-  await setupForAddThreads();
-  await addThreads();
+  // await setupForAddThreads();
+  // await addThreads();
   // await removeThreads();
   // await replaceThreads();
   // await failProposal();
+
+  await setupForEndExecution();
+  await endExecutionForAddThread();
 }
 
 main();
