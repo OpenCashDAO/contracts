@@ -58,7 +58,8 @@ export const main = async () => {
   const projectAuthorizedUtxo = projectUtxos.find(utxo => 
     utxo.token?.category === upgradableProjectCategory &&
     utxo.token?.nft?.capability === 'none' &&
-    utxo.token?.nft?.commitment.slice(0, 8) === proposalId
+    utxo.token?.nft?.commitment.slice(0, 8) === proposalId &&
+    utxo.token?.amount > BigInt(0)
   );
   if(!projectAuthorizedUtxo) { throw new Error('Project minting utxo not found'); }
 
@@ -67,8 +68,6 @@ export const main = async () => {
   const proposalScriptHash = voteProposalUtxo.token.nft.commitment.slice(12, 80);
 
   const newThreadCount = intToBytesToHex({value: hexToInt(threadLeft) - 1, length: 2});
-
-  console.log(proposalId + threadCount + proposalScriptHash);
 
   const tx = await new TransactionBuilder({ provider })
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())

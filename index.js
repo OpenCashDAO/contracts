@@ -25,33 +25,35 @@ import { main as endExecutionForAddThread } from './mocknet/transactions/executi
 
 import { main as failProposal } from './mocknet/transactions/executions/fail-proposal.js';
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const main = async () => {
   await daoSetup();
   await upgradableProjectSetup();
 
-  // await proposalToAdd();
-  // await proposalToRemove();
-  // await proposalToReplace();
+  await proposalToAdd();
+  await proposalToRemove();
+  await proposalToReplace();
 
-  // await setupForVote();
-  // await vote();
+  await setupForVote();
+  await vote();
 
-  // await setupForRetractVote();
-  // await retractVote();
+  await setupForRetractVote();
+  await retractVote();
 
-  // await setupForAddThreads();
-  // await addThreads();
+  await setupForAddThreads();
+  await addThreads();
 
-  // await setupForRemoveThreads();
-  // await removeThreads();
+  await setupForRemoveThreads();
+  await removeThreads();
 
-  await setupForReplaceThreads();
-  await replaceThreads();
+  // await setupForReplaceThreads();
+  // await replaceThreads();
 
-  // await setupForEndExecution();
-  // await endExecutionForAddThread();
+  await setupForEndExecution();
+  await endExecutionForAddThread();
 
-    // await failProposal();
+  await failProposal();
 }
 
 main();

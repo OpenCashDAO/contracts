@@ -34,7 +34,8 @@ export const main = async () => {
   const voteProposalUtxo = contractUtxos.find(utxo => 
     utxo.token?.category === daoCategory &&
     utxo.token?.nft?.capability === 'mutable' &&
-    utxo.token?.nft?.commitment.length === 40 * 2
+    utxo.token?.nft?.commitment.length === 40 * 2 &&
+    utxo.token?.amount > BigInt(0)
   );
   if(!voteProposalUtxo) { throw new Error('Vote proposal utxo not found'); }
 
