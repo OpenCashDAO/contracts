@@ -13,10 +13,6 @@ contract ExecuteProposal(
   bytes projectLockingBytecode
 ) {
 
-  function test() {
-    require(2==2);
-  }
-
   /**
    * @inputs
    * - Input0: DAO Contract's authorizedThreadNFT
@@ -296,52 +292,11 @@ contract ExecuteProposal(
     require(tx.inputs[4].tokenCategory == 0x);
     // Output4: Change pure BCH
     require(tx.outputs[4].tokenCategory == 0x);
-
-    if(tx.inputs[2].nftCommitment.length == 40) {
-      require(tx.inputs.length == 6);
-      require(tx.outputs.length == 7);
-
-      // Project Minting NFT from DAO Contract
-      require(tx.outputs[5].lockingBytecode == daoInputLockingBytecode);
-
-      // ProjectMinting NFT should preserve it's minting capability
-      require(tx.outputs[5].tokenCategory == tx.inputs[5].tokenCategory);
-      require(tx.outputs[5].lockingBytecode == tx.inputs[5].lockingBytecode);
-      require(tx.outputs[5].nftCommitment == 0x);
-
-      bytes remainingBytes1 = tx.inputs[2].nftCommitment.split(6)[1];
-
-      // Set the values for the output voteProposalNFT i.e only update the `threadLeft`
-      require(tx.outputs[2].nftCommitment == proposalId + threadLeftBytes + remainingBytes1);
-      // last chunk of the voteProposalNFT
-      bytes threadCount, bytes proposedScriptHash = remainingBytes1.split(2);
-      // New authorizedThreadNFT to the project contract
-      require(tx.outputs[6].nftCommitment == proposalId + threadCount + proposedScriptHash);
-      // The structure of the new authorizedThreadNFT for the project contract is
-      // <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
-      require(tx.outputs[6].nftCommitment.length == 38);
-
-      // Project minting NFT should be minting and of the 'projectCategory', used to mint the output[4]
-      bytes projectInputCategory, bytes projectInputCapability = tx.inputs[5].tokenCategory.split(32);
-      require(projectInputCategory == projectCategory);
-      require(projectInputCapability == 0x02); // Minting
-
-      // New authorizedThreadNFT to the Project Contract
-      require(tx.outputs[6].lockingBytecode == projectLockingBytecode);
-      require(tx.outputs[6].tokenCategory == projectCategory);
-    }
-
-    // REMOVE Proposal
+    
     if(tx.inputs[2].nftCommitment.length == 6) {
-      require(tx.inputs.length == 6);
       require(tx.outputs.length == 5);
-    }
-
-    // REPLACE Proposal
-    if(tx.inputs[2].nftCommitment.length == 38) {
-      require(tx.inputs.length == 7);
+    } else {
       require(tx.outputs.length == 7);
-
       // Project Minting NFT from DAO Contract
       require(tx.outputs[5].lockingBytecode == daoInputLockingBytecode);
 
@@ -356,6 +311,12 @@ contract ExecuteProposal(
       require(tx.outputs[2].nftCommitment == proposalId + threadLeftBytes + remainingBytes1);
       // last chunk of the voteProposalNFT
       bytes threadCount, bytes proposedScriptHash = remainingBytes1.split(2);
+
+     if(tx.inputs[2].nftCommitment.length == 38){
+        threadCount = tx.inputs[6].nftCommitment.split(6)[0].split(4)[1];
+        proposedScriptHash = remainingBytes1;
+     }
+
       // New authorizedThreadNFT to the project contract
       require(tx.outputs[6].nftCommitment == proposalId + threadCount + proposedScriptHash);
       // The structure of the new authorizedThreadNFT for the project contract is
@@ -368,8 +329,16 @@ contract ExecuteProposal(
       require(projectInputCapability == 0x02); // Minting
 
       // New authorizedThreadNFT to the Project Contract
-      require(tx.outputs[6].lockingBytecode == projectLockingBytecode);
+      // require(tx.outputs[6].lockingBytecode == projectLockingBytecode);
       require(tx.outputs[6].tokenCategory == projectCategory);
     }
+
+    int inputLength = 6;
+    if(tx.inputs[2].nftCommitment.length == 38) {
+      inputLength = 7;
+      // Make sure that the incoming authorizedThreadNFT has the same proposalId and the one requested to be replaced.
+      require(tx.inputs[6].nftCommitment.split(4)[0] == proposalId);
+    }
+    require(tx.inputs.length == inputLength);
   }
 }
