@@ -28,7 +28,7 @@ export const main = async () => {
     token: {
     ...randomNFT({
       category: daoCategory,
-      amount: BigInt(2),
+      amount: BigInt(0),
       nft: {
           commitment: proposalCommitment,
           capability: 'mutable'
@@ -43,6 +43,7 @@ export const main = async () => {
     token: {
     ...randomNFT({
       category: daoCategory,
+      amount: BigInt(2),
       nft: {
           commitment: proposalId + binToHex(aliceAddressLockingBytecode),
           capability: 'none'

@@ -1,10 +1,10 @@
 import { TransactionBuilder } from 'cashscript';
 import {
   DAOControllerContract,
-  AddThreadsContract,
+  ExecuteProposalContract,
   provider,
   daoCategory,
-  addThreadsContractLockingBytecode,
+  executeProposalContractLockingBytecode,
   upgradableProjectCategory,
   aliceAddress,
   aliceTemplate
@@ -16,11 +16,11 @@ export const main = async () => {
   const authorizedThreadUtxo = contractUtxos.find(utxo => 
     utxo.token?.category === daoCategory &&
     utxo.token?.nft?.capability === 'none' &&
-    utxo.token?.nft?.commitment === addThreadsContractLockingBytecode
+    utxo.token?.nft?.commitment === executeProposalContractLockingBytecode
   );
   if(!authorizedThreadUtxo) { throw new Error('Authorized thread utxo not found'); }
 
-  const executeUtxos = await provider.getUtxos(AddThreadsContract.address);
+  const executeUtxos = await provider.getUtxos(ExecuteProposalContract.address);
   const executeUtxo = executeUtxos[0];
   if(!executeUtxo) { throw new Error('Execute utxo not found'); }
 
@@ -55,7 +55,7 @@ export const main = async () => {
 
   const tx = await new TransactionBuilder({ provider })
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())
-    .addInput(executeUtxo, AddThreadsContract.unlock.end())
+    .addInput(executeUtxo, ExecuteProposalContract.unlock.completeOrFail())
     .addInput(voteProposalUtxo, DAOControllerContract.unlock.call())
     .addInput(timeProposalUtxo, DAOControllerContract.unlock.call())
     .addInput(aliceUtxo, aliceTemplate.unlockP2PKH())
@@ -71,7 +71,7 @@ export const main = async () => {
         }
       },
     })
-    .addOutput({ to: AddThreadsContract.address, amount: executeUtxo.satoshis })
+    .addOutput({ to: ExecuteProposalContract.address, amount: executeUtxo.satoshis })
     .addOutput({
       to: DAOControllerContract.tokenAddress,
       amount: timeProposalUtxo.satoshis,

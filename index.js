@@ -26,15 +26,15 @@ const main = async () => {
   await daoSetup();
   await upgradableProjectSetup();
 
-  // await proposalToAdd();
-  // await proposalToRemove();
-  // await proposalToReplace();
+  await proposalToAdd();
+  await proposalToRemove();
+  await proposalToReplace();
 
-  // await setupForVote();
-  // await vote();
+  await setupForVote();
+  await vote();
 
-  // await setupForRetractVote();
-  // await retractVote();
+  await setupForRetractVote();
+  await retractVote();
 
   // await setupForAddThreads();
   // await addThreads();

@@ -6,10 +6,7 @@ import {
   DAOControllerContract,
   DAOControllerNFT,
   daoCategory,
-  addThreadsContractLockingBytecode,
-  removeThreadsContractLockingBytecode,
-  replaceThreadsContractLockingBytecode,
-  failProposalContractLockingBytecode,
+  executeProposalContractLockingBytecode,
   proposalContractLockingBytecode,
   votingContractLockingBytecode,
   provider
@@ -31,55 +28,7 @@ export const main = async () => {
       ...randomNFT({
         category: daoCategory,
         nft: {
-          commitment: addThreadsContractLockingBytecode,
-          capability: 'none'
-        }
-      })
-    },
-    ...randomUtxo()
-  };
-
-  // Add threads
-  provider.addUtxo(DAOControllerContract.address, authorizedThreadNFTUtxo);
-
-  authorizedThreadNFTUtxo = {
-    token: {
-      ...randomNFT({
-        category: daoCategory,
-        nft: {
-          commitment: removeThreadsContractLockingBytecode,
-          capability: 'none'
-        }
-      })
-    },
-    ...randomUtxo()
-  };
-
-  // Add threads
-  provider.addUtxo(DAOControllerContract.address, authorizedThreadNFTUtxo);
-
-  authorizedThreadNFTUtxo = {
-    token: {
-      ...randomNFT({
-        category: daoCategory,
-        nft: {
-          commitment: replaceThreadsContractLockingBytecode,
-          capability: 'none'
-        }
-      })
-    },
-    ...randomUtxo()
-  };
-
-  // Add threads
-  provider.addUtxo(DAOControllerContract.address, authorizedThreadNFTUtxo);
-
-  authorizedThreadNFTUtxo = {
-    token: {
-      ...randomNFT({
-        category: daoCategory,
-        nft: {
-          commitment: failProposalContractLockingBytecode,
+          commitment: executeProposalContractLockingBytecode,
           capability: 'none'
         }
       })
