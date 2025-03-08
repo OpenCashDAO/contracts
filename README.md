@@ -49,99 +49,98 @@ Transaction Structure:
 
 
 #### SubmitProposal.cash
-Anyone can submit new proposals to the DAO, which can have one of three intentions: to add, remove, or replace functionality. Once a proposal is submitted, a timer starts, and the proposal is open for voting. The proposal remains open for a set period, after which it can be executed. Based on the number of votes, the proposal is either passed or failed. If a proposal passes, it can be executed by anyone, implementing the new changes to the project. While the DAO's contracts are static, the projects it controls are upgradable in nature.
+Anyone can submit new proposals to the DAO, which can have one of three intentions: to add, remove, or replace functionality. Once a proposal is submitted, a timer starts(`voteWindow`), and the proposal is open for voting. The proposal remains open for a set period, after which it can be executed. Based on the number of votes, the proposal is either passed or failed. If a proposal passes(`voteThreshold` is met), it can be executed by anyone, implementing the new changes to the project. While the DAO's contracts are static, the projects it controls are upgradable in nature.
 
 The proposal requires a `commitmentDeposit` to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `completeOrFail` function of the [ExecuteProposal.cash](#executeproposalcash) contract.
 
 Constructor:
-  - minCommitmentDeposit: The minimum amount of sathoshis the creator has to commit to the proposal.
+  - `minCommitmentDeposit`: The minimum amount of satoshis the creator has to commit to the proposal.
 
-There are 3 functions in each Domain Contract:
+There are 3 functions in in the SubmitProposal contract:
 
-- **add** The Add proposal contract allows anyone to submit a proposal to add new authorizedThreadNFTs to the Upgradable Project Contract. The proposal requires a commitment deposit to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
+1. **add** This function allows anyone to submit a proposal to add new authorizedThreadNFTs to the Upgradable Project Contract.
 
 Parameters:
-  - proposalScriptHash: 32 bytes scriptHash of the new contract
-  - threadCount: 2 bytes thread count of the new contract
+  - `proposalScriptHash`: 32 bytes scriptHash of the new contract to be included in the project.
+   - `threadCount`: 2 bytes thread count represents the number of authorizedThreadNFTs to be added to the project.
 
 Transaction Structure:
 | # | Inputs | Outputs |
 |---|--------|---------|
-| 0 | DAO Contract's authorizedThreadNFT | DAO Contract's authorizedThreadNFT back to DAO Contract |
+| 0 | [AuthorizedThreadNFT](#authorizedthreadnfts) from controller.cash | [AuthorizedThreadNFT](#authorizedthreadnfts) back to controller.cash |
 | 1 | Any input from this contract | Input1 back to this contract without any change |
-| 2 | ProposalCounterNFT from DAO Contract | ProposalCounterNFT back to DAO Contract |
-| 3 | Funding UTXO | VoteProposalNFT to DAO Contract |
-| 4 |                        | TimeProposalNFT to DAO Contract |
+| 2 | [ProposalCounterNFT](#mintingnfts) from controller.cash | [ProposalCounterNFT](#mintingnfts) back to controller.cash |
+| 3 | Funding UTXO | [VoteProposalNFT](#proposalnfts) to controller.cash |
+| 4 |                        | [TimeProposalNFT](#proposaltnft) to controller.cash |
 | 5 |                        | OP_RETURN with the proposal data |
 | 6 |                        | Change pure BCH |
 
 
- - **remove** The Remove proposal contract allows anyone to submit a proposal to remove authorizedThreadNFTs from the Upgradable Project Contract. The proposal requires a commitment deposit to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
+2. **remove** This function allows anyone to submit a proposal to remove authorizedThreadNFTs from the Project. In order to remove the threads, an existing thread should be used as the input.
 
-Constructor:
-  - minCommitmentDeposit: The minimum amount of sathoshis the creator has to commit to the proposal.
 
 Transaction Structure:
 | # | Inputs | Outputs |
 |---|--------|---------|
-| 0 | DAO Contract's authorizedThreadNFT | DAO Contract's authorizedThreadNFT back to DAO Contract |
+| 0 | [AuthorizedThreadNFT](#authorizedthreadnfts) from controller.cash | [AuthorizedThreadNFT](#authorizedthreadnfts) back to controller.cash |
 | 1 | Any input from this contract | Input1 back to this contract without any change |
-| 2 | ProposalCounterNFT from DAO Contract | ProposalCounterNFT back to DAO Contract |
-| 3 | AuthorizedThreadNFT from the Project Contract | VoteProposalNFT to DAO Contract |
-| 4 | Funding UTXO | TimeProposalNFT to DAO Contract |
-| 5 |                        | AuthorizedThreadNFT back to the Project Contract |
+| 2 | [ProposalCounterNFT](#mintingnfts) from controller.cash | [ProposalCounterNFT](#mintingnfts) back to controller.cash |
+| 3 | [AuthorizedThreadNFT](#authorizedthreadnfts) from the Project Contract | [VoteProposalNFT](#proposalnfts) to controller.cash |
+| 4 | Funding UTXO | [TimeProposalNFT](#proposaltnft) to controller.cash |
+| 5 |                        | [AuthorizedThreadNFT](#authorizedthreadnfts) back to the Project Contract |
 | 6 |                        | OP_RETURN with the proposal data |
 | 7 |                        | Change pure BCH |
 
 
- - **replace** The Replace proposal contract allows anyone to submit a proposal to replace authorizedThreadNFTs in the Upgradable Project Contract. The proposal requires a commitment deposit to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.
-
-Constructor:
-  - minCommitmentDeposit: The minimum amount of sathoshis the creator has to commit to the proposal.
+3. **replace** This function allows anyone to submit a proposal to replace authorizedThreadNFTs in the Project.
 
 Parameters:
-  - proposalScriptHash: 32 bytes scriptHash of the new contract
+  - `proposalScriptHash`: 32 bytes scriptHash of the new contract to be included in the project. The proposalId of the contract to be replaced is taken from the authorizedThreadNFT included in the input.
 
 Transaction Structure:
 | # | Inputs | Outputs |
 |---|--------|---------|
-| 0 | DAO Contract's authorizedThreadNFT | DAO Contract's authorizedThreadNFT back to DAO Contract |
+| 0 | [AuthorizedThreadNFT](#authorizedthreadnfts) from controller.cash | [AuthorizedThreadNFT](#authorizedthreadnfts) back to controller.cash |
 | 1 | Any input from this contract | Input1 back to this contract without any change |
-| 2 | ProposalCounterNFT from DAO Contract | ProposalCounterNFT back to DAO Contract |
-| 3 | AuthorizedThreadNFT from the Project Contract | VoteProposalNFT to DAO Contract |
-| 4 | Funding UTXO | TimeProposalNFT to DAO Contract |
-| 5 |                        | AuthorizedThreadNFT back to the Project Contract |
+| 2 | [ProposalCounterNFT](#mintingnfts) from controller.cash | [ProposalCounterNFT](#mintingnfts) back to controller.cash |
+| 3 | [AuthorizedThreadNFT](#authorizedthreadnfts) from the Project Contract | [VoteProposalNFT](#proposalnfts) to controller.cash |
+| 4 | Funding UTXO | [TimeProposalNFT](#proposaltnft) to controller.cash |
+| 5 |                        | [AuthorizedThreadNFT](#authorizedthreadnfts) back to the Project Contract |
 | 6 |                        | OP_RETURN with the proposal data |
 | 7 |                        | Change pure BCH |
 
 #### Voting.cash
 This contract allows stakeholders to vote on proposals. The votes send their tokens to the [proposalNFT](#proposalcounternft) and receive a [VoteNFT](#votenft) in return that can be used to retract their vote.
 
-- **vote** The Voting contract allows anyone to cast their vote on a proposal. The vote requires a certain amount of tokens to be committed to the proposal. The contract ensures that the vote is valid and updates the proposal's vote count accordingly.
+There are 2 functions in in the Voting contract:
+
+1. **vote** This function allows anyone to cast their vote on a proposal.
 
 Parameters:
-  - voteAmount: The amount of tokens to be committed to the proposal.
+  - `voteAmount`: The amount of tokens to be committed to the proposal.
 
 Transaction Structure:
 | # | Inputs | Outputs |
 |---|--------|---------|
-| 0 | DAO Contract's authorizedThreadNFT | DAO Contract's authorizedThreadNFT back to self |
+| 0 | [AuthorizedThreadNFT](#authorizedthreadnfts) from controller.cash | [AuthorizedThreadNFT](#authorizedthreadnfts) back to controller.cash |
 | 1 | Any input from this contract | Input1 back to this contract without any change |
-| 2 | Minting NFT of daoCategory from DAO | Minting NFT of daoCategory back to DAO |
-| 3 | Mutable Proposal NFT of daoCategory from DAO | Mutable Proposal NFT back to DAO with tokenAmount (Equal to `voteAmount`) |
-| 4 | Utxo to cast vote with tokenAmount | ReceiptNFT of Vote, to be used later to get back the tokens from proposal NFT to the bytecode of Input3 |
+| 2 | [VoteMintingNFT](#mintingnfts) from Controller.cash | [VoteMintingNFT](#mintingnfts) back to Controller.cash |
+| 3 | [VoteProposalNFT](#proposalnfts) from Controller.cash | [VoteProposalNFT](#proposalnfts) back to Controller.cash with tokenAmount (Equal to `voteAmount`) |
+| 4 | Utxo to cast vote with tokenAmount | [VoteNFT](#votenft) of Vote to the lockingbytecode of the voter |
 | 5 |                        | Change tokenAmount and BCH |
 
 
-  - **retract** The Retract Voting contract allows anyone to retract their vote from a proposal. The contract ensures that the vote is valid and updates the proposal's vote count accordingly. The retraction process involves returning the committed tokens to the voter and updating the proposal's vote count.
+  - **retract** The Retract Voting contract allows anyone to retract their vote from a proposal.
+
+> **Note:** When the proposal is being executed, the votes are temporarily locked in the timeProposalNFT so the votes can't be retracted during the execution.
 
 Transaction Structure:
 | # | Inputs | Outputs |
 |---|--------|---------|
-| 0 | DAO Contract's authorizedThreadNFT | DAO Contract's authorizedThreadNFT back to self |
+| 0 | [AuthorizedThreadNFT](#authorizedthreadnfts) from controller.cash | [AuthorizedThreadNFT](#authorizedthreadnfts) back to controller.cash |
 | 1 | Any input from this contract | Input1 back to this contract without any change |
-| 2 | VoteProposalNFT from DAO | VoteProposalNFT back to DAO (minus the tokenAmount in the recieptNFT) |
-| 3 | RecieptNFT used to cast vote | tokenAmount to the recieptNFT provider |
+| 2 | [VoteProposalNFT](#proposalnfts) from controller.cash | [VoteProposalNFT](#proposalnfts) back to controller.cash (minus the tokenAmount in the recieptNFT) |
+| 3 | [VoteNFT](#votenft) used to cast vote | tokenAmount to the voteNFT provider |
 | 4 | Funding UTXO | Change pure BCH |
 
 
@@ -164,16 +163,16 @@ The contracts talk to each other through cashtokens. There are a few types in th
 - [UpgradableProject.cash](#upgradableproject.cash) holds the project's authorizedThreadNFTs.
 - Each individual votes holds the [voteNFTs](#votenft)
 
-#### AuthorizedThreadNFTs [DAO]
+#### AuthorizedThreadNFTs
 
-- **DAO AuthorizedThreadNFT**:
+- **[DAO] AuthorizedThreadNFT**:
 These are immutable NFTs that control the transaction's execution flow of the DAO. These NFTs exist as utxos in the [Controller.cash](#controllercash) contract.
 
   - `category`: daoCategory
   - `commitment`: 35 bytes
   - Allocates 1 thread.
 
-- **Project AuthorizedThreadNFT**:
+- **[Project] AuthorizedThreadNFT**:
 These are immutable NFTs that exist with the project's controller contract. These are responsible to manage the transaction's execution flow of the project.
 
 The DAO is responsible to create/remove/replace these NFTs from the project's controller contract. Making it possible for the project to upgrade itself.
@@ -186,11 +185,16 @@ For any project to be compatible with the DAO, it must hold an AuthorizedThreadN
 #### MintingNFTs
 
 The [Controller.cash](#controllercash) contract holds the following minting NFTs:
-- **ProposalMintingNFT**: This NFT is used to create new proposals for users to vote on. Since each proposal should be unique, the commitment of this NFT holds can't as a counter which increments by 1 for each new proposal.
+- **ProposalCounterNFT**: This NFT is used to create new proposals for users to vote on. Since each proposal should be unique, the commitment of this NFT holds can't as a counter which increments by 1 for each new proposal.
   - `category`: daoCategory
   - `commitment`: 4 bytes
   - `capability`: minting
   - 1 threads/utxos
+- **VoteMintingNFT**: This NFT is used to create NFT reciepts for new votes, the minted immutable NFT is send to the voter, that can be used to retract their vote.
+  - `category`: daoCategory
+  - `commitment`: 0 bytes
+  - `capability`: immutable
+  - x threads/utxos
 - **ProjectThreadMintingNFT**: This NFT is used to mint or replace the project's authorizedThreadNFTs.
   - `category`: projectCategory
   - `commitment`: 0 bytes
@@ -235,98 +239,6 @@ Each vote cast results in the issuance of a VoteNFT.
   - `breakup`: < ProposalID >< VoteAmount >
 
 ### FAQs
-
-#### How does it work?
-
-After token distribution, which depends on the party working on the DAO, tokens are used for voting on proposals.
-
-Anyone can submit a proposal by depositing a `commitmentDeposit` amount of BCH.
-
-Proposals run for a `voteWindow` period, after which they can be executed.
-
-If a proposal passes, anyone can execute and interact with the contracts:
-- Add
-- Remove
-- Replace
-
-If a proposal doesn't meet the `voteThreshold`, it can be burned, and the `commitmentDeposit` is sent to the party who burns the proposal. This mechanism prevents spam and ensures serious commitment from proposal creators.
-
-Proposals can also be created by other P2SH contracts or contract systems where communities collectively fund a proposal.
-
-## What does a proposal look like?
-
-Once a proposal is passed, it can be executed by anyone. There are three different behaviors for a proposal:
-- Add: An `Add` proposal mints new authorizedThreadNFTs in the `authorizedThreadNFTs` contract, resulting in a new contract being created.
-- Remove: A `Remove` proposal burns the `authorizedThreadNFTs`, removing the contract from the `authorizedThreadNFTs` contract.
-- Replace: A `Replace` proposal burns the `authorizedThreadNFTs` and mints new ones in the `authorizedThreadNFTs` contract.
-
-#### What is the purpose of the DelegateNFT?
-
-The DelegateNFT is used to manage delegates. It allows a user to delegate their votes to another user.
-
-### How to identify what an NFT represents?
-
-VoteProposalNFT:
-  - AddProposalNFT:
-    - ActiveVoting:
-      - `category`: daoCategory
-      - `commitment`: 40 bytes
-      - `capability`: mutable
-    - CompletedVoting:
-      - `category`: daoCategory
-      - `commitment`: 40 bytes
-      - `capability`: immutable
-
-  - RemoveProposalNFT:
-    - ActiveVoting:
-      - `category`: daoCategory
-      - `commitment`: 6 bytes
-      - `capability`: mutable
-    - CompletedVoting:
-      - `category`: daoCategory
-      - `commitment`: 6 bytes
-      - `capability`: immutable
-
-  - ReplaceProposalNFT:
-    - ActiveVoting:
-      - `category`: daoCategory
-      - `commitment`: 36 bytes
-      - `capability`: mutable
-    - CompletedVoting:
-      - `category`: daoCategory
-      - `commitment`: 36 bytes
-      - `capability`: immutable
-
-TimeProposalNFT:
-  - `category`: daoCategory
-  - `commitment`: 29 bytes or 39 bytes
-  - `capability`: immutable
-
-VoteNFT:
-  - `category`: daoCategory
-  - `commitment`: 12 bytes
-  - `capability`: immutable
-
-ProposalCounterNFT:
-  - `category`: daoCategory
-  - `commitment`: 4 bytes
-  - `capability`: minting
-
-AuthorizedThreadNFT:
-  - `category`: daoCategory
-  - `commitment`: 35 bytes
-  - `capability`: immutable
-
-ProjectAuthorizedThreadNFT:
-  - `category`: projectCategory
-  - `commitment`: 39 bytes
-  - `capability`: immutable
-
-ProjectMintingNFT:
-  - `category`: projectCategory
-  - `commitment`: 0 bytes
-  - `capability`: minting
-
 
 
 #### How does voting occur?

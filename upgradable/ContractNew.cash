@@ -2,6 +2,6 @@ pragma cashscript ^0.11.0;
 
 contract ContractNew() {
   function call() {
-    require(2==2);
+    require(3==3);
   }
 }
