@@ -7,33 +7,23 @@ contract Controller(
   bytes32 daoCategory
 ) {
   /**
+   * NOTE: Thread = utxo
+   *
    * The Controller holds:
-   * - AuthorizedThreadNFTs (immutable, daoCategory, 35 bytes)
-   *   - ProposalToAdd:       	   	[~x threads]
-   *   - ProposalToRemove:    	   	[~x threads]
-   *   - ProposalToReplace:     	  [~x threads]
-   *   - ExecuteAddProposal:     		[~x threads]
-   *   - ExecuteRemoveProposal:  		[~x threads]
-   *   - ExecuteReplaceProposal:	  [~x threads]
-   *   - FailProposal:	       	    [~x threads]
-   *   - Vote:                 	  	[~x threads]
-   *   - RetractVote:          	    [~x threads]
    * - ProposalCounterNFT, (minting, daoCategory, 4 bytes)                      [1 thread]
+   * - AuthorizedThreadNFTs (immutable, daoCategory, 35 bytes)
+   *   - SubmitProposal:                                                        [~x threads]
+   *   - ExecuteProposal:                                                       [~x threads]
+   *   - FailProposal:                                                          [~x threads]
    * - TimeProposalNFT, (immutable, daoCategory, 29 bytes)                      [1 thread/proposal]
-   * - VoteProposalNFTs are mutable/immutable NFTs of daoCategory
-   *   - NFT created by `ProposalToAdd` Contract the commitment length is 40 bytes and is mutable.
-   *   - NFT created by `ProposalToRemove` Contract the commitment length is 6 bytes and is mutable.
-   *   - NFT created by `ProposalToReplace` Contract the commitment length is 38 bytes and is mutable.
-   *   Once all the threads are created/removed/replaced, the NFT becomes immutable.
-   * - UpgradableContractNFT, (minting, upgradableCategory, 0 bytes)            [1 thread]
-   *
-   * Each voter is issued a voteNFT when they cast a vote.
-   * - VoteNFT, (immutable, daoCategory, 12 bytes) <ProposalId><VoteAmount>
-   *
-   * Once the voting is over, the proposalNFT becomes immutable, making it un-usable for any other contract
-   * It also means that the proposal has ended.
-   *
-   * The users are not allowed to retractVotes when proposal is being executed.
+   * - VoteProposalNFTs are mutable/immutable NFTs of daoCategory               [1 thread/proposal]
+   *   - Intent to add new authorizedThreadNFTs to the upgradable project.
+   *     - Commitment length is 40 bytes.
+   *   - Intent to remove authorizedThreadNFTs from the upgradable project.
+   *     - Commitment length is 6 bytes.
+   *   - Intent to replace authorizedThreadNFTs in the upgradable project.
+   *     - Commitment length is 38 bytes.
+   * - UpgradableContractNFT, (minting, projectCategory, 0 bytes)               [1 thread]
    *
    * @inputs
    * - Input0: AuthorizedThreadNFT from self

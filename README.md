@@ -1,13 +1,14 @@
 # OpenCashDAO
 
+> **Note:** This project is under active development.
+
+
 OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) template, designed to empower stakeholders to influence the project's direction. It serves as a proposal and voting platform for the community, enabling them to vote on various proposals to modify the project's functionality.
 
-- DAO
-- Proposals
-- Voting on Proposals by stakeholders
+- 1 DAO, ∞ projects
+- Proposals and Voting by stakeholders
 - Upgradable Project
 
-Anyone is allowed to submit new proposals to the DAO. The proposals can only have one of three properties i.e to add, remove, or replace functionality. Once a proposal is submitted, the timer starts and the proposal is open for voting. The proposal runs for a set period of time and once the timer is up, the proposal can be executed. Depending upon the number of votes, the proposal is considered passed or failed. Once a proposal is passed, it can be executed by anyone, applying the new changes to the project. The DAO's contracts are static, but the projects it controls is upgradable in nature.
 
 ## Table of Contents
 1. [DAO contracts](#dao-contracts)
@@ -25,6 +26,7 @@ Anyone is allowed to submit new proposals to the DAO. The proposals can only hav
     - [UpgradableContractNFT](#upgradablecontractnft)
     - [VoteNFT](#votenft)
 4. [FAQs](#faqs)
+
 
 ### DAO contracts
 
@@ -45,8 +47,8 @@ Transaction Structure:
 
 
 #### SubmitProposal.cash
+Anyone can submit new proposals to the DAO, which can have one of three intentions: to add, remove, or replace functionality. Once a proposal is submitted, a timer starts, and the proposal is open for voting. The proposal remains open for a set period, after which it can be executed. Based on the number of votes, the proposal is either passed or failed. If a proposal passes, it can be executed by anyone, implementing the new changes to the project. While the DAO's contracts are static, the projects it controls are upgradable in nature.
 
-The SubmitProposal contract allows anyone to submit a proposal to add/ remove or replace authorizedThreadNFTs to/from the Upgradable Project Contract.
 The proposal requires a `commitmentDeposit` to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `completeOrFail` function of the [ExecuteProposal.cash](#executeproposalcash) contract.
 
 Constructor:
