@@ -5,6 +5,8 @@
 
 OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) template, designed to empower stakeholders to influence the project's direction. It serves as a proposal and voting platform for the community, enabling them to vote on various proposals to modify the project's functionality.
 
+**Key Features:**
+
 - 1 DAO, ∞ projects
 - Proposals and Voting by stakeholders
 - Upgradable Project
@@ -113,7 +115,9 @@ Transaction Structure:
 | 7 |                        | Change pure BCH |
 
 #### Voting.cash
-The Voting contract allows anyone to cast their vote on a proposal. The vote requires a certain amount of tokens to be committed to the proposal. The contract ensures that the vote is valid and updates the proposal's vote count accordingly.
+This contract allows stakeholders to vote on proposals. The votes send their tokens to the [proposalNFT](#proposalcounternft) and receive a [VoteNFT](#votenft) in return that can be used to retract their vote.
+
+- **vote** The Voting contract allows anyone to cast their vote on a proposal. The vote requires a certain amount of tokens to be committed to the proposal. The contract ensures that the vote is valid and updates the proposal's vote count accordingly.
 
 Parameters:
   - voteAmount: The amount of tokens to be committed to the proposal.
@@ -129,8 +133,7 @@ Transaction Structure:
 | 5 |                        | Change tokenAmount and BCH |
 
 
-#### Retract Voting Contract
-The Retract Voting contract allows anyone to retract their vote from a proposal. The contract ensures that the vote is valid and updates the proposal's vote count accordingly. The retraction process involves returning the committed tokens to the voter and updating the proposal's vote count.
+  - **retract** The Retract Voting contract allows anyone to retract their vote from a proposal. The contract ensures that the vote is valid and updates the proposal's vote count accordingly. The retraction process involves returning the committed tokens to the voter and updating the proposal's vote count.
 
 Transaction Structure:
 | # | Inputs | Outputs |
@@ -161,63 +164,75 @@ The contracts talk to each other through cashtokens. There are a few types in th
 - [UpgradableProject.cash](#upgradableproject.cash) holds the project's authorizedThreadNFTs.
 - Each individual votes holds the [voteNFTs](#votenft)
 
-#### AuthorizedThreadNFTs
-These are immutable NFTs used to manage threads for various proposal actions.
+#### AuthorizedThreadNFTs [DAO]
+
+- **DAO AuthorizedThreadNFT**:
+These are immutable NFTs that control the transaction's execution flow of the DAO. These NFTs exist as utxos in the [Controller.cash](#controllercash) contract.
+
   - `category`: daoCategory
-  - `commitment`: 35 bytes < lockingbytecode >
+  - `commitment`: 35 bytes
+  - Allocates 1 thread.
+
+- **Project AuthorizedThreadNFT**:
+These are immutable NFTs that exist with the project's controller contract. These are responsible to manage the transaction's execution flow of the project.
+
+The DAO is responsible to create/remove/replace these NFTs from the project's controller contract. Making it possible for the project to upgrade itself.
+
+For any project to be compatible with the DAO, it must hold an AuthorizedThreadNFT with the following commitment pattern:
+  - `category`: projectCategory
+  - `commitment`: 39 bytes < proposalID >< threadCount >< proposedScriptHash >
+
 
 #### MintingNFTs
-ProposalMintingNFT [~x threads]
-ProjectMintingNFT [1 thread]
 
-#### ProposalCounterNFT
-A minting NFT used to count proposals.
+The [Controller.cash](#controllercash) contract holds the following minting NFTs:
+- **ProposalMintingNFT**: This NFT is used to create new proposals for users to vote on. Since each proposal should be unique, the commitment of this NFT holds can't as a counter which increments by 1 for each new proposal.
   - `category`: daoCategory
   - `commitment`: 4 bytes
-  - Allocates 1 thread.
+  - `capability`: minting
+  - 1 threads/utxos
+- **ProjectThreadMintingNFT**: This NFT is used to mint or replace the project's authorizedThreadNFTs.
+  - `category`: projectCategory
+  - `commitment`: 0 bytes
+  - `capability`: minting
+  - x threads/utxos
 
-#### TimeProposalNFT
-An immutable NFT used to manage the timing of proposals.
+
+#### ProposalNFTs
+
+- **TimeProposalNFT**: An immutable NFT used to manage the timing of proposals, this NFT is created when a new proposal is created. Initially it's used as timer for the proposal, but once the proposal is executed, it's used to lock the proposalNFT's votes and commitmentDeposit.
   - `category`: daoCategory
   - `commitment`: 29 bytes
-  - Allocates 1 thread for each proposal.
+  - `capability`: immutable
+  - 1 thread/utxo for each proposal
 
-#### VoteProposalNFTs
-These NFTs can be either mutable or immutable and are created by different proposal contracts.
-  - `category`: daoCategory
-  - **AddProposal Contract**: Creates a mutable NFT.
-    - `commitment`: 40 bytes
-  - **RemoveProposal Contract**: Creates an immutable NFT.
-    - `commitment`: 6 bytes
-  - **ReplaceProposal Contract**: Creates a mutable NFT.
-    - `commitment`: 36 bytes
+- **VoteProposalNFT**: This NFT holds all the votes for a proposal, whenever a user votes on a proposal, the vote amount is added to this NFT. This NFT also holds the proposal's commitmentDeposit. This NFT has different behaviour depending on the type of proposal.
+  - If the proposal is to add a new contract to the project, then the 
+   nftCommitment must be of 40 bytes and holds the following information:
+    - `category`: daoCategory
+    - `capability`: mutable
+    - `commitment`: `40 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>`
+  - If the proposal is a remove proposal, then the nftCommitment must be of 6 bytes and holds the following information:
+    - `category`: daoCategory
+    - `commitment`: `6 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes)>`
+    - `capability`: mutable
+  - If the proposal is a replace proposal, then the nftCommitment must be of 36 bytes and holds the following information:
+    - `category`: daoCategory
+    - `commitment`: `36 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ProposedScriptHash (32 bytes)>`
+    - `capability`: mutable
 
-#### UpgradableContractNFT
-A minting NFT that allows for contract upgrades.
-  - `category`: upgradableCategory
-  - `commitment`: 0 bytes
-  - Allocates 1 thread.
+Once the proposal is eligible to be passed, the proposal is executed. During this process, the `threadLeft` is decremented by 1 for each thread that is minted, removed or replaced. until it reaches 0, at which point the proposal is fully executed.
+
+During the proposal execution, the votes and commitmentDeposit are locked in the timeProposalNFT.
+
+Once all the threadsLeft reaches 0, the timeProposalNFT is burned and the votes and commitmentDeposit are returned to the proposalNFT allowing the votes to take back their tokens.
 
 #### VoteNFT
 Each vote cast results in the issuance of a VoteNFT.
   - `category`: daoCategory
   - `commitment`: 12 bytes
-  - `breakup`: <ProposalId><VoteAmount>
-
-#### DelegateNFT
-A minting NFT used to manage delegates.
-  - `category`: daoCategory
-  - `commitment`: 12 bytes
-  - `breakup`: <ProposalId><VoteAmount>
-
-#### ProjectAuthorizedThreadNFTs
-A minting NFT used to manage project threads.
-  - `category`: projectCategory
-  - `commitment`: 35 bytes
-  - Allocates 1 thread.
-
-
-
+  - `capability`: immutable
+  - `breakup`: < ProposalID >< VoteAmount >
 
 ### FAQs
 
