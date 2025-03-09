@@ -34,372 +34,376 @@
       ]
     }
   ],
-  "bytecode": "OP_OVER OP_0 OP_NUMEQUAL OP_IF OP_TXINPUTCOUNT OP_4 OP_NUMEQUALVERIFY OP_TXOUTPUTCOUNT OP_7 OP_LESSTHANOREQUAL OP_VERIFY OP_INPUTINDEX OP_1 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_UTXOBYTECODE OP_INPUTINDEX OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_INPUTINDEX OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_2 OP_PICK OP_SIZE OP_NIP 20 OP_NUMEQUALVERIFY OP_3 OP_PICK OP_SIZE OP_NIP OP_2 OP_NUMEQUALVERIFY OP_3 OP_PICK OP_REVERSEBYTES OP_BIN2NUM OP_0 OP_NUMNOTEQUAL OP_VERIFY OP_2 OP_OUTPUTTOKENCOMMITMENT OP_REVERSEBYTES OP_BIN2NUM OP_2 OP_UTXOTOKENCOMMITMENT OP_REVERSEBYTES OP_BIN2NUM OP_1ADD OP_NUMEQUALVERIFY OP_0 OP_UTXOBYTECODE OP_2 OP_UTXOBYTECODE OP_OVER OP_EQUALVERIFY OP_2 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_3 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_4 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_2 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP OP_4 OP_NUMEQUALVERIFY OP_2 OP_OUTPUTTOKENCATEGORY OP_2 OP_UTXOTOKENCATEGORY OP_EQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_2 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_2 OP_EQUALVERIFY OP_3 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_1 OP_EQUALVERIFY OP_4 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_3 OP_UTXOTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_3 OP_UTXOVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_4 OP_OUTPUTVALUE OP_LESSTHANOREQUAL OP_VERIFY OP_3 OP_OUTPUTTOKENCOMMITMENT OP_2 OP_OUTPUTTOKENCOMMITMENT OP_4 OP_PICK OP_CAT OP_4 OP_ROLL OP_CAT OP_3 OP_ROLL OP_CAT OP_EQUALVERIFY OP_3 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP 28 OP_NUMEQUALVERIFY OP_3 OP_UTXOBYTECODE OP_SIZE OP_NIP 23 OP_NUMEQUAL OP_3 OP_UTXOBYTECODE OP_SIZE OP_NIP 19 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_4 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP 1d OP_NUMEQUAL OP_4 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP 27 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_5 OP_OUTPUTVALUE OP_0 OP_NUMEQUALVERIFY OP_5 OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUAL OP_NIP OP_ELSE OP_OVER OP_1 OP_NUMEQUAL OP_IF OP_TXINPUTCOUNT OP_5 OP_NUMEQUALVERIFY OP_TXOUTPUTCOUNT OP_8 OP_LESSTHANOREQUAL OP_VERIFY OP_INPUTINDEX OP_1 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_UTXOBYTECODE OP_INPUTINDEX OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_INPUTINDEX OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_2 OP_OUTPUTTOKENCOMMITMENT OP_2 OP_UTXOTOKENCOMMITMENT OP_EQUALVERIFY OP_0 OP_UTXOBYTECODE OP_2 OP_UTXOBYTECODE OP_OVER OP_EQUALVERIFY OP_2 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_3 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_4 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_2 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP OP_4 OP_NUMEQUALVERIFY OP_2 OP_OUTPUTTOKENCATEGORY OP_2 OP_UTXOTOKENCATEGORY OP_EQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_2 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_2 OP_EQUALVERIFY OP_3 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_1 OP_EQUALVERIFY OP_4 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_4 OP_UTXOTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_4 OP_UTXOVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_4 OP_OUTPUTVALUE OP_LESSTHANOREQUAL OP_VERIFY OP_3 OP_OUTPUTTOKENCOMMITMENT OP_3 OP_UTXOTOKENCOMMITMENT OP_6 OP_SPLIT OP_DROP OP_EQUALVERIFY OP_3 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP OP_6 OP_NUMEQUALVERIFY OP_3 OP_UTXOBYTECODE OP_SIZE OP_NIP 23 OP_NUMEQUAL OP_3 OP_UTXOBYTECODE OP_SIZE OP_NIP 19 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_4 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP 1d OP_NUMEQUAL OP_4 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP 27 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_3 OP_UTXOBYTECODE OP_5 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_3 OP_UTXOTOKENCATEGORY OP_5 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_3 OP_UTXOTOKENCOMMITMENT OP_5 OP_OUTPUTTOKENCOMMITMENT OP_EQUALVERIFY OP_3 OP_UTXOVALUE OP_5 OP_OUTPUTVALUE OP_NUMEQUALVERIFY OP_6 OP_OUTPUTVALUE OP_0 OP_NUMEQUALVERIFY OP_7 OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUAL OP_NIP OP_ELSE OP_SWAP OP_2 OP_NUMEQUALVERIFY OP_TXINPUTCOUNT OP_5 OP_NUMEQUALVERIFY OP_TXOUTPUTCOUNT OP_8 OP_LESSTHANOREQUAL OP_VERIFY OP_INPUTINDEX OP_1 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_UTXOBYTECODE OP_INPUTINDEX OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_INPUTINDEX OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_OVER OP_SIZE OP_NIP 20 OP_NUMEQUALVERIFY OP_2 OP_OUTPUTTOKENCOMMITMENT OP_2 OP_UTXOTOKENCOMMITMENT OP_EQUALVERIFY OP_0 OP_UTXOBYTECODE OP_2 OP_UTXOBYTECODE OP_OVER OP_EQUALVERIFY OP_2 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_3 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_4 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_2 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP OP_4 OP_NUMEQUALVERIFY OP_2 OP_OUTPUTTOKENCATEGORY OP_2 OP_UTXOTOKENCATEGORY OP_EQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_2 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_2 OP_EQUALVERIFY OP_3 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_1 OP_EQUALVERIFY OP_4 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_4 OP_UTXOTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_4 OP_UTXOVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_4 OP_OUTPUTVALUE OP_LESSTHANOREQUAL OP_VERIFY OP_3 OP_OUTPUTTOKENCOMMITMENT OP_3 OP_UTXOTOKENCOMMITMENT OP_6 OP_SPLIT OP_DROP OP_ROT OP_CAT OP_EQUALVERIFY OP_3 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP 26 OP_NUMEQUALVERIFY OP_3 OP_UTXOBYTECODE OP_SIZE OP_NIP 23 OP_NUMEQUAL OP_3 OP_UTXOBYTECODE OP_SIZE OP_NIP 19 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_4 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP 1d OP_NUMEQUAL OP_4 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP 27 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_3 OP_UTXOBYTECODE OP_5 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_3 OP_UTXOTOKENCATEGORY OP_5 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_3 OP_UTXOTOKENCOMMITMENT OP_5 OP_OUTPUTTOKENCOMMITMENT OP_EQUALVERIFY OP_3 OP_UTXOVALUE OP_5 OP_OUTPUTVALUE OP_NUMEQUALVERIFY OP_6 OP_OUTPUTVALUE OP_0 OP_NUMEQUALVERIFY OP_7 OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUAL OP_ENDIF OP_ENDIF",
-  "source": "pragma cashscript ^0.11.0;\n\n/**\n * @param commitmentDeposit - The amount of sathoshis the creator has to commit to the proposal.\n * - It prevents spam of proposals, reducing confusion among the stakeholders and reduces the risk of vote splitting.\n * - It requires a commitment from the creator to go ensure that the proposal is widely accepted and socially agreed upon among the shareholders of the DAO\n * If the proposal passes, the creator will get back the commitmentDeposit.\n * If the proposal fails, the BCH is sent to anyone who calls the `FailProposal` contract.\n */\ncontract SubmitProposal(int minCommitmentDeposit) {\n  /**\n   *\n   * @inputs\n   * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract\n   *   - capability: immutable\n   *   - length: 35 bytes\n   *   - category: daoCategory\n   * - Input1: Any input from this contract\n   * - Input2: ProposalCounterNFT from DAO Contract\n   *   - capability: minting\n   *   - length: 4 bytes\n   *   - category: daoCategory\n   * - Input3: Funding UTXO\n   *   - value: >= commitmentDeposit\n   * \n   * @outputs\n   * - Output0: DAO Contract's authorizedThreadNFT back to DAO Contract\n   *   - capability: immutable\n   *   - length: 35 bytes\n   *   - category: daoCategory\n   * - Output1: Input1 back to this contract without any change\n   * - Output2: ProposalCounterNFT back to DAO Contract\n   *   - capability: minting\n   *   - length: 4 bytes\n   *   - category: daoCategory\n   * - Output3: VoteProposalNFT to DAO Contract\n   *   - capability: mutable\n   *   - length: 40 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>\n   *   - category: daoCategory\n   * - Output4: TimeProposalNFT to DAO Contract\n   *   - capability: immutable\n   *   - length: >=29 bytes <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)>\n   *   - category: daoCategory\n   *   - satoshis >= commitmentDeposit\n   * - Output5: OP_RETURN with the proposal data\n   * - Output6: Change pure BCH\n   */\n  function add(bytes proposalScriptHash, bytes threadCount) {\n    require(tx.inputs.length == 4);\n    require(tx.outputs.length <= 7);\n\n    // This contract can only be used at input1 and it should return the input1 back to itself.\n    require(this.activeInputIndex == 1);\n    require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);\n    // Ensure that the daoCategory or projectCategory in not minted here.\n    require(tx.outputs[this.activeInputIndex].tokenCategory == 0x);\n    \n    // Add Proposal requires a 32 byte script hash and 2 byte thread count\n    require(proposalScriptHash.length == 32);\n    require(threadCount.length == 2);\n\n    // Thread count should not be 0\n    require(int(threadCount.reverse()) != 0);\n\n    // Proposal NFT ID increases by 1 with each transaction.\n    require(int(tx.outputs[2].nftCommitment.reverse()) == int(tx.inputs[2].nftCommitment.reverse()) + 1);\n\n    // This contract can only be used with the 'lockingbytecode' used in the 0th input.\n    // Note: This contract can be used with any contract that fulfills these conditions, and that is fine\n    // because those contracts will not be manipulating the utxos of the Controller contract. Instead, they will\n    // be manipulating their own utxos.\n    bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;\n    require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[3].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[4].lockingBytecode == daoInputLockingBytecode);\n\n    // ProposalCounterNFT should always be 4 bytes\n    require(tx.outputs[2].nftCommitment.length == 4);\n    // ProposalCounterNFT should keep the same category and capability.\n    require(tx.outputs[2].tokenCategory == tx.inputs[2].tokenCategory);\n\n    bytes daoInputCategory = tx.inputs[0].tokenCategory;\n\n    // ProposalCounterNFT should be minting and of the 'daoInputCategory'\n    bytes proposalCounterCategory, bytes proposalCounterCapability = tx.outputs[2].tokenCategory.split(32);\n    require(proposalCounterCategory == daoInputCategory);\n    require(proposalCounterCapability == 0x02); // Minting\n\n    // VoteProposalNFT should be mutable\n    bytes voteProposalCategory, bytes voteProposalCapability = tx.outputs[3].tokenCategory.split(32);\n    require(voteProposalCategory == daoInputCategory);\n    require(voteProposalCapability == 0x01); // Mutable\n\n    // TimeProposalNFT should be immutable\n    require(tx.outputs[4].tokenCategory == daoInputCategory);\n    \n    // Ensure funding is pure BCH and is >= commitmentDeposit\n    require(tx.inputs[3].tokenCategory == 0x);\n    require(tx.inputs[3].value >= minCommitmentDeposit);\n    // Ensure the TimeProposalNFT has the same value as the commitmentDeposit\n    require(tx.outputs[4].value >= minCommitmentDeposit);\n\n    // ADD: Create the proposalID<4 bytes> + threadLeft<2 bytes> + threadCount<2 bytes> + proposalScriptHash<32 bytes>\n    require(tx.outputs[3].nftCommitment == tx.outputs[2].nftCommitment + threadCount + threadCount + proposalScriptHash);\n    require(tx.outputs[3].nftCommitment.length == 40);\n\n    // Set the commitment for the TimeProposalNFT <proposalID<4 bytes>, CreatorLockingBytecode<any length bytes>>\n    // @todo: Uncomment this, commented out because of cashscript bug\n    // require(tx.outputs[4].nftCommitment == tx.outputs[2].nftCommitment + tx.inputs[3].lockingBytecode);\n\n    // Allow a P2SH32 contract or a P2PKH to initiate the proposal\n    require(tx.inputs[3].lockingBytecode.length == 35 || tx.inputs[3].lockingBytecode.length == 25);\n    require(tx.outputs[4].nftCommitment.length == 29 || tx.outputs[4].nftCommitment.length == 39);\n\n    // Force OP_RETURN output\n    require(tx.outputs[5].value == 0);    \n\n    // Ensure change is pure BCH\n    require(tx.outputs[5].tokenCategory == 0x);\n  }\n\n  /**\n   *\n   * @inputs\n   * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract\n   *   - capability: immutable\n   *   - length: 35 bytes\n   *   - category: daoCategory\n   * - Input1: Any input from this contract\n   * - Input2: ProposalCounterNFT from DAO Contract\n   *   - capability: minting\n   *   - length: 4 bytes\n   *   - category: daoCategory\n   * - Input3: AuthorizedThreadNFT from the Project Contract \n   * - Input4: Funding UTXO\n   *   - value: >= commitmentDeposit\n   * \n   * @outputs\n   * - Output0: DAO Contract's authorizedThreadNFT back to DAO Contract\n   *   - capability: immutable\n   *   - length: 35 bytes\n   *   - category: daoCategory\n   * - Output1: Input1 back to this contract without any change\n   * - Output2: ProposalCounterNFT back to DAO Contract\n   *   - capability: minting\n   *   - length: 4 bytes\n   *   - category: daoCategory\n   * - Output3: VoteProposalNFT to DAO contract\n   *   - capability: mutable\n   *   - length: 6 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes)>\n   *   - category: daoCategory\n   * - Output4: TimeProposalNFT to DAO contract\n   *   - capability: immutable\n   *   - length: >=29 bytes <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)>\n   *   - category: daoCategory\n   *   - satoshis >= commitmentDeposit\n   * - Output5: AuthorizedThreadNFT back to the Project Contract\n   * - Output6: OP_RETURN with the proposal data\n   * - Output7: Change pure BCH\n   */\n  function remove() {\n    require(tx.inputs.length == 5);\n    require(tx.outputs.length <= 8);\n\n    // This contract can only be used at input1 and it should return the input1 back to itself.\n    require(this.activeInputIndex == 1);\n    require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);\n    // Ensure that the daoCategory or projectCategory in not minted here.\n    require(tx.outputs[this.activeInputIndex].tokenCategory == 0x);\n\n    // Proposal NFT ID stays the same\n    require(tx.outputs[2].nftCommitment == tx.inputs[2].nftCommitment);\n\n    // This contract can only be used with the 'lockingbytecode' used in the 0th input.\n    // Note: This contract can be used with any contract that fulfills these conditions, and that is fine\n    // because those contracts will not be manipulating the utxos of the Controller contract. Instead, they will\n    // be manipulating their own utxos.\n    bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;\n    require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[3].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[4].lockingBytecode == daoInputLockingBytecode);\n\n    // ProposalCounterNFT should always be 4 bytes\n    require(tx.outputs[2].nftCommitment.length == 4);\n    // ProposalCounterNFT should keep the same category and capability.\n    require(tx.outputs[2].tokenCategory == tx.inputs[2].tokenCategory);\n\n    bytes daoInputCategory = tx.inputs[0].tokenCategory;\n\n    // ProposalCounterNFT should be minting and of the 'daoInputCategory'\n    bytes proposalCounterCategory, bytes proposalCounterCapability = tx.outputs[2].tokenCategory.split(32);\n    require(proposalCounterCategory == daoInputCategory);\n    require(proposalCounterCapability == 0x02); // Minting\n\n    // VoteProposalNFT should be mutable\n    bytes voteProposalCategory, bytes voteProposalCapability = tx.outputs[3].tokenCategory.split(32);\n    require(voteProposalCategory == daoInputCategory);\n    require(voteProposalCapability == 0x01); // Mutable\n\n    // TimeProposalNFT should be immutable\n    require(tx.outputs[4].tokenCategory == daoInputCategory);\n    \n    // Ensure funding is pure BCH and is >= commitmentDeposit\n    require(tx.inputs[4].tokenCategory == 0x);\n    require(tx.inputs[4].value >= minCommitmentDeposit);\n    // Ensure the TimeProposalNFT has the same value as the commitmentDeposit\n    require(tx.outputs[4].value >= minCommitmentDeposit);\n\n    // REMOVE: Take the proposalID<4 bytes> and threadLeft<2 bytes> from the AuthorizedThreadNFT\n    require(tx.outputs[3].nftCommitment == tx.inputs[3].nftCommitment.split(6)[0]);\n    require(tx.outputs[3].nftCommitment.length == 6);\n\n    // @todo: Uncomment this, commented out because of cashscript bug\n    // Set the commitment for the TimeProposalNFT <proposalID<4 bytes>, CreatorLockingBytecode<any length bytes>>\n    // require(tx.outputs[4].nftCommitment == tx.inputs[3].nftCommitment.split(4)[0] + tx.inputs[4].lockingBytecode);\n\n    // Allow a P2SH32 contract or a P2PKH to initiate the proposal\n    require(tx.inputs[3].lockingBytecode.length == 35 || tx.inputs[3].lockingBytecode.length == 25);\n    require(tx.outputs[4].nftCommitment.length == 29 || tx.outputs[4].nftCommitment.length == 39);\n\n    // Return the AuthorizedThreadNFT back to the Project Contract as it was in the input\n    require(tx.inputs[3].lockingBytecode == tx.outputs[5].lockingBytecode);\n    require(tx.inputs[3].tokenCategory == tx.outputs[5].tokenCategory);\n    require(tx.inputs[3].nftCommitment == tx.outputs[5].nftCommitment);\n    require(tx.inputs[3].value == tx.outputs[5].value);\n\n    // Force OP_RETURN output\n    require(tx.outputs[6].value == 0);    \n\n    // Ensure change is pure BCH\n    require(tx.outputs[7].tokenCategory == 0x);\n\n  }\n\n  /**\n   *\n   * @inputs\n   * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract\n   *   - capability: immutable\n   *   - length: 35 bytes\n   *   - category: daoCategory\n   * - Input1: Any input from this contract\n   * - Input2: ProposalCounterNFT from DAO Contract\n   *   - capability: minting\n   *   - length: 4 bytes\n   *   - category: daoCategory\n   * - Input3: AuthorizedThreadNFT from the Project Contract \n   * - Input4: Funding UTXO\n   *   - value: >= commitmentDeposit\n   * \n   * @outputs\n   * - Output0: DAO Contract's authorizedThreadNFT back to DAO Contract\n   *   - capability: immutable\n   *   - length: 35 bytes\n   *   - category: daoCategory\n   * - Output1: Input1 back to this contract without any change\n   * - Output2: ProposalCounterNFT back to DAO Contract\n   *   - capability: minting\n   *   - length: 4 bytes\n   *   - category: daoCategory\n   * - Output3: VoteProposalNFT to DAO contract\n   *   - capability: mutable\n   *   - length: 38 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ProposedScriptHash (32 bytes)>\n   *   - category: daoCategory\n   * - Output4: TimeProposalNFT to DAO contract\n   *   - capability: immutable\n   *   - length: 29 bytes <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)>\n   *   - category: daoCategory\n   *   - satoshis >= commitmentDeposit\n   * - Output5: AuthorizedThreadNFT back to the Project Contract\n   * - Output6: OP_RETURN with the proposal data\n   * - Output7: Change pure BCH\n   */\n  function replace(bytes proposalScriptHash) {\n    require(tx.inputs.length == 5);\n    require(tx.outputs.length <= 8);\n\n    // This contract can only be used at input1 and it should return the input1 back to itself.\n    require(this.activeInputIndex == 1);\n    require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);\n    // Ensure that the daoCategory or projectCategory in not minted here.\n    require(tx.outputs[this.activeInputIndex].tokenCategory == 0x);\n\n    require(proposalScriptHash.length == 32);\n    // Proposal NFT ID stays the same\n    require(tx.outputs[2].nftCommitment == tx.inputs[2].nftCommitment);\n\n    // This contract can only be used with the 'lockingbytecode' used in the 0th input.\n    // Note: This contract can be used with any contract that fulfills these conditions, and that is fine\n    // because those contracts will not be manipulating the utxos of the Controller contract. Instead, they will\n    // be manipulating their own utxos.\n    bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;\n    require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[3].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[4].lockingBytecode == daoInputLockingBytecode);\n\n    // ProposalCounterNFT should always be 4 bytes\n    require(tx.outputs[2].nftCommitment.length == 4);\n    // ProposalCounterNFT should keep the same category and capability.\n    require(tx.outputs[2].tokenCategory == tx.inputs[2].tokenCategory);\n\n    bytes daoInputCategory = tx.inputs[0].tokenCategory;\n\n    // ProposalCounterNFT should be minting and of the 'daoInputCategory'\n    bytes proposalCounterCategory, bytes proposalCounterCapability = tx.outputs[2].tokenCategory.split(32);\n    require(proposalCounterCategory == daoInputCategory);\n    require(proposalCounterCapability == 0x02); // Minting\n\n    // VoteProposalNFT should be mutable\n    bytes voteProposalCategory, bytes voteProposalCapability = tx.outputs[3].tokenCategory.split(32);\n    require(voteProposalCategory == daoInputCategory);\n    require(voteProposalCapability == 0x01); // Mutable\n\n    // TimeProposalNFT should be immutable\n    require(tx.outputs[4].tokenCategory == daoInputCategory);\n    \n    // Ensure funding is pure BCH and is >= commitmentDeposit\n    require(tx.inputs[4].tokenCategory == 0x);\n    require(tx.inputs[4].value >= minCommitmentDeposit);\n    // Ensure the TimeProposalNFT has the same value as the commitmentDeposit\n    require(tx.outputs[4].value >= minCommitmentDeposit);\n\n    // Take the proposalID<4 bytes> + threadLeft<2 bytes> + proposalScriptHash<32 bytes> from the AuthorizedThreadNFT\n    require(tx.outputs[3].nftCommitment == tx.inputs[3].nftCommitment.split(6)[0] + proposalScriptHash);\n    require(tx.outputs[3].nftCommitment.length == 38);\n\n    // Set the commitment for the TimeProposalNFT <proposalID<4 bytes>, CreatorLockingBytecode<any length bytes>>\n    // @todo: Uncomment this, commented out because of cashscript bug\n    // require(tx.outputs[3].nftCommitment == tx.inputs[3].nftCommitment.split(4)[0] + tx.inputs[4].lockingBytecode);\n\n    // Allow a P2SH32 contract or a P2PKH to initiate the proposal\n    require(tx.inputs[3].lockingBytecode.length == 35 || tx.inputs[3].lockingBytecode.length == 25);\n    require(tx.outputs[4].nftCommitment.length == 29 || tx.outputs[4].nftCommitment.length == 39);\n\n    // Return the AuthorizedThreadNFT back to the Project Contract as it was in the input\n    require(tx.inputs[3].lockingBytecode == tx.outputs[5].lockingBytecode);\n    require(tx.inputs[3].tokenCategory == tx.outputs[5].tokenCategory);\n    require(tx.inputs[3].nftCommitment == tx.outputs[5].nftCommitment);\n    require(tx.inputs[3].value == tx.outputs[5].value);\n\n    // Force OP_RETURN output\n    require(tx.outputs[6].value == 0);    \n\n    // Ensure change is pure BCH\n    require(tx.outputs[7].tokenCategory == 0x);\n\n  }\n}",
+  "bytecode": "OP_OVER OP_0 OP_NUMEQUAL OP_IF OP_TXINPUTCOUNT OP_4 OP_NUMEQUALVERIFY OP_TXOUTPUTCOUNT OP_7 OP_LESSTHANOREQUAL OP_VERIFY OP_INPUTINDEX OP_1 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_UTXOBYTECODE OP_INPUTINDEX OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_INPUTINDEX OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_2 OP_PICK OP_SIZE OP_NIP 20 OP_NUMEQUALVERIFY OP_3 OP_PICK OP_SIZE OP_NIP OP_2 OP_NUMEQUALVERIFY OP_3 OP_PICK OP_REVERSEBYTES OP_BIN2NUM OP_0 OP_NUMNOTEQUAL OP_VERIFY OP_0 OP_UTXOBYTECODE OP_2 OP_UTXOBYTECODE OP_OVER OP_EQUALVERIFY OP_2 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_3 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_4 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_2 OP_OUTPUTTOKENCATEGORY OP_2 OP_UTXOTOKENCATEGORY OP_EQUALVERIFY OP_2 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP OP_4 OP_NUMEQUALVERIFY OP_2 OP_OUTPUTTOKENCOMMITMENT OP_REVERSEBYTES OP_BIN2NUM OP_2 OP_UTXOTOKENCOMMITMENT OP_REVERSEBYTES OP_BIN2NUM OP_1ADD OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_2 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_2 OP_EQUALVERIFY OP_3 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_1 OP_EQUALVERIFY OP_4 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_3 OP_UTXOTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_3 OP_UTXOVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_4 OP_OUTPUTVALUE OP_LESSTHANOREQUAL OP_VERIFY OP_3 OP_OUTPUTTOKENCOMMITMENT OP_2 OP_OUTPUTTOKENCOMMITMENT OP_4 OP_PICK OP_CAT OP_4 OP_ROLL OP_CAT OP_3 OP_ROLL OP_CAT OP_EQUALVERIFY OP_3 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP 28 OP_NUMEQUALVERIFY OP_3 OP_UTXOBYTECODE OP_SIZE OP_NIP 23 OP_NUMEQUAL OP_3 OP_UTXOBYTECODE OP_SIZE OP_NIP 19 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_5 OP_OUTPUTVALUE OP_0 OP_NUMEQUALVERIFY OP_TXOUTPUTCOUNT OP_7 OP_NUMEQUAL OP_IF OP_6 OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_ENDIF OP_DROP OP_1 OP_ELSE OP_OVER OP_1 OP_NUMEQUAL OP_IF OP_TXINPUTCOUNT OP_5 OP_NUMEQUALVERIFY OP_TXOUTPUTCOUNT OP_8 OP_LESSTHANOREQUAL OP_VERIFY OP_INPUTINDEX OP_1 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_UTXOBYTECODE OP_INPUTINDEX OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_INPUTINDEX OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_0 OP_UTXOBYTECODE OP_2 OP_UTXOBYTECODE OP_OVER OP_EQUALVERIFY OP_2 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_4 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_5 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_3 OP_UTXOBYTECODE OP_EQUAL OP_NOT OP_VERIFY OP_2 OP_OUTPUTTOKENCOMMITMENT OP_2 OP_UTXOTOKENCOMMITMENT OP_EQUALVERIFY OP_2 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP OP_4 OP_NUMEQUALVERIFY OP_2 OP_OUTPUTTOKENCATEGORY OP_2 OP_UTXOTOKENCATEGORY OP_EQUALVERIFY OP_3 OP_UTXOBYTECODE OP_3 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_3 OP_UTXOTOKENCATEGORY OP_3 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_3 OP_UTXOTOKENCOMMITMENT OP_3 OP_OUTPUTTOKENCOMMITMENT OP_EQUALVERIFY OP_3 OP_UTXOTOKENAMOUNT OP_3 OP_OUTPUTTOKENAMOUNT OP_NUMEQUALVERIFY OP_3 OP_UTXOVALUE OP_3 OP_OUTPUTVALUE OP_NUMEQUALVERIFY OP_3 OP_UTXOTOKENCOMMITMENT OP_SIZE OP_NIP 26 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_2 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_2 OP_EQUALVERIFY OP_4 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_1 OP_EQUALVERIFY OP_5 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_4 OP_UTXOTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_4 OP_UTXOVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_5 OP_OUTPUTVALUE OP_LESSTHANOREQUAL OP_VERIFY OP_4 OP_OUTPUTTOKENCOMMITMENT OP_3 OP_UTXOTOKENCOMMITMENT OP_6 OP_SPLIT OP_DROP OP_EQUALVERIFY OP_4 OP_UTXOBYTECODE OP_SIZE OP_NIP 23 OP_NUMEQUAL OP_4 OP_UTXOBYTECODE OP_SIZE OP_NIP 19 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_6 OP_OUTPUTVALUE OP_0 OP_NUMEQUALVERIFY OP_TXOUTPUTCOUNT OP_8 OP_NUMEQUAL OP_IF OP_7 OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_ENDIF OP_DROP OP_1 OP_ELSE OP_SWAP OP_2 OP_NUMEQUALVERIFY OP_TXINPUTCOUNT OP_5 OP_NUMEQUALVERIFY OP_TXOUTPUTCOUNT OP_8 OP_LESSTHANOREQUAL OP_VERIFY OP_INPUTINDEX OP_1 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_UTXOBYTECODE OP_INPUTINDEX OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_INPUTINDEX OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_OVER OP_SIZE OP_NIP 20 OP_NUMEQUALVERIFY OP_2 OP_OUTPUTTOKENCOMMITMENT OP_2 OP_UTXOTOKENCOMMITMENT OP_EQUALVERIFY OP_0 OP_UTXOBYTECODE OP_2 OP_UTXOBYTECODE OP_OVER OP_EQUALVERIFY OP_2 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_4 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_5 OP_OUTPUTBYTECODE OP_OVER OP_EQUALVERIFY OP_3 OP_UTXOBYTECODE OP_EQUAL OP_NOT OP_VERIFY OP_2 OP_OUTPUTTOKENCOMMITMENT OP_SIZE OP_NIP OP_4 OP_NUMEQUALVERIFY OP_2 OP_OUTPUTTOKENCATEGORY OP_2 OP_UTXOTOKENCATEGORY OP_EQUALVERIFY OP_3 OP_UTXOBYTECODE OP_3 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_3 OP_UTXOTOKENCATEGORY OP_3 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_3 OP_UTXOTOKENCOMMITMENT OP_3 OP_OUTPUTTOKENCOMMITMENT OP_EQUALVERIFY OP_3 OP_UTXOTOKENAMOUNT OP_3 OP_OUTPUTTOKENAMOUNT OP_NUMEQUALVERIFY OP_3 OP_UTXOVALUE OP_3 OP_OUTPUTVALUE OP_NUMEQUALVERIFY OP_3 OP_UTXOTOKENCOMMITMENT OP_SIZE OP_NIP 26 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_2 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_2 OP_EQUALVERIFY OP_4 OP_OUTPUTTOKENCATEGORY 20 OP_SPLIT OP_SWAP OP_2 OP_PICK OP_EQUALVERIFY OP_1 OP_EQUALVERIFY OP_5 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_4 OP_UTXOTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_4 OP_UTXOVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_5 OP_OUTPUTVALUE OP_LESSTHANOREQUAL OP_VERIFY OP_4 OP_OUTPUTTOKENCOMMITMENT OP_3 OP_UTXOTOKENCOMMITMENT OP_6 OP_SPLIT OP_DROP OP_ROT OP_CAT OP_EQUALVERIFY OP_4 OP_UTXOBYTECODE OP_SIZE OP_NIP 23 OP_NUMEQUAL OP_4 OP_UTXOBYTECODE OP_SIZE OP_NIP 19 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_6 OP_OUTPUTVALUE OP_0 OP_NUMEQUALVERIFY OP_TXOUTPUTCOUNT OP_8 OP_NUMEQUAL OP_IF OP_7 OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_ENDIF OP_1 OP_ENDIF OP_ENDIF",
+  "source": "pragma cashscript ^0.11.0;\n\n/**\n * @param commitmentDeposit - The amount of sathoshis the creator has to commit to the proposal.\n * - It prevents spam of proposals, reducing confusion among the stake holders/token holders and reduces the risk of vote splitting.\n * - It requires a commitment from the creator to ensure that the proposal is widely accepted and socially agreed upon else they will lose the commitmentDeposit.\n * If the proposal passes, the creator will get back the commitmentDeposit.\n * If the proposal fails, the BCH is sent to anyone who calls the `completeOrFail` function of the ExecuteProposal contract.\n */\ncontract SubmitProposal(int minCommitmentDeposit) {\n\n  /**\n   * This function create a proposal with an intent to add a new contract to the project controlled by the DAO.\n   *\n   * @inputs\n   * - Input0: DAO Contract's authorizedThreadNFT from Controller Contract (immutable NFT with commitment that has the lockingBytecode of this contract)\n   *   - capability: immutable\n   *   - length: 35 bytes\n   *   - category: daoCategory\n   * - Input1: Any input from this contract\n   * - Input2: ProposalCounterNFT from Controller Contract\n   *   - capability: minting\n   *   - length: 4 bytes\n   *   - category: daoCategory\n   * - Input3: Funding UTXO\n   *   - value: >= commitmentDeposit\n   * \n   * @outputs\n   * - Output0: DAO Contract's authorizedThreadNFT back to Controller Contract\n   *   - capability: immutable\n   *   - length: 35 bytes\n   *   - category: daoCategory\n   * - Output1: Input1 back to this contract without any change\n   * - Output2: ProposalCounterNFT back to Controller Contract\n   *   - capability: minting\n   *   - length: 4 bytes\n   *   - category: daoCategory\n   * - Output3: VoteProposalNFT to Controller Contract\n   *   - capability: mutable\n   *   - length: 40 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>\n   *   - category: daoCategory\n   * - Output4: TimeProposalNFT to Controller Contract\n   *   - capability: immutable\n   *   - length: 29 or 39 bytes <ProposalID (4 bytes), CreatorLockingBytecode (25/35 bytes)>\n   *   - category: daoCategory\n   *   - satoshis >= commitmentDeposit\n   * - Output5: OP_RETURN with the proposal data\n   * - Output6: Optional change pure BCH\n   */\n  function add(bytes proposalScriptHash, bytes threadCount) {\n    require(tx.inputs.length == 4);\n    require(tx.outputs.length <= 7);\n\n    // This contract can only be used at input1 and it should return the input1 back to itself.\n    require(this.activeInputIndex == 1);\n    require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);\n    // Ensure that the daoCategory or projectCategory in not minted here.\n    require(tx.outputs[this.activeInputIndex].tokenCategory == 0x);\n    \n    // Add Proposal requires a 32 byte script hash and 2 byte thread count\n    require(proposalScriptHash.length == 32);\n    require(threadCount.length == 2);\n\n    // Thread count should not be 0\n    require(int(threadCount.reverse()) != 0);\n\n    // This contract can only be used with the 'lockingbytecode' used in the 0th input.\n    // Note: This contract can be used with any contract that fulfills these conditions, and that is fine\n    // because those contracts will not be manipulating the utxos of the Controller contract. Instead, they will\n    // be manipulating their own utxos.\n    bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;\n    require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[3].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[4].lockingBytecode == daoInputLockingBytecode);\n\n    // ProposalCounterNFT should keep the same category and capability.\n    require(tx.outputs[2].tokenCategory == tx.inputs[2].tokenCategory);\n    // ProposalCounterNFT should always be 4 bytes\n    require(tx.outputs[2].nftCommitment.length == 4);\n    // Proposal NFT ID increases by 1 with each transaction.\n    require(int(tx.outputs[2].nftCommitment.reverse()) == int(tx.inputs[2].nftCommitment.reverse()) + 1);\n\n    bytes daoInputCategory = tx.inputs[0].tokenCategory;\n\n    // ProposalCounterNFT should be minting and of the 'daoInputCategory'\n    bytes proposalCounterCategory, bytes proposalCounterCapability = tx.outputs[2].tokenCategory.split(32);\n    require(proposalCounterCategory == daoInputCategory);\n    require(proposalCounterCapability == 0x02); // Minting\n\n    // VoteProposalNFT should be mutable\n    bytes voteProposalCategory, bytes voteProposalCapability = tx.outputs[3].tokenCategory.split(32);\n    require(voteProposalCategory == daoInputCategory);\n    require(voteProposalCapability == 0x01); // Mutable\n\n    // TimeProposalNFT should be immutable\n    require(tx.outputs[4].tokenCategory == daoInputCategory);\n    \n    // Ensure funding is pure BCH and is >= commitmentDeposit\n    require(tx.inputs[3].tokenCategory == 0x);\n    require(tx.inputs[3].value >= minCommitmentDeposit);\n    // Ensure the TimeProposalNFT has the same value as the commitmentDeposit\n    require(tx.outputs[4].value >= minCommitmentDeposit);\n\n    // Create the proposalID<4 bytes> + threadLeft<2 bytes> + threadCount<2 bytes> + proposalScriptHash<32 bytes>\n    require(tx.outputs[3].nftCommitment == tx.outputs[2].nftCommitment + threadCount + threadCount + proposalScriptHash);\n    require(tx.outputs[3].nftCommitment.length == 40);\n\n    // Set the commitment for the TimeProposalNFT <proposalID<4 bytes>, CreatorLockingBytecode<any length bytes>>\n    // @todo: Uncomment this, commented out because of cashscript bug\n    // require(tx.outputs[4].nftCommitment == tx.outputs[2].nftCommitment + tx.inputs[3].lockingBytecode);\n\n    // Allow a P2SH32 contract or a P2PKH to initiate the proposal\n    require(tx.inputs[3].lockingBytecode.length == 35 || tx.inputs[3].lockingBytecode.length == 25);\n\n    // Force OP_RETURN output\n    require(tx.outputs[5].value == 0);    \n\n    if(tx.outputs.length == 7) {\n      // Ensure change is pure BCH\n      require(tx.outputs[6].tokenCategory == 0x);\n    }\n  }\n\n  /**\n   * This function create a proposal with an intent to remove a contract from the project controlled by the DAO.\n   *\n   * @inputs\n   * - Input0: DAO Contract's authorizedThreadNFT from Controller Contract (immutable NFT with commitment that has the lockingBytecode of this contract)\n   *   - capability: immutable\n   *   - length: 35 bytes\n   *   - category: daoCategory\n   * - Input1: Any input from this contract\n   * - Input2: ProposalCounterNFT from Controller Contract\n   *   - capability: minting\n   *   - length: 4 bytes\n   *   - category: daoCategory\n   * - Input3: AuthorizedThreadNFT from the Project Contract \n   *   - capability: immutable\n   *   - length: 38 bytes <ProposalID (4 bytes), ThreadCount (2 bytes), ScriptHash (32 bytes)>\n   *   - category: projectCategory\n   * - Input4: Funding UTXO\n   *   - value: >= commitmentDeposit\n   * \n   * @outputs\n   * - Output0: DAO Contract's authorizedThreadNFT back to Controller Contract\n   *   - capability: immutable\n   *   - length: 35 bytes\n   *   - category: daoCategory\n   * - Output1: Input1 back to this contract without any change\n   * - Output2: ProposalCounterNFT back to Controller Contract\n   *   - capability: minting\n   *   - length: 4 bytes\n   *   - category: daoCategory\n   * - Output3: AuthorizedThreadNFT back to the Project Contract\n   *   - capability: immutable\n   *   - length: 38 bytes <ProposalID (4 bytes), ThreadCount (2 bytes), ScriptHash (32 bytes)>\n   *   - category: projectCategory\n   * - Output4: VoteProposalNFT to Controller Contract\n   *   - capability: mutable\n   *   - length: 6 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes)>\n   *   - category: daoCategory\n   * - Output5: TimeProposalNFT to Controller Contract\n   *   - capability: immutable\n   *   - length: >=29 bytes <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)>\n   *   - category: daoCategory\n   *   - satoshis >= commitmentDeposit\n   * - Output6: OP_RETURN with the proposal data\n   * - Output7: Optional change pure BCH\n   */\n  function remove() {\n    require(tx.inputs.length == 5);\n    require(tx.outputs.length <= 8);\n\n    // This contract can only be used at input1 and it should return the input1 back to itself.\n    require(this.activeInputIndex == 1);\n    require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);\n    // Ensure that the daoCategory or projectCategory in not minted here.\n    require(tx.outputs[this.activeInputIndex].tokenCategory == 0x);\n\n    // This contract can only be used with the 'lockingbytecode' used in the 0th input.\n    // Note: This contract can be used with any contract that fulfills these conditions, and that is fine\n    // because those contracts will not be manipulating the utxos of the Controller contract. Instead, they will\n    // be manipulating their own utxos.\n    bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;\n    require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[4].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[5].lockingBytecode == daoInputLockingBytecode);\n\n    // The AuthorizedThreadNFT should not come from the DAO.\n    require(tx.inputs[3].lockingBytecode != daoInputLockingBytecode);\n\n    // Proposal NFT ID stays the same\n    require(tx.outputs[2].nftCommitment == tx.inputs[2].nftCommitment);\n    // ProposalCounterNFT should always be 4 bytes\n    require(tx.outputs[2].nftCommitment.length == 4);\n    // ProposalCounterNFT should keep the same category and capability.\n    require(tx.outputs[2].tokenCategory == tx.inputs[2].tokenCategory);\n\n    // Return the AuthorizedThreadNFT back to the Project Contract as it was in the input\n    require(tx.inputs[3].lockingBytecode == tx.outputs[3].lockingBytecode);\n    require(tx.inputs[3].tokenCategory == tx.outputs[3].tokenCategory);\n    require(tx.inputs[3].nftCommitment == tx.outputs[3].nftCommitment);\n    require(tx.inputs[3].tokenAmount == tx.outputs[3].tokenAmount);\n    require(tx.inputs[3].value == tx.outputs[3].value);\n    // AuthorizedThreadNFT should be 38 bytes\n    require(tx.inputs[3].nftCommitment.length == 38);\n\n    bytes daoInputCategory = tx.inputs[0].tokenCategory;\n\n    // ProposalCounterNFT should be minting and of the 'daoInputCategory'\n    bytes proposalCounterCategory, bytes proposalCounterCapability = tx.outputs[2].tokenCategory.split(32);\n    require(proposalCounterCategory == daoInputCategory);\n    require(proposalCounterCapability == 0x02); // Minting\n\n    // VoteProposalNFT should be mutable\n    bytes voteProposalCategory, bytes voteProposalCapability = tx.outputs[4].tokenCategory.split(32);\n    require(voteProposalCategory == daoInputCategory);\n    require(voteProposalCapability == 0x01); // Mutable\n\n    // TimeProposalNFT should be immutable\n    require(tx.outputs[5].tokenCategory == daoInputCategory);\n    \n    // Ensure funding is pure BCH and is >= commitmentDeposit\n    require(tx.inputs[4].tokenCategory == 0x);\n    require(tx.inputs[4].value >= minCommitmentDeposit);\n    // Ensure the TimeProposalNFT has the same value as the commitmentDeposit\n    require(tx.outputs[5].value >= minCommitmentDeposit);\n\n    // Take the proposalID<4 bytes> and threadLeft<2 bytes> from the AuthorizedThreadNFT of the Project Contract\n    require(tx.outputs[4].nftCommitment == tx.inputs[3].nftCommitment.split(6)[0]);\n\n    // @todo: Uncomment this, commented out because of cashscript bug\n    // Set the commitment for the TimeProposalNFT <proposalID<4 bytes>, CreatorLockingBytecode<any length bytes>>\n    // require(tx.outputs[5].nftCommitment == tx.inputs[3].nftCommitment.split(4)[0] + tx.inputs[4].lockingBytecode);\n\n    // Allow a P2SH32 contract or a P2PKH to initiate the proposal\n    require(tx.inputs[4].lockingBytecode.length == 35 || tx.inputs[4].lockingBytecode.length == 25);\n\n    // Force OP_RETURN output\n    require(tx.outputs[6].value == 0);    \n\n    if(tx.outputs.length == 8) {\n      // Ensure change is pure BCH\n      require(tx.outputs[7].tokenCategory == 0x);\n    }\n\n  }\n\n  /**\n   * This function create a proposal with an intent to replace a contract from the project controlled by the DAO.\n   *\n   * @inputs\n   * - Input0: DAO Contract's authorizedThreadNFT from Controller Contract (immutable NFT with commitment that has the lockingBytecode of this contract)\n   *   - capability: immutable\n   *   - length: 35 bytes\n   *   - category: daoCategory\n   * - Input1: Any input from this contract\n   * - Input2: ProposalCounterNFT from Controller Contract\n   *   - capability: minting\n   *   - length: 4 bytes\n   *   - category: daoCategory\n   * - Input3: AuthorizedThreadNFT from the Project Contract \n   *   - capability: immutable\n   *   - length: 38 bytes <ProposalID (4 bytes), ThreadCount (2 bytes), ScriptHash (32 bytes)>\n   *   - category: projectCategory\n   * - Input4: Funding UTXO\n   *   - value: >= commitmentDeposit\n   * \n   * @outputs\n   * - Output0: DAO Contract's authorizedThreadNFT back to Controller Contract\n   *   - capability: immutable\n   *   - length: 35 bytes\n   *   - category: daoCategory\n   * - Output1: Input1 back to this contract without any change\n   * - Output2: ProposalCounterNFT back to Controller Contract\n   *   - capability: minting\n   *   - length: 4 bytes\n   *   - category: daoCategory\n   * - Output3: AuthorizedThreadNFT back to the Project Contract\n   *   - capability: immutable\n   *   - length: 38 bytes\n   *   - category: projectCategory\n   * - Output4: VoteProposalNFT to Controller Contract\n   *   - capability: mutable\n   *   - length: 38 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ProposedScriptHash (32 bytes)>\n   *   - category: daoCategory\n   * - Output5: TimeProposalNFT to Controller Contract\n   *   - capability: immutable\n   *   - length: 29 bytes <ProposalID (4 bytes), CreatorLockingBytecode (25 bytes)>\n   *   - category: daoCategory\n   *   - satoshis >= commitmentDeposit\n   * - Output6: OP_RETURN with the proposal data\n   * - Output7: Optional change pure BCH\n   */\n  function replace(bytes proposalScriptHash) {\n    require(tx.inputs.length == 5);\n    require(tx.outputs.length <= 8);\n\n    // This contract can only be used at input1 and it should return the input1 back to itself.\n    require(this.activeInputIndex == 1);\n    require(tx.inputs[this.activeInputIndex].lockingBytecode == tx.outputs[this.activeInputIndex].lockingBytecode);\n    // Ensure that the daoCategory or projectCategory in not minted here.\n    require(tx.outputs[this.activeInputIndex].tokenCategory == 0x);\n\n    require(proposalScriptHash.length == 32);\n    // Proposal NFT ID stays the same\n    require(tx.outputs[2].nftCommitment == tx.inputs[2].nftCommitment);\n\n    // This contract can only be used with the 'lockingbytecode' used in the 0th input.\n    // Note: This contract can be used with any contract that fulfills these conditions, and that is fine\n    // because those contracts will not be manipulating the utxos of the Controller contract. Instead, they will\n    // be manipulating their own utxos.\n    bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;\n    require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[4].lockingBytecode == daoInputLockingBytecode);\n    require(tx.outputs[5].lockingBytecode == daoInputLockingBytecode);\n    // The AuthorizedThreadNFT should not come from the DAO.\n    require(tx.inputs[3].lockingBytecode != daoInputLockingBytecode);\n\n    // ProposalCounterNFT should always be 4 bytes\n    require(tx.outputs[2].nftCommitment.length == 4);\n    // ProposalCounterNFT should keep the same category and capability.\n    require(tx.outputs[2].tokenCategory == tx.inputs[2].tokenCategory);\n\n    // Return the AuthorizedThreadNFT back to the Project Contract as it was in the input\n    require(tx.inputs[3].lockingBytecode == tx.outputs[3].lockingBytecode);\n    require(tx.inputs[3].tokenCategory == tx.outputs[3].tokenCategory);\n    require(tx.inputs[3].nftCommitment == tx.outputs[3].nftCommitment);\n    require(tx.inputs[3].tokenAmount == tx.outputs[3].tokenAmount);\n    require(tx.inputs[3].value == tx.outputs[3].value);\n    // AuthorizedThreadNFT should be 38 bytes\n    require(tx.inputs[3].nftCommitment.length == 38);\n\n    bytes daoInputCategory = tx.inputs[0].tokenCategory;\n\n    // ProposalCounterNFT should be minting and of the 'daoInputCategory'\n    bytes proposalCounterCategory, bytes proposalCounterCapability = tx.outputs[2].tokenCategory.split(32);\n    require(proposalCounterCategory == daoInputCategory);\n    require(proposalCounterCapability == 0x02); // Minting\n\n    // VoteProposalNFT should be mutable\n    bytes voteProposalCategory, bytes voteProposalCapability = tx.outputs[4].tokenCategory.split(32);\n    require(voteProposalCategory == daoInputCategory);\n    require(voteProposalCapability == 0x01); // Mutable\n\n    // TimeProposalNFT should be immutable\n    require(tx.outputs[5].tokenCategory == daoInputCategory);\n    \n    // Ensure funding is pure BCH and is >= commitmentDeposit\n    require(tx.inputs[4].tokenCategory == 0x);\n    require(tx.inputs[4].value >= minCommitmentDeposit);\n    // Ensure the TimeProposalNFT has the same value as the commitmentDeposit\n    require(tx.outputs[5].value >= minCommitmentDeposit);\n\n    // Take the proposalID<4 bytes> + threadLeft<2 bytes> + proposalScriptHash<32 bytes> from the AuthorizedThreadNFT\n    require(tx.outputs[4].nftCommitment == tx.inputs[3].nftCommitment.split(6)[0] + proposalScriptHash);\n\n    // Set the commitment for the TimeProposalNFT <proposalID<4 bytes>, CreatorLockingBytecode<any length bytes>>\n    // @todo: Uncomment this, commented out because of cashscript bug\n    // require(tx.outputs[5].nftCommitment == tx.inputs[3].nftCommitment.split(4)[0] + tx.inputs[4].lockingBytecode);\n\n    // Allow a P2SH32 contract or a P2PKH to initiate the proposal\n    require(tx.inputs[4].lockingBytecode.length == 35 || tx.inputs[4].lockingBytecode.length == 25);\n\n    // Force OP_RETURN output\n    require(tx.outputs[6].value == 0);    \n\n    if(tx.outputs.length == 8) {\n      // Ensure change is pure BCH\n      require(tx.outputs[7].tokenCategory == 0x);\n    }\n  }\n}",
   "debug": {
-    "bytecode": "5179009c63c3549c69c457a169c0519c69c0c7c0cd8769c0d10087695279827701209c6953798277529c695379bc81009e6952d2bc8152cfbc8151939c6900c752c75179876952cd5179876953cd5179876954cd517a876952d28277549c6952d152ce876900ce52d101207f517a52798769007a52876953d101207f517a52798769007a51876954d1517a876953ce00876953c65179a26954cc517aa26953d252d254797e547a7e537a7e876953d2827701289c6953c7827701239c53c7827701199c9b6954d28277011d9c54d2827701279c9b6955cc009c6955d1008777675179519c63c3559c69c458a169c0519c69c0c7c0cd8769c0d100876952d252cf876900c752c75179876952cd5179876953cd5179876954cd517a876952d28277549c6952d152ce876900ce52d101207f517a52798769007a52876953d101207f517a52798769007a51876954d1517a876954ce00876954c65179a26954cc517aa26953d253cf567f75876953d28277569c6953c7827701239c53c7827701199c9b6954d28277011d9c54d2827701279c9b6953c755cd876953ce55d1876953cf55d2876953c655cc9c6956cc009c6957d100877767517a529c69c3559c69c458a169c0519c69c0c7c0cd8769c0d10087695179827701209c6952d252cf876900c752c75179876952cd5179876953cd5179876954cd517a876952d28277549c6952d152ce876900ce52d101207f517a52798769007a52876953d101207f517a52798769007a51876954d1517a876954ce00876954c65179a26954cc517aa26953d253cf567f75527a7e876953d2827701269c6953c7827701239c53c7827701199c9b6954d28277011d9c54d2827701279c9b6953c755cd876953ce55d1876953cf55d2876953c655cc9c6956cc009c6957d100876868",
-    "sourceMap": "48:2:121:3;;;;;49:12:49:28;:32::33;:12:::1;:4::35;50:12:50:29:0;:33::34;:12:::1;:4::36;53:12:53:33:0;:37::38;:12:::1;:4::40;54:22:54:43:0;:12::60:1;:75::96:0;:64::113:1;:12;:4::115;56:23:56:44:0;:12::59:1;:63::65:0;:12:::1;:4::67;59:12:59:30:0;;:::37:1;;:41::43:0;:12:::1;:4::45;60:12:60:23:0;;:::30:1;;:34::35:0;:12:::1;:4::37;63:16:63:27:0;;:::37:1;:12::38;:42::43:0;:12:::1;:4::45;66:27:66:28:0;:16::43:1;:::53;:12::54;:72::73:0;:62::88:1;:::98;:58::99;:102::103:0;:58:::1;:12;:4::105;72:46:72:47:0;:36::64:1;73:22:73:23:0;:12::40:1;:44::67:0;;:12:::1;:4::69;74:23:74:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;75:23:75:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;76:23:76:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;79:23:79:24:0;:12::39:1;:::46;;:50::51:0;:12:::1;:4::53;81:23:81:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;83:39:83:40:0;:29::55:1;86:80:86:81:0;:69::96:1;:103::105:0;:69::106:1;87:12:87:35:0;;:39::55;;:12:::1;:4::57;88:12:88:37:0;;:41::45;:12:::1;:4::47;91:74:91:75:0;:63::90:1;:97::99:0;:63::100:1;92:12:92:32:0;;:36::52;;:12:::1;:4::54;93:12:93:34:0;;:38::42;:12:::1;:4::44;96:23:96:24:0;:12::39:1;:43::59:0;;:12:::1;:4::61;99:22:99:23:0;:12::38:1;:42::44:0;:12:::1;:4::46;100:22:100:23:0;:12::30:1;:34::54:0;;:12:::1;:4::56;102:23:102:24:0;:12::31:1;:35::55:0;;:12:::1;:4::57;105:23:105:24:0;:12::39:1;:54::55:0;:43::70:1;:73::84:0;;:43:::1;:87::98:0;;:43:::1;:101::119:0;;:43:::1;:12;:4::121;106:23:106:24:0;:12::39:1;:::46;;:50::52:0;:12:::1;:4::54;113:22:113:23:0;:12::40:1;:::47;;:51::53:0;:12:::1;:67::68:0;:57::85:1;:::92;;:96::98:0;:57:::1;:12;:4::100;114:23:114:24:0;:12::39:1;:::46;;:50::52:0;:12:::1;:67::68:0;:56::83:1;:::90;;:94::96:0;:56:::1;:12;:4::98;117:23:117:24:0;:12::31:1;:35::36:0;:12:::1;:4::38;120:23:120:24:0;:12::39:1;:43::45:0;:12:::1;48:2:121:3;;162::235::0;;;;;163:12:163:28;:32::33;:12:::1;:4::35;164:12:164:29:0;:33::34;:12:::1;:4::36;167:12:167:33:0;:37::38;:12:::1;:4::40;168:22:168:43:0;:12::60:1;:75::96:0;:64::113:1;:12;:4::115;170:23:170:44:0;:12::59:1;:63::65:0;:12:::1;:4::67;173:23:173:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;179:46:179:47:0;:36::64:1;180:22:180:23:0;:12::40:1;:44::67:0;;:12:::1;:4::69;181:23:181:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;182:23:182:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;183:23:183:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;186:23:186:24:0;:12::39:1;:::46;;:50::51:0;:12:::1;:4::53;188:23:188:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;190:39:190:40:0;:29::55:1;193:80:193:81:0;:69::96:1;:103::105:0;:69::106:1;194:12:194:35:0;;:39::55;;:12:::1;:4::57;195:12:195:37:0;;:41::45;:12:::1;:4::47;198:74:198:75:0;:63::90:1;:97::99:0;:63::100:1;199:12:199:32:0;;:36::52;;:12:::1;:4::54;200:12:200:34:0;;:38::42;:12:::1;:4::44;203:23:203:24:0;:12::39:1;:43::59:0;;:12:::1;:4::61;206:22:206:23:0;:12::38:1;:42::44:0;:12:::1;:4::46;207:22:207:23:0;:12::30:1;:34::54:0;;:12:::1;:4::56;209:23:209:24:0;:12::31:1;:35::55:0;;:12:::1;:4::57;212:23:212:24:0;:12::39:1;:53::54:0;:43::69:1;:76::77:0;:43::78:1;:::81;:12;:4::83;213:23:213:24:0;:12::39:1;:::46;;:50::51:0;:12:::1;:4::53;220:22:220:23:0;:12::40:1;:::47;;:51::53:0;:12:::1;:67::68:0;:57::85:1;:::92;;:96::98:0;:57:::1;:12;:4::100;221:23:221:24:0;:12::39:1;:::46;;:50::52:0;:12:::1;:67::68:0;:56::83:1;:::90;;:94::96:0;:56:::1;:12;:4::98;224:22:224:23:0;:12::40:1;:55::56:0;:44::73:1;:12;:4::75;225:22:225:23:0;:12::38:1;:53::54:0;:42::69:1;:12;:4::71;226:22:226:23:0;:12::38:1;:53::54:0;:42::69:1;:12;:4::71;227:22:227:23:0;:12::30:1;:45::46:0;:34::53:1;:12;:4::55;230:23:230:24:0;:12::31:1;:35::36:0;:12:::1;:4::38;233:23:233:24:0;:12::39:1;:43::45:0;:12:::1;162:2:235:3;;276::350::0;;;;;277:12:277:28;:32::33;:12:::1;:4::35;278:12:278:29:0;:33::34;:12:::1;:4::36;281:12:281:33:0;:37::38;:12:::1;:4::40;282:22:282:43:0;:12::60:1;:75::96:0;:64::113:1;:12;:4::115;284:23:284:44:0;:12::59:1;:63::65:0;:12:::1;:4::67;286:12:286:30:0;;:::37:1;;:41::43:0;:12:::1;:4::45;288:23:288:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;294:46:294:47:0;:36::64:1;295:22:295:23:0;:12::40:1;:44::67:0;;:12:::1;:4::69;296:23:296:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;297:23:297:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;298:23:298:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;301:23:301:24:0;:12::39:1;:::46;;:50::51:0;:12:::1;:4::53;303:23:303:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;305:39:305:40:0;:29::55:1;308:80:308:81:0;:69::96:1;:103::105:0;:69::106:1;309:12:309:35:0;;:39::55;;:12:::1;:4::57;310:12:310:37:0;;:41::45;:12:::1;:4::47;313:74:313:75:0;:63::90:1;:97::99:0;:63::100:1;314:12:314:32:0;;:36::52;;:12:::1;:4::54;315:12:315:34:0;;:38::42;:12:::1;:4::44;318:23:318:24:0;:12::39:1;:43::59:0;;:12:::1;:4::61;321:22:321:23:0;:12::38:1;:42::44:0;:12:::1;:4::46;322:22:322:23:0;:12::30:1;:34::54:0;;:12:::1;:4::56;324:23:324:24:0;:12::31:1;:35::55:0;;:12:::1;:4::57;327:23:327:24:0;:12::39:1;:53::54:0;:43::69:1;:76::77:0;:43::78:1;:::81;:84::102:0;;:43:::1;:12;:4::104;328:23:328:24:0;:12::39:1;:::46;;:50::52:0;:12:::1;:4::54;335:22:335:23:0;:12::40:1;:::47;;:51::53:0;:12:::1;:67::68:0;:57::85:1;:::92;;:96::98:0;:57:::1;:12;:4::100;336:23:336:24:0;:12::39:1;:::46;;:50::52:0;:12:::1;:67::68:0;:56::83:1;:::90;;:94::96:0;:56:::1;:12;:4::98;339:22:339:23:0;:12::40:1;:55::56:0;:44::73:1;:12;:4::75;340:22:340:23:0;:12::38:1;:53::54:0;:42::69:1;:12;:4::71;341:22:341:23:0;:12::38:1;:53::54:0;:42::69:1;:12;:4::71;342:22:342:23:0;:12::30:1;:45::46:0;:34::53:1;:12;:4::55;345:23:345:24:0;:12::31:1;:35::36:0;:12:::1;:4::38;348:23:348:24:0;:12::39:1;:43::45:0;:12:::1;10:0:351:1;",
+    "bytecode": "5179009c63c3549c69c457a169c0519c69c0c7c0cd8769c0d10087695279827701209c6953798277529c695379bc81009e6900c752c75179876952cd5179876953cd5179876954cd517a876952d152ce876952d28277549c6952d2bc8152cfbc8151939c6900ce52d101207f517a52798769007a52876953d101207f517a52798769007a51876954d1517a876953ce00876953c65179a26954cc517aa26953d252d254797e547a7e537a7e876953d2827701289c6953c7827701239c53c7827701199c9b6955cc009c69c4579c6356d1008769685177675179519c63c3559c69c458a169c0519c69c0c7c0cd8769c0d100876900c752c75179876952cd5179876954cd5179876955cd5179876953c7517a87916952d252cf876952d28277549c6952d152ce876953c753cd876953ce53d1876953cf53d2876953d053d39c6953c653cc9c6953cf827701269c6900ce52d101207f517a52798769007a52876954d101207f517a52798769007a51876955d1517a876954ce00876954c65179a26955cc517aa26954d253cf567f75876954c7827701239c54c7827701199c9b6956cc009c69c4589c6357d100876968517767517a529c69c3559c69c458a169c0519c69c0c7c0cd8769c0d10087695179827701209c6952d252cf876900c752c75179876952cd5179876954cd5179876955cd5179876953c7517a87916952d28277549c6952d152ce876953c753cd876953ce53d1876953cf53d2876953d053d39c6953c653cc9c6953cf827701269c6900ce52d101207f517a52798769007a52876954d101207f517a52798769007a51876955d1517a876954ce00876954c65179a26955cc517aa26954d253cf567f75527a7e876954c7827701239c54c7827701199c9b6956cc009c69c4589c6357d100876968516868",
+    "sourceMap": "50:2:123:3;;;;;51:12:51:28;:32::33;:12:::1;:4::35;52:12:52:29:0;:33::34;:12:::1;:4::36;55:12:55:33:0;:37::38;:12:::1;:4::40;56:22:56:43:0;:12::60:1;:75::96:0;:64::113:1;:12;:4::115;58:23:58:44:0;:12::59:1;:63::65:0;:12:::1;:4::67;61:12:61:30:0;;:::37:1;;:41::43:0;:12:::1;:4::45;62:12:62:23:0;;:::30:1;;:34::35:0;:12:::1;:4::37;65:16:65:27:0;;:::37:1;:12::38;:42::43:0;:12:::1;:4::45;71:46:71:47:0;:36::64:1;72:22:72:23:0;:12::40:1;:44::67:0;;:12:::1;:4::69;73:23:73:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;74:23:74:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;75:23:75:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;78:23:78:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;80:23:80:24:0;:12::39:1;:::46;;:50::51:0;:12:::1;:4::53;82:27:82:28:0;:16::43:1;:::53;:12::54;:72::73:0;:62::88:1;:::98;:58::99;:102::103:0;:58:::1;:12;:4::105;84:39:84:40:0;:29::55:1;87:80:87:81:0;:69::96:1;:103::105:0;:69::106:1;88:12:88:35:0;;:39::55;;:12:::1;:4::57;89:12:89:37:0;;:41::45;:12:::1;:4::47;92:74:92:75:0;:63::90:1;:97::99:0;:63::100:1;93:12:93:32:0;;:36::52;;:12:::1;:4::54;94:12:94:34:0;;:38::42;:12:::1;:4::44;97:23:97:24:0;:12::39:1;:43::59:0;;:12:::1;:4::61;100:22:100:23:0;:12::38:1;:42::44:0;:12:::1;:4::46;101:22:101:23:0;:12::30:1;:34::54:0;;:12:::1;:4::56;103:23:103:24:0;:12::31:1;:35::55:0;;:12:::1;:4::57;106:23:106:24:0;:12::39:1;:54::55:0;:43::70:1;:73::84:0;;:43:::1;:87::98:0;;:43:::1;:101::119:0;;:43:::1;:12;:4::121;107:23:107:24:0;:12::39:1;:::46;;:50::52:0;:12:::1;:4::54;114:22:114:23:0;:12::40:1;:::47;;:51::53:0;:12:::1;:67::68:0;:57::85:1;:::92;;:96::98:0;:57:::1;:12;:4::100;117:23:117:24:0;:12::31:1;:35::36:0;:12:::1;:4::38;119:7:119:24:0;:28::29;:7:::1;:31:122:5:0;121:25:121:26;:14::41:1;:45::47:0;:14:::1;:6::49;119:31:122:5;50:2:123:3;;;171::249::0;;;;;172:12:172:28;:32::33;:12:::1;:4::35;173:12:173:29:0;:33::34;:12:::1;:4::36;176:12:176:33:0;:37::38;:12:::1;:4::40;177:22:177:43:0;:12::60:1;:75::96:0;:64::113:1;:12;:4::115;179:23:179:44:0;:12::59:1;:63::65:0;:12:::1;:4::67;185:46:185:47:0;:36::64:1;186:22:186:23:0;:12::40:1;:44::67:0;;:12:::1;:4::69;187:23:187:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;188:23:188:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;189:23:189:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;192:22:192:23:0;:12::40:1;:44::67:0;;:12:::1;;:4::69;195:23:195:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;197:23:197:24:0;:12::39:1;:::46;;:50::51:0;:12:::1;:4::53;199:23:199:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;202:22:202:23:0;:12::40:1;:55::56:0;:44::73:1;:12;:4::75;203:22:203:23:0;:12::38:1;:53::54:0;:42::69:1;:12;:4::71;204:22:204:23:0;:12::38:1;:53::54:0;:42::69:1;:12;:4::71;205:22:205:23:0;:12::36:1;:51::52:0;:40::65:1;:12;:4::67;206:22:206:23:0;:12::30:1;:45::46:0;:34::53:1;:12;:4::55;208:22:208:23:0;:12::38:1;:::45;;:49::51:0;:12:::1;:4::53;210:39:210:40:0;:29::55:1;213:80:213:81:0;:69::96:1;:103::105:0;:69::106:1;214:12:214:35:0;;:39::55;;:12:::1;:4::57;215:12:215:37:0;;:41::45;:12:::1;:4::47;218:74:218:75:0;:63::90:1;:97::99:0;:63::100:1;219:12:219:32:0;;:36::52;;:12:::1;:4::54;220:12:220:34:0;;:38::42;:12:::1;:4::44;223:23:223:24:0;:12::39:1;:43::59:0;;:12:::1;:4::61;226:22:226:23:0;:12::38:1;:42::44:0;:12:::1;:4::46;227:22:227:23:0;:12::30:1;:34::54:0;;:12:::1;:4::56;229:23:229:24:0;:12::31:1;:35::55:0;;:12:::1;:4::57;232:23:232:24:0;:12::39:1;:53::54:0;:43::69:1;:76::77:0;:43::78:1;:::81;:12;:4::83;239:22:239:23:0;:12::40:1;:::47;;:51::53:0;:12:::1;:67::68:0;:57::85:1;:::92;;:96::98:0;:57:::1;:12;:4::100;242:23:242:24:0;:12::31:1;:35::36:0;:12:::1;:4::38;244:7:244:24:0;:28::29;:7:::1;:31:247:5:0;246:25:246:26;:14::41:1;:45::47:0;:14:::1;:6::49;244:31:247:5;171:2:249:3;;;297::375::0;;;;;298:12:298:28;:32::33;:12:::1;:4::35;299:12:299:29:0;:33::34;:12:::1;:4::36;302:12:302:33:0;:37::38;:12:::1;:4::40;303:22:303:43:0;:12::60:1;:75::96:0;:64::113:1;:12;:4::115;305:23:305:44:0;:12::59:1;:63::65:0;:12:::1;:4::67;307:12:307:30:0;;:::37:1;;:41::43:0;:12:::1;:4::45;309:23:309:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;315:46:315:47:0;:36::64:1;316:22:316:23:0;:12::40:1;:44::67:0;;:12:::1;:4::69;317:23:317:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;318:23:318:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;319:23:319:24:0;:12::41:1;:45::68:0;;:12:::1;:4::70;321:22:321:23:0;:12::40:1;:44::67:0;;:12:::1;;:4::69;324:23:324:24:0;:12::39:1;:::46;;:50::51:0;:12:::1;:4::53;326:23:326:24:0;:12::39:1;:53::54:0;:43::69:1;:12;:4::71;329:22:329:23:0;:12::40:1;:55::56:0;:44::73:1;:12;:4::75;330:22:330:23:0;:12::38:1;:53::54:0;:42::69:1;:12;:4::71;331:22:331:23:0;:12::38:1;:53::54:0;:42::69:1;:12;:4::71;332:22:332:23:0;:12::36:1;:51::52:0;:40::65:1;:12;:4::67;333:22:333:23:0;:12::30:1;:45::46:0;:34::53:1;:12;:4::55;335:22:335:23:0;:12::38:1;:::45;;:49::51:0;:12:::1;:4::53;337:39:337:40:0;:29::55:1;340:80:340:81:0;:69::96:1;:103::105:0;:69::106:1;341:12:341:35:0;;:39::55;;:12:::1;:4::57;342:12:342:37:0;;:41::45;:12:::1;:4::47;345:74:345:75:0;:63::90:1;:97::99:0;:63::100:1;346:12:346:32:0;;:36::52;;:12:::1;:4::54;347:12:347:34:0;;:38::42;:12:::1;:4::44;350:23:350:24:0;:12::39:1;:43::59:0;;:12:::1;:4::61;353:22:353:23:0;:12::38:1;:42::44:0;:12:::1;:4::46;354:22:354:23:0;:12::30:1;:34::54:0;;:12:::1;:4::56;356:23:356:24:0;:12::31:1;:35::55:0;;:12:::1;:4::57;359:23:359:24:0;:12::39:1;:53::54:0;:43::69:1;:76::77:0;:43::78:1;:::81;:84::102:0;;:43:::1;:12;:4::104;366:22:366:23:0;:12::40:1;:::47;;:51::53:0;:12:::1;:67::68:0;:57::85:1;:::92;;:96::98:0;:57:::1;:12;:4::100;369:23:369:24:0;:12::31:1;:35::36:0;:12:::1;:4::38;371:7:371:24:0;:28::29;:7:::1;:31:374:5:0;373:25:373:26;:14::41:1;:45::47:0;:14:::1;:6::49;371:31:374:5;297:2:375:3;10:0:376:1;",
     "logs": [],
     "requires": [
       {
         "ip": 9,
-        "line": 49
+        "line": 51
       },
       {
         "ip": 13,
-        "line": 50
+        "line": 52
       },
       {
         "ip": 17,
-        "line": 53
+        "line": 55
       },
       {
         "ip": 23,
-        "line": 54
-      },
-      {
-        "ip": 28,
         "line": 56
       },
       {
+        "ip": 28,
+        "line": 58
+      },
+      {
         "ip": 35,
-        "line": 59
+        "line": 61
       },
       {
         "ip": 42,
-        "line": 60
+        "line": 62
       },
       {
         "ip": 49,
-        "line": 63
+        "line": 65
       },
       {
-        "ip": 61,
-        "line": 66
+        "ip": 57,
+        "line": 72
       },
       {
-        "ip": 69,
+        "ip": 63,
         "line": 73
       },
       {
-        "ip": 75,
+        "ip": 69,
         "line": 74
       },
       {
-        "ip": 81,
+        "ip": 75,
         "line": 75
       },
       {
-        "ip": 87,
-        "line": 76
+        "ip": 81,
+        "line": 78
       },
       {
-        "ip": 94,
-        "line": 79
+        "ip": 88,
+        "line": 80
       },
       {
         "ip": 100,
-        "line": 81
+        "line": 82
       },
       {
         "ip": 112,
-        "line": 87
-      },
-      {
-        "ip": 117,
         "line": 88
       },
       {
-        "ip": 127,
-        "line": 92
+        "ip": 117,
+        "line": 89
       },
       {
-        "ip": 132,
+        "ip": 127,
         "line": 93
       },
       {
+        "ip": 132,
+        "line": 94
+      },
+      {
         "ip": 138,
-        "line": 96
+        "line": 97
       },
       {
         "ip": 143,
-        "line": 99
-      },
-      {
-        "ip": 149,
         "line": 100
       },
       {
+        "ip": 149,
+        "line": 101
+      },
+      {
         "ip": 155,
-        "line": 102
+        "line": 103
       },
       {
         "ip": 170,
-        "line": 105
-      },
-      {
-        "ip": 177,
         "line": 106
       },
       {
-        "ip": 191,
-        "line": 113
+        "ip": 177,
+        "line": 107
       },
       {
-        "ip": 205,
+        "ip": 191,
         "line": 114
       },
       {
-        "ip": 210,
+        "ip": 196,
         "line": 117
       },
       {
-        "ip": 215,
-        "line": 120
+        "ip": 205,
+        "line": 121
       },
       {
-        "ip": 225,
-        "line": 163
+        "ip": 218,
+        "line": 172
       },
       {
-        "ip": 229,
-        "line": 164
-      },
-      {
-        "ip": 233,
-        "line": 167
-      },
-      {
-        "ip": 239,
-        "line": 168
-      },
-      {
-        "ip": 244,
-        "line": 170
-      },
-      {
-        "ip": 250,
+        "ip": 222,
         "line": 173
       },
       {
-        "ip": 258,
-        "line": 180
+        "ip": 226,
+        "line": 176
       },
       {
-        "ip": 264,
-        "line": 181
+        "ip": 232,
+        "line": 177
       },
       {
-        "ip": 270,
-        "line": 182
+        "ip": 237,
+        "line": 179
       },
       {
-        "ip": 276,
-        "line": 183
-      },
-      {
-        "ip": 283,
+        "ip": 245,
         "line": 186
       },
       {
-        "ip": 289,
+        "ip": 251,
+        "line": 187
+      },
+      {
+        "ip": 257,
         "line": 188
       },
       {
-        "ip": 301,
-        "line": 194
+        "ip": 263,
+        "line": 189
       },
       {
-        "ip": 306,
+        "ip": 270,
+        "line": 192
+      },
+      {
+        "ip": 276,
         "line": 195
       },
       {
-        "ip": 316,
+        "ip": 283,
+        "line": 197
+      },
+      {
+        "ip": 289,
         "line": 199
       },
       {
-        "ip": 321,
-        "line": 200
+        "ip": 295,
+        "line": 202
       },
       {
-        "ip": 327,
+        "ip": 301,
         "line": 203
       },
       {
-        "ip": 332,
+        "ip": 307,
+        "line": 204
+      },
+      {
+        "ip": 313,
+        "line": 205
+      },
+      {
+        "ip": 319,
         "line": 206
       },
       {
-        "ip": 338,
-        "line": 207
+        "ip": 326,
+        "line": 208
       },
       {
-        "ip": 344,
-        "line": 209
+        "ip": 338,
+        "line": 214
+      },
+      {
+        "ip": 343,
+        "line": 215
       },
       {
         "ip": 353,
-        "line": 212
+        "line": 219
       },
       {
-        "ip": 360,
-        "line": 213
-      },
-      {
-        "ip": 374,
+        "ip": 358,
         "line": 220
       },
       {
-        "ip": 388,
-        "line": 221
+        "ip": 364,
+        "line": 223
       },
       {
-        "ip": 394,
-        "line": 224
-      },
-      {
-        "ip": 400,
-        "line": 225
-      },
-      {
-        "ip": 406,
+        "ip": 369,
         "line": 226
       },
       {
-        "ip": 412,
+        "ip": 375,
         "line": 227
       },
       {
-        "ip": 417,
-        "line": 230
+        "ip": 381,
+        "line": 229
       },
       {
-        "ip": 422,
-        "line": 233
+        "ip": 390,
+        "line": 232
       },
       {
-        "ip": 432,
-        "line": 277
+        "ip": 404,
+        "line": 239
       },
       {
-        "ip": 436,
-        "line": 278
+        "ip": 409,
+        "line": 242
       },
       {
-        "ip": 440,
-        "line": 281
+        "ip": 418,
+        "line": 246
       },
       {
-        "ip": 446,
-        "line": 282
-      },
-      {
-        "ip": 451,
-        "line": 284
-      },
-      {
-        "ip": 458,
-        "line": 286
-      },
-      {
-        "ip": 464,
-        "line": 288
-      },
-      {
-        "ip": 472,
-        "line": 295
-      },
-      {
-        "ip": 478,
-        "line": 296
-      },
-      {
-        "ip": 484,
-        "line": 297
-      },
-      {
-        "ip": 490,
+        "ip": 431,
         "line": 298
       },
       {
-        "ip": 497,
-        "line": 301
+        "ip": 435,
+        "line": 299
       },
       {
-        "ip": 503,
+        "ip": 439,
+        "line": 302
+      },
+      {
+        "ip": 445,
         "line": 303
       },
       {
-        "ip": 515,
+        "ip": 450,
+        "line": 305
+      },
+      {
+        "ip": 457,
+        "line": 307
+      },
+      {
+        "ip": 463,
         "line": 309
       },
       {
-        "ip": 520,
-        "line": 310
+        "ip": 471,
+        "line": 316
       },
       {
-        "ip": 530,
-        "line": 314
+        "ip": 477,
+        "line": 317
       },
       {
-        "ip": 535,
-        "line": 315
-      },
-      {
-        "ip": 541,
+        "ip": 483,
         "line": 318
       },
       {
-        "ip": 546,
+        "ip": 489,
+        "line": 319
+      },
+      {
+        "ip": 496,
         "line": 321
       },
       {
-        "ip": 552,
-        "line": 322
-      },
-      {
-        "ip": 558,
+        "ip": 503,
         "line": 324
       },
       {
-        "ip": 570,
-        "line": 327
+        "ip": 509,
+        "line": 326
       },
       {
-        "ip": 577,
-        "line": 328
+        "ip": 515,
+        "line": 329
       },
       {
-        "ip": 591,
+        "ip": 521,
+        "line": 330
+      },
+      {
+        "ip": 527,
+        "line": 331
+      },
+      {
+        "ip": 533,
+        "line": 332
+      },
+      {
+        "ip": 539,
+        "line": 333
+      },
+      {
+        "ip": 546,
         "line": 335
       },
       {
-        "ip": 605,
-        "line": 336
-      },
-      {
-        "ip": 611,
-        "line": 339
-      },
-      {
-        "ip": 617,
-        "line": 340
-      },
-      {
-        "ip": 623,
+        "ip": 558,
         "line": 341
       },
       {
-        "ip": 629,
+        "ip": 563,
         "line": 342
       },
       {
-        "ip": 634,
-        "line": 345
+        "ip": 573,
+        "line": 346
       },
       {
-        "ip": 639,
-        "line": 348
+        "ip": 578,
+        "line": 347
+      },
+      {
+        "ip": 584,
+        "line": 350
+      },
+      {
+        "ip": 589,
+        "line": 353
+      },
+      {
+        "ip": 595,
+        "line": 354
+      },
+      {
+        "ip": 601,
+        "line": 356
+      },
+      {
+        "ip": 613,
+        "line": 359
+      },
+      {
+        "ip": 627,
+        "line": 366
+      },
+      {
+        "ip": 632,
+        "line": 369
+      },
+      {
+        "ip": 641,
+        "line": 373
       }
     ]
   },
@@ -407,5 +411,5 @@
     "name": "cashc",
     "version": "0.11.0-next.2"
   },
-  "updatedAt": "2025-03-09T06:55:31.577Z"
+  "updatedAt": "2025-03-09T11:51:15.642Z"
 }

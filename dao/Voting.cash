@@ -3,30 +3,33 @@ pragma cashscript ^0.11.0;
 contract Voting() {
   /**
    * @inputs
-   * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
+   * - Input0: DAO Contract's authorizedThreadNFT from Controller Contract (immutable NFT with commitment that has the lockingBytecode of this contract)
    *   - capability: immutable
    *   - length: 35 bytes
    *   - category: daoCategory
    * - Input1: Any input from this contract.
-   * - Input2: Minting NFT of daoCategory from DAO.
+   * - Input2: Minting NFT of daoCategory from Controller Contract.
    *   - capability: minting
    *   - category: daoCategory
-   * - Input3: Proposal NFT of daoCategory from DAO.
+   * - Input3: Proposal NFT of daoCategory from Controller Contract.
    *   - capability: mutable
    *   - length: 6/38/40 bytes
    *   - category: daoCategory
-   * - Input4: Utxo to cast vote with tokenAmount
+   * - Input4: Utxo to cast vote
+   *   - category: daoCategory
+   *   - tokenAmount: voteAmount
+   * - Input5: Funding UTXO
    * 
    * @outputs
-   * - Output0: DAO Contract's authorizedThreadNFT back to self
+   * - Output0: DAO Contract's authorizedThreadNFT back to Controller Contract
    *   - capability: immutable
    *   - length: 35 bytes
    *   - category: daoCategory
    * - Output1: Input1 back to this contract without any change.
-   * - Output2: Minting NFT of daoCategory back to DAO
+   * - Output2: Minting NFT of daoCategory back to Controller Contract
    *   - capability: minting
    *   - category: daoCategory
-   * - Output3: Proposal NFT back to DAO with tokenAmount (Equal to `voteAmount`)
+   * - Output3: Proposal NFT back to Controller Contract with tokenAmount (Equal to `voteAmount`)
    *   - capability: mutable
    *   - length: 6/38/40 bytes
    *   - category: daoCategory
@@ -34,11 +37,12 @@ contract Voting() {
    *   - capability: immutable
    *   - length: 12 bytes
    *   - category: daoCategory
-   * - Output5: Change tokenAmount and BCH
+   * - Output5: Change tokenAmount
+   * - Output6: Change pure BCH
    */
   function vote(int voteAmount) {
-    require(tx.inputs.length == 5);
-    require(tx.outputs.length <= 6);
+    require(tx.inputs.length == 6);
+    require(tx.outputs.length <= 7);
 
     // This contract can only be used at input1 and it should return the input1 back to itself.
     require(this.activeInputIndex == 1);
@@ -76,7 +80,6 @@ contract Voting() {
 
     // The voteProposalNFT gets the voteAmount added to it
     require(tx.outputs[3].tokenAmount == tx.inputs[3].tokenAmount + voteAmount);
-    require(tx.outputs[3].value == tx.inputs[3].value);
 
     // Split the nftCommitment of the proposalNFT and take the first 4 bytes as the proposalId.
     // <4 bytes of proposalId><8 bytes of voteAmount>
@@ -87,19 +90,25 @@ contract Voting() {
     // The recieptNFT should have the same lockingBytecode as the voting UTXO
     // require(tx.inputs[4].lockingBytecode == tx.outputs[4].lockingBytecode);
 
-    require(tx.inputs[4].tokenAmount >= voteAmount);
-    require(tx.outputs[5].tokenAmount == tx.inputs[4].tokenAmount - voteAmount);
-    require(tx.outputs[5].nftCommitment == 0x);
+    if(tx.inputs[4].tokenAmount - voteAmount > 0){
+      require(tx.outputs[5].tokenAmount == tx.inputs[4].tokenAmount - voteAmount);
+      // @todo: Uncomment this, commented out because of cashscript bug
+      // require(tx.outputs[5].lockingBytecode == tx.inputs[4].lockingBytecode);
+      require(tx.outputs[6].tokenCategory == 0x);
+    } else {
+      require(tx.outputs[5].tokenCategory == 0x);
+      require(tx.outputs.length == 6);
+    }
   }
 
   /**
    * @inputs
-   * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
+   * - Input0: DAO Contract's authorizedThreadNFT from Controller Contract (immutable NFT with commitment that has the lockingBytecode of this contract)
    *   - capability: immutable
    *   - length: 35 bytes
    *   - category: daoCategory
    * - Input1: Any input from this contract.
-   * - Input2: VoteProposalNFT from DAO
+   * - Input2: VoteProposalNFT from Controller Contract
    *   - capability: mutable
    *   - length: 6/38/40 bytes
    *   - category: daoCategory
@@ -110,16 +119,18 @@ contract Voting() {
    * - Input4: Funding UTXO               
    * 
    * @outputs
-   * - Output0: DAO Contract's authorizedThreadNFT back to self
+   * - Output0: DAO Contract's authorizedThreadNFT back to Controller Contract
    *   - capability: immutable
    *   - length: 35 bytes
    *   - category: daoCategory
    * - Output1: Input1 back to this contract without any change.
-   * - Output2: VoteProposalNFT back to DAO (minus the tokenAmount in the recieptNFT)
+   * - Output2: VoteProposalNFT back to Controller Contract (minus the tokenAmount in the recieptNFT)
    *   - capability: immutable
    *   - length: 6/38/40 bytes
    *   - category: daoCategory
    * - Output3: tokenAmount to the recieptNFT provider
+   *   - category: daoCategory
+   *   - tokenAmount: voteAmount
    * - Output4: Change pure BCH
    */
   function retract() {
@@ -137,14 +148,12 @@ contract Voting() {
     bytes daoInputLockingBytecode = tx.inputs[0].lockingBytecode;
     require(tx.inputs[2].lockingBytecode == daoInputLockingBytecode);
     require(tx.outputs[2].lockingBytecode == daoInputLockingBytecode);
+    require(tx.outputs[2].value == tx.inputs[2].value);
 
     // All NFTs should have the same category
     bytes daoInputCategory = tx.inputs[0].tokenCategory;
     require(tx.inputs[3].tokenCategory == daoInputCategory);
     require(tx.outputs[3].tokenCategory == daoInputCategory);
-
-    // This holds the commitmentDeposit.
-    require(tx.outputs[2].value == tx.inputs[2].value);
 
     // VoteProposalNFT should be mutable
     bytes voteProposalCategory, bytes voteProposalCapability = tx.outputs[2].tokenCategory.split(32);
@@ -154,11 +163,9 @@ contract Voting() {
 
     // RecieptNFT should have 0 tokenAmount
     require(tx.inputs[3].tokenAmount == 0);
-
     // Get the proposalId and voteAmount from the VoteProposalNFT
     bytes proposalId, bytes voteAmountBytes = tx.inputs[3].nftCommitment.split(4);
     require(tx.inputs[3].nftCommitment.length == 12);
-
     // Compare projectID i.e the first 4 bytes of the nftCommitment
     require(proposalId == tx.inputs[2].nftCommitment.split(4)[0]);
     
@@ -167,6 +174,10 @@ contract Voting() {
     require(tx.outputs[2].tokenAmount == tx.inputs[2].tokenAmount - voteAmount);
     // RecieptNFT should have the voteAmount subtracted from it
     require(tx.outputs[3].tokenAmount == tx.inputs[3].tokenAmount + voteAmount);
+
+    // @todo: Uncomment this, commented out because of cashscript bug
+    // The recieptNFT provider should get the tokens
+    // require(tx.outputs[3].lockingBytecode == tx.inputs[3].lockingBytecode);
 
     // Pure BCH output
     require(tx.outputs[4].tokenCategory == 0x);

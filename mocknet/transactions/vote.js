@@ -40,15 +40,19 @@ export const main = async () => {
   if (!proposalUtxo) { throw new Error('Proposal utxo not found'); }
 
   const aliceUtxos = await provider.getUtxos(aliceAddress);
-  const aliceUtxo = aliceUtxos.find(utxo => utxo.token?.amount >= voteAmount);
-  if (!aliceUtxo) { throw new Error('Alice utxo not found'); }
+  const aliceVotingUtxo = aliceUtxos.find(utxo => utxo.token?.amount >= voteAmount);
+  if (!aliceVotingUtxo) { throw new Error('Alice voting utxo not found'); }
+
+  const aliceFundingUtxo = aliceUtxos.find(utxo => utxo.satoshis > 5000);
+  if (!aliceFundingUtxo) { throw new Error('Alice funding utxo not found'); }
 
   const tx = await new TransactionBuilder({ provider })
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())
     .addInput(votingUtxo, VotingContract.unlock.vote(voteAmount))
     .addInput(daoMintingUtxo, DAOControllerContract.unlock.call())
     .addInput(proposalUtxo, DAOControllerContract.unlock.call())
-    .addInput(aliceUtxo, aliceTemplate.unlockP2PKH())
+    .addInput(aliceVotingUtxo, aliceTemplate.unlockP2PKH())
+    .addInput(aliceFundingUtxo, aliceTemplate.unlockP2PKH())
     .addOutput({
       to: DAOControllerContract.tokenAddress,
       amount: authorizedThreadUtxo.satoshis,
@@ -100,11 +104,15 @@ export const main = async () => {
     })
     .addOutput({
       to: aliceTokenAddress,
-      amount: aliceUtxo.satoshis - BigInt(2000n),
+      amount: aliceVotingUtxo.satoshis - BigInt(2000n),
       token: {
-        category: aliceUtxo.token.category,
-        amount: aliceUtxo.token.amount - voteAmount
+        category: aliceVotingUtxo.token.category,
+        amount: aliceVotingUtxo.token.amount - voteAmount
       },
+    })
+    .addOutput({
+      to: aliceAddress,
+      amount: aliceFundingUtxo.satoshis - BigInt(2000n),
     })
     .send();
 

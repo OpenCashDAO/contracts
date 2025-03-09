@@ -82,9 +82,9 @@ Transaction Structure:
 | 0 | [AuthorizedThreadNFT](#authorizedthreadnfts) from controller.cash | [AuthorizedThreadNFT](#authorizedthreadnfts) back to controller.cash |
 | 1 | Any input from this contract | Input1 back to this contract without any change |
 | 2 | [ProposalCounterNFT](#mintingnfts) from controller.cash | [ProposalCounterNFT](#mintingnfts) back to controller.cash |
-| 3 | [AuthorizedThreadNFT](#authorizedthreadnfts) from the Project Contract | [VoteProposalNFT](#proposalnfts) to controller.cash |
-| 4 | Funding UTXO | [TimeProposalNFT](#proposaltnft) to controller.cash |
-| 5 |                        | [AuthorizedThreadNFT](#authorizedthreadnfts) back to the Project Contract |
+| 3 | [AuthorizedThreadNFT](#authorizedthreadnfts) from the Project Contract | [AuthorizedThreadNFT](#authorizedthreadnfts) back to the Project Contract |
+| 4 | | [VoteProposalNFT](#proposalnfts) to controller.cash |
+| 5 | Funding UTXO | [TimeProposalNFT](#proposalnfts) to controller.cash |
 | 6 |                        | OP_RETURN with the proposal data |
 | 7 |                        | Change pure BCH |
 
@@ -100,9 +100,9 @@ Transaction Structure:
 | 0 | [AuthorizedThreadNFT](#authorizedthreadnfts) from controller.cash | [AuthorizedThreadNFT](#authorizedthreadnfts) back to controller.cash |
 | 1 | Any input from this contract | Input1 back to this contract without any change |
 | 2 | [ProposalCounterNFT](#mintingnfts) from controller.cash | [ProposalCounterNFT](#mintingnfts) back to controller.cash |
-| 3 | [AuthorizedThreadNFT](#authorizedthreadnfts) from the Project Contract | [VoteProposalNFT](#proposalnfts) to controller.cash |
-| 4 | Funding UTXO | [TimeProposalNFT](#proposaltnft) to controller.cash |
-| 5 |                        | [AuthorizedThreadNFT](#authorizedthreadnfts) back to the Project Contract |
+| 3 | [AuthorizedThreadNFT](#authorizedthreadnfts) from the Project Contract | [AuthorizedThreadNFT](#authorizedthreadnfts) back to the Project Contract |
+| 4 | Funding UTXO | [VoteProposalNFT](#proposalnfts) to controller.cash |
+| 5 |                        | [TimeProposalNFT](#proposaltnfts) to controller.cash |
 | 6 |                        | OP_RETURN with the proposal data |
 | 7 |                        | Change pure BCH |
 
@@ -124,10 +124,11 @@ Transaction Structure:
 | 2 | [VoteMintingNFT](#mintingnfts) from Controller.cash | [VoteMintingNFT](#mintingnfts) back to Controller.cash |
 | 3 | [VoteProposalNFT](#proposalnfts) from Controller.cash | [VoteProposalNFT](#proposalnfts) back to Controller.cash with tokenAmount (Equal to `voteAmount`) |
 | 4 | Utxo to cast vote with tokenAmount | [VoteNFT](#votenft) of Vote to the lockingbytecode of the voter |
-| 5 |                        | Change tokenAmount and BCH |
+| 5 | Funding UTXO | Change tokenAmount |
+| 6 |  | Change BCH |
 
 
-  - **retract** The Retract Voting contract allows anyone to retract their vote from a proposal.
+2. **retract** The Retract Voting contract allows anyone to retract their vote from a proposal.
 
 > **Note:** When the proposal is being executed, the votes are temporarily locked in the timeProposalNFT so the votes can't be retracted during the execution.
 
