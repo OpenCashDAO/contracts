@@ -23,7 +23,7 @@ OpenCashDAO is a decentralized autonomous organization (DAO) template, designed 
     - [VoteProposalNFTs](#voteproposalnfts)
     - [UpgradableContractNFT](#upgradablecontractnft)
     - [VoteNFT](#votenft)
-4. [FAQs](#faqs)
+4. [License](#license)
 
 
 ### DAO contracts
@@ -105,7 +105,7 @@ Transaction Structure:
 | 7 |                        | Change pure BCH |
 
 #### Voting.cash
-This contract allows stakeholders to vote on proposals. The votes send their tokens to the [proposalNFT](#proposalcounternft) and receive a [VoteNFT](#votenft) in return that can be used to retract their vote.
+Token holders cast their votes on proposals by submitting their tokenAmount to the [proposalNFT](#proposalcounternft). In exchange, they receive a [VoteNFT](#votenft), which they can later use to reclaim their tokens. Voters have the flexibility to retract their votes at any time, regardless of the proposal deadline.
 
 There are 2 functions in in the Voting contract:
 
@@ -304,17 +304,6 @@ Each vote cast results in the issuance of a VoteNFT.
   - `capability`: immutable
   - `breakup`: < ProposalID >< VoteAmount >
 
-### FAQs
+### License
 
-
-#### How does voting occur?
-
-Token holders cast their votes on proposals by submitting their tokenAmount to the proposalNFT. In exchange, they receive a VoteNFT, which they can later use to reclaim their tokens. Voters have the flexibility to retract their votes at any time, regardless of the proposal deadline.
-
-There is another NFT called timeProposalNFT, minted simultaneously with the proposalNFT. This NFT remains with the contract and cannot be included in any transaction until the minWait period has elapsed. Once this period is over, the proposal can be executed. Depending on the number of votes in the proposalNFT, the proposal will either be executed or fail.
-
-Upon reaching the deadline, anyone can execute the proposal and initiate the process of minting, replacing, or removing threads. When the proposal is executed, the tokenAmount from the proposalNFT is transferred to the timeNFT and locked until all threads are minted. During this period, votes cannot be withdrawn. Additionally, the commitment deposit is sent to the proposal creator.
-
-Once all threads are minted, removed, or replaced, the timeNFT is burned, and the tokenAmount from the timeNFT is returned to the proposalNFT, enabling withdrawals. At this point, the proposalNFT becomes immutable and remains permanently in the DAO contract, while the timeNFT is destroyed.
-
-In the event of a failure, only a single transaction occurs because the minThresholdAmount was not met. Consequently, the proposalNFT is made immutable, the timeNFT is burned, and the commitment deposit is sent to the recipient designated by the transaction initiator.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
