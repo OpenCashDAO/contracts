@@ -4,17 +4,36 @@ contract Voting() {
   /**
    * @inputs
    * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
+   *   - capability: immutable
+   *   - length: 35 bytes
+   *   - category: daoCategory
    * - Input1: Any input from this contract.
    * - Input2: Minting NFT of daoCategory from DAO.
-   * - Input3: Mutable Proposal NFT of daoCategory from DAO.
+   *   - capability: minting
+   *   - category: daoCategory
+   * - Input3: Proposal NFT of daoCategory from DAO.
+   *   - capability: mutable
+   *   - length: 6/38/40 bytes
+   *   - category: daoCategory
    * - Input4: Utxo to cast vote with tokenAmount
    * 
    * @outputs
    * - Output0: DAO Contract's authorizedThreadNFT back to self
+   *   - capability: immutable
+   *   - length: 35 bytes
+   *   - category: daoCategory
    * - Output1: Input1 back to this contract without any change.
    * - Output2: Minting NFT of daoCategory back to DAO
-   * - Output3: Mutable Proposal NFT back to DAO with tokenAmount (Equal to `voteAmount`)
+   *   - capability: minting
+   *   - category: daoCategory
+   * - Output3: Proposal NFT back to DAO with tokenAmount (Equal to `voteAmount`)
+   *   - capability: mutable
+   *   - length: 6/38/40 bytes
+   *   - category: daoCategory
    * - Output4: ReceiptNFT of Vote, to be used later to get back the tokens from proposal NFT to the bytecode of Input3
+   *   - capability: immutable
+   *   - length: 12 bytes
+   *   - category: daoCategory
    * - Output5: Change tokenAmount and BCH
    */
   function vote(int voteAmount) {
@@ -76,15 +95,30 @@ contract Voting() {
   /**
    * @inputs
    * - Input0: DAO Contract's authorizedThreadNFT i.e immutable NFT with commitment that has the lockingBytecode of this contract
+   *   - capability: immutable
+   *   - length: 35 bytes
+   *   - category: daoCategory
    * - Input1: Any input from this contract.
    * - Input2: VoteProposalNFT from DAO
+   *   - capability: mutable
+   *   - length: 6/38/40 bytes
+   *   - category: daoCategory
    * - Input3: RecieptNFT used to cast vote
+   *   - capability: immutable
+   *   - length: 12 bytes
+   *   - category: daoCategory
    * - Input4: Funding UTXO               
    * 
    * @outputs
    * - Output0: DAO Contract's authorizedThreadNFT back to self
+   *   - capability: immutable
+   *   - length: 35 bytes
+   *   - category: daoCategory
    * - Output1: Input1 back to this contract without any change.
    * - Output2: VoteProposalNFT back to DAO (minus the tokenAmount in the recieptNFT)
+   *   - capability: immutable
+   *   - length: 6/38/40 bytes
+   *   - category: daoCategory
    * - Output3: tokenAmount to the recieptNFT provider
    * - Output4: Change pure BCH
    */

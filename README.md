@@ -9,6 +9,8 @@ OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) templa
 - **Proposals and Voting by stakeholders**: Anyone can submit proposals and stakeholders/token holders can vote on them.
 - **Upgradable Project**: Once a proposal passes, the project gets updated by either removing, replacing or adding functionality.
 
+
+
 ## Table of Contents
 1. [Upgradable Project](#upgradable-project)
 2. [DAO contracts](#dao-contracts)
@@ -66,6 +68,8 @@ Transaction Structure:
 Anyone can submit new proposals to the DAO, which can have one of three intentions: to add, remove, or replace functionality. Once a proposal is submitted, a timer starts(`voteWindow`), and the proposal is open for voting. The proposal remains open for a set period, after which it can be executed. Based on the number of votes, the proposal is either passed or failed. If a proposal passes(`voteThreshold` is met), it can be executed by anyone, implementing the new changes to the project. While the DAO's contracts are static, the projects it controls are upgradable in nature.
 
 The proposal requires a `commitmentDeposit` to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `completeOrFail` function of the [ExecuteProposal.cash](#executeproposalcash) contract.
+
+![Submit Proposal](./diagrams/submit-proposal.png)
 
 Constructor:
   - `minCommitmentDeposit`: The minimum amount of satoshis the creator has to commit to the proposal.
@@ -130,6 +134,8 @@ There are 2 functions in in the Voting contract:
 
 1. **vote** This function allows anyone to cast their vote on a proposal.
 
+![Vote](./diagrams/vote.png)
+
 Parameters:
   - `voteAmount`: The amount of tokens to be committed to the proposal.
 
@@ -147,6 +153,8 @@ Transaction Structure:
   - **retract** The Retract Voting contract allows anyone to retract their vote from a proposal.
 
 > **Note:** When the proposal is being executed, the votes are temporarily locked in the timeProposalNFT so the votes can't be retracted during the execution.
+
+![Retract-vote](./diagrams/retract-vote.png)
 
 Transaction Structure:
 | # | Inputs | Outputs |

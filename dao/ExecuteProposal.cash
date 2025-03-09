@@ -17,8 +17,8 @@ contract ExecuteProposal(
    * @inputs
    * - Input0: DAO Contract's authorizedThreadNFT
    *   - capability: immutable
-   *   - length: 38 bytes <ProposalID (4 bytes), ThreadCount (2 bytes), ProposedScriptHash (32 bytes)>
-   *   - category: projectCategory
+   *   - length: 35 bytes
+   *   - category: daoCategory
    * - Input1: Any input from this contract.
    * - Input2: VoteProposalNFT from the DAO Contract
    *   - capability: mutable
