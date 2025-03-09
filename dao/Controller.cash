@@ -13,8 +13,8 @@ contract Controller(
    * - ProposalCounterNFT, (minting, daoCategory, 4 bytes)                      [1 thread]
    * - AuthorizedThreadNFTs (immutable, daoCategory, 35 bytes)
    *   - SubmitProposal:                                                        [~x threads]
+   *   - Voting:                                                                [~x threads]
    *   - ExecuteProposal:                                                       [~x threads]
-   *   - FailProposal:                                                          [~x threads]
    * - TimeProposalNFT, (immutable, daoCategory, 29 bytes)                      [1 thread/proposal]
    * - VoteProposalNFTs are mutable/immutable NFTs of daoCategory               [1 thread/proposal]
    *   - Intent to add new authorizedThreadNFTs to the upgradable project.

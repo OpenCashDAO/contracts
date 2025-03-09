@@ -46,7 +46,9 @@ Transaction Structure:
 #### SubmitProposal.cash
 Anyone can submit new proposals to the DAO, which can have one of three intentions: to add, remove, or replace functionality. Once a proposal is submitted, a timer starts (`voteWindow`), and the proposal is open for voting. The proposal remains open for a set period, after which it can be executed. Based on the number of votes, the proposal is either passed or failed. If a proposal passes (`voteThreshold` is met), it can be executed by anyone, implementing the new changes to the project. While the DAO's contracts are static, the projects it controls are upgradable in nature.
 
-The proposal requires a `commitmentDeposit` to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `completeOrFail` function of the [ExecuteProposal.cash](#executeproposalcash) contract.
+The proposal requires a `commitmentDeposit` to prevent spam and ensure serious commitment from the proposal creator. It prevents spam of proposals, reducing confusion among the stake holders/token holders and reduces the risk of vote splitting. It requires a commitment from the creator to ensure that the proposal is widely accepted and socially agreed upon else they will lose the commitment deposit.
+
+If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `completeOrFail` function of the [ExecuteProposal.cash](#executeproposalcash) contract.
 
 Constructor:
   - `minCommitmentDeposit`: The minimum amount of satoshis the creator has to commit to the proposal.
@@ -245,7 +247,7 @@ The DAO is responsible to create/remove/replace these NFTs from the project's co
 
 For any project to be compatible with the DAO, it must hold an AuthorizedThreadNFT with the following commitment pattern:
   - `category`: projectCategory
-  - `commitment`: 39 bytes < proposalID >< threadCount >< proposedScriptHash >
+  - `commitment`: 38 bytes < 4 bytes proposalID >< 2 bytes threadCount >< 32 bytes proposedScriptHash >
 
 
 #### MintingNFTs

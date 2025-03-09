@@ -83,6 +83,18 @@ export const main = async () => {
       },
     })
     .addOutput({
+      to: ProjectCoordinatorContract.tokenAddress,
+      amount: projectAuthorizedUtxo.satoshis,
+      token: {
+        category: projectAuthorizedUtxo.token.category,
+        amount: projectAuthorizedUtxo.token.amount,
+        nft: {
+          commitment: projectAuthorizedUtxo.token.nft.commitment,
+          capability: projectAuthorizedUtxo.token.nft.capability
+        }
+      },
+    })
+    .addOutput({
       to: DAOControllerContract.tokenAddress,
       amount: BigInt(1000n),
       token: {
@@ -103,18 +115,6 @@ export const main = async () => {
         nft: {
           commitment: proposalId + binToHex(aliceAddressLockingBytecode),
           capability: 'none'
-        }
-      },
-    })
-    .addOutput({
-      to: ProjectCoordinatorContract.tokenAddress,
-      amount: projectAuthorizedUtxo.satoshis,
-      token: {
-        category: projectAuthorizedUtxo.token.category,
-        amount: projectAuthorizedUtxo.token.amount,
-        nft: {
-          commitment: projectAuthorizedUtxo.token.nft.commitment,
-          capability: projectAuthorizedUtxo.token.nft.capability
         }
       },
     })
