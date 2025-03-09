@@ -1,10 +1,10 @@
 # OpenCashDAO
 
-OpenCashDAO is a decentralized autonomous organization (DAO) template on the Bitcoin Cash Blockchain. It is designed to empower stakeholders/token holders to influence the project's direction. It serves as a proposal and voting platform enabling token holders to vote on various proposals to modify the project's functionality.
+OpenCashDAO is a decentralized autonomous organization (DAO) template for the Bitcoin Cash Blockchain. It is designed to empower stakeholders/token holders to influence the project's direction. It serves as a proposal and voting platform enabling token holders to vote on various proposals to modify the project's functionality.
 
 - **1 DAO, ∞ projects**: A single DAO can control multiple projects.
 - **Proposals and Voting by stakeholders**: Anyone can submit proposals and stakeholders/token holders can vote on them.
-- **Upgradable Project**: Once a proposal passes, the project gets updated by either removing, replacing, or adding functionality.
+- **Project Upgradability**: Projects can be dynamically updated through community-approved proposals, allowing for the addition, removal, or replacement of functionalities.
 
 
 ## Table of Contents
