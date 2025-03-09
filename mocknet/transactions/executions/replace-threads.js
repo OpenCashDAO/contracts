@@ -6,11 +6,10 @@ import {
   provider,
   daoCategory,
   executeProposalContractLockingBytecode,
-  upgradableProjectCategory,
+  projectCategory,
   aliceAddress,
   aliceTemplate,
-  UpgradableProjectContract,
-  contractNewLockingBytecode
+  ProjectCoordinatorContract
 } from '../../setup/index.js';
 import { intToBytesToHex, hexToInt } from '../../utils.js';
 
@@ -48,16 +47,16 @@ export const main = async () => {
   if(!aliceUtxo) { throw new Error('Alice utxo not found'); }
 
   const projectMintingUtxo = contractUtxos.find(utxo => 
-    utxo.token?.category === upgradableProjectCategory &&
+    utxo.token?.category === projectCategory &&
     utxo.token?.nft?.capability === 'minting'
   );
   if(!projectMintingUtxo) { throw new Error('Project minting utxo not found'); }
 
   const proposalId = voteProposalUtxo.token.nft.commitment.slice(0, 8);
 
-  const projectUtxos = await provider.getUtxos(UpgradableProjectContract.address);
+  const projectUtxos = await provider.getUtxos(ProjectCoordinatorContract.address);
   const projectAuthorizedUtxo = projectUtxos.find(utxo => 
-    utxo.token?.category === upgradableProjectCategory &&
+    utxo.token?.category === projectCategory &&
     utxo.token?.nft?.capability === 'none' &&
     utxo.token?.nft?.commitment.slice(0, 8) === proposalId
   );
@@ -76,7 +75,7 @@ export const main = async () => {
     .addInput(timeProposalUtxo, DAOControllerContract.unlock.call())
     .addInput(aliceUtxo, aliceTemplate.unlockP2PKH())
     .addInput(projectMintingUtxo, DAOControllerContract.unlock.call())
-    .addInput(projectAuthorizedUtxo, UpgradableProjectContract.unlock.useAuthorizedThread())
+    .addInput(projectAuthorizedUtxo, ProjectCoordinatorContract.unlock.useAuthorizedThread())
     .addOutput({
       to: DAOControllerContract.tokenAddress,
       amount: authorizedThreadUtxo.satoshis,
@@ -131,7 +130,7 @@ export const main = async () => {
       },
     })
     .addOutput({
-      to: UpgradableProjectContract.tokenAddress,
+      to: ProjectCoordinatorContract.tokenAddress,
       amount: BigInt(1000n),
       token: {
         category: projectMintingUtxo.token.category,

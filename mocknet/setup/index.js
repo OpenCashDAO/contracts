@@ -23,7 +23,7 @@ export { alicePriv, aliceAddress, aliceTokenAddress, alicePkh, alicePub };
 // - Create authorizedThreadNFT
 
 // Upgradable Project contract
-const Upgradable = compileFile(new URL('../../upgradable/Upgradable.cash', import.meta.url));
+const ProjectCoordinator = compileFile(new URL('../../upgradable/Coordinator.cash', import.meta.url));
 const ContractA = compileFile(new URL('../../upgradable/ContractA.cash', import.meta.url));
 const ContractNew = compileFile(new URL('../../upgradable/ContractNew.cash', import.meta.url));
 
@@ -48,12 +48,12 @@ export const addressType = 'p2sh32';
 export const options = { provider, addressType }
 
 export const DAOControllerNFT = randomNFT({nft: {commitment: intToBytesToHex({value: 0, length: 4}), capability: 'minting'}});
-export const UpgradableProjectNFT = randomNFT({nft: {commitment: '', capability: 'minting'}});
+export const ProjectCoordinatorNFT = randomNFT({nft: {commitment: '', capability: 'minting'}});
 
 export const daoCategory = DAOControllerNFT.category
 export const reverseDaoTokenCategory = binToHex(hexToBin(daoCategory).reverse())
-export const upgradableProjectCategory = UpgradableProjectNFT.category
-export const reverseUpgradableProjectCategory = binToHex(hexToBin(upgradableProjectCategory).reverse())
+export const projectCategory = ProjectCoordinatorNFT.category
+export const reverseProjectCategory = binToHex(hexToBin(projectCategory).reverse())
 
 export const proposalId = intToBytesToHex({value: hexToInt(DAOControllerNFT.nft.commitment) + 1, length: 4});
 export const threadCount = intToBytesToHex({value: 1, length: 2});
@@ -71,11 +71,11 @@ provider.addUtxo(aliceTokenAddress, {... randomUtxo(), token: { category: daoCat
 export const DAOControllerContract = new Contract(Controller, [reverseDaoTokenCategory], options);
 export const DAOControllerLockingBytecode = cashAddressToLockingBytecode(DAOControllerContract.address)
 // Upgradable Project
-export const UpgradableProjectContract = new Contract(Upgradable, [reverseUpgradableProjectCategory, DAOControllerLockingBytecode.bytecode], options);
-export const upgradableProjectLockingBytecode = cashAddressToLockingBytecode(UpgradableProjectContract.address).bytecode
+export const ProjectCoordinatorContract = new Contract(ProjectCoordinator, [reverseProjectCategory, DAOControllerLockingBytecode.bytecode], options);
+export const projectCoordinatorLockingBytecode = cashAddressToLockingBytecode(ProjectCoordinatorContract.address).bytecode
 
 // DAO Contracts
-export const ExecuteProposalContract = new Contract(ExecuteProposal, [minVoteThreshold, minWait, reverseUpgradableProjectCategory, upgradableProjectLockingBytecode], options);
+export const ExecuteProposalContract = new Contract(ExecuteProposal, [minVoteThreshold, minWait, reverseProjectCategory, projectCoordinatorLockingBytecode], options);
 export const executeProposalContractLockingBytecode = binToHex(cashAddressToLockingBytecode(ExecuteProposalContract.address).bytecode);
 provider.addUtxo(ExecuteProposalContract.address, randomUtxo());
 

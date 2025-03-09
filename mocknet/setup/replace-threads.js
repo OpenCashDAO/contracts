@@ -3,16 +3,16 @@ import {
   randomNFT
 } from 'cashscript';
 import { hexToBin, binToHex } from '@bitauth/libauth';
-import { intToBytesToHex, hexToInt } from '../utils.js';
+import { intToBytesToHex } from '../utils.js';
 import {
   provider,
   DAOControllerContract,
   daoCategory,
-  upgradableProjectCategory,
+  projectCategory,
   contractALockingBytecode,
   contractNewLockingBytecode,
   aliceAddressLockingBytecode,
-  UpgradableProjectContract
+  ProjectCoordinatorContract
 } from './index.js';
 
 
@@ -65,10 +65,10 @@ export const main = async () => {
   });
 
   // Existing authorizedThreadNFT in Project
-  provider.addUtxo(UpgradableProjectContract.address, {
+  provider.addUtxo(ProjectCoordinatorContract.address, {
     token: {
     ...randomNFT({
-      category: upgradableProjectCategory,
+      category: projectCategory,
       nft: {
           commitment: authThreadCommitment,
           capability: 'none'

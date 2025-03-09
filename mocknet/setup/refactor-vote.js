@@ -4,7 +4,13 @@ import {
 } from 'cashscript';
 import { hexToBin, binToHex } from '@bitauth/libauth';
 import { intToBytesToHex, hexToInt } from '../utils.js';
-import { provider, DAOControllerContract, daoCategory, aliceTokenAddress, contractNewLockingBytecode } from './index.js';
+import {
+  provider,
+  DAOControllerContract,
+  daoCategory,
+  aliceTokenAddress,
+  contractNewLockingBytecode
+} from './index.js';
 
 const proposalVoteAmount = BigInt(50000);
 const aliceVoteAmount = BigInt(1000);

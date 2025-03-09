@@ -5,10 +5,10 @@ import {
   provider,
   daoCategory,
   executeProposalContractLockingBytecode,
-  upgradableProjectCategory,
+  projectCategory,
   aliceAddress,
   aliceTemplate,
-  UpgradableProjectContract
+  ProjectCoordinatorContract
 } from '../../setup/index.js';
 import { intToBytesToHex, hexToInt } from '../../utils.js';
 
@@ -26,7 +26,7 @@ export const main = async () => {
   if(!executeUtxo) { throw new Error('Execute utxo not found'); }
 
   const projectMintingUtxo = contractUtxos.find(utxo => 
-    utxo.token?.category === upgradableProjectCategory &&
+    utxo.token?.category === projectCategory &&
     utxo.token?.nft?.capability === 'minting'
   );
   if(!projectMintingUtxo) { throw new Error('Project minting utxo not found'); }
@@ -119,7 +119,7 @@ export const main = async () => {
       },
     })
     .addOutput({
-      to: UpgradableProjectContract.tokenAddress,
+      to: ProjectCoordinatorContract.tokenAddress,
       amount: BigInt(1000n),
       token: {
         category: projectMintingUtxo.token.category,

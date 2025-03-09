@@ -3,22 +3,19 @@
 > **Note:** This project is under active development.
 
 
-OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) template, designed to empower stakeholders to influence the project's direction. It serves as a proposal and voting platform for the community, enabling them to vote on various proposals to modify the project's functionality.
+OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) template, designed to empower stakeholders to influence the project's direction. It serves as a proposal and voting platform for the community, enabling token holders to vote on various proposals to modify the project's functionality.
 
-**Key Features:**
-
-- 1 DAO, ∞ projects
-- Proposals and Voting by stakeholders
-- Upgradable Project
-
+- **1 DAO, ∞ projects**: A single DAO can control multiple projects.
+- **Proposals and Voting by stakeholders**: Anyone can submit proposals and stakeholders/token holders can vote on them.
+- **Upgradable Project**: Once a proposal passes, the project gets updated by either removing, replacing or adding functionality.
 
 ## Table of Contents
-1. [DAO contracts](#dao-contracts)
+1. [Upgradable Project](#upgradable-project)
+2. [DAO contracts](#dao-contracts)
     - [Controller.cash](#controller.cash)
     - [SubmitProposal.cash](#submitproposal.cash)
     - [Voting.cash](#voting.cash)
     - [ExecuteProposal.cash](#executeproposal.cash)
-2. [Upgradable Project Contract](#upgradable-project-contract)
 3. [Cashtokens](#cashtokens)
     - [AuthorizedThreadNFTs](#authorizedthreadnfts)
     - [MintingNFTs](#mintingnfts)
@@ -28,6 +25,23 @@ OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) templa
     - [UpgradableContractNFT](#upgradablecontractnft)
     - [VoteNFT](#votenft)
 4. [FAQs](#faqs)
+
+ 
+### Upgradable Project
+
+The DAO is responsible for upgrading the project's functionality. It does so by managing the AuthorizedThreadNFTs that exist within the project's controller contract.
+
+The upgradable project follows a pattern what I call it a 'star contract composition' pattern. It has a central control and storage contract with 1 or more authorizedThreadNFTs. (utxos) that 
+
+In order for a project to be upgradable, it must fullfil the following requirements:
+
+1. The project must hold an AuthorizedThreadNFT with the following commitment pattern:
+  - `category`: projectCategory
+  - `commitment`: 39 bytes < proposalID >< threadCount >< proposedScriptHash >
+
+2. It must have a function `useAuthorizedThread` that must be used in any transaction by the DAO's controller contract.
+
+3. It must have a function `call` that makes use of the authorizedThreadNFTs to manage it's own functionality.
 
 
 ### DAO contracts
@@ -151,9 +165,6 @@ The ExecuteProposal contract allows anyone to execute a proposal. The contract e
  - **execute** The Execute function.
  - **completeOrFail** The CompleteOrFail function.
 
-## Upgradable Contract
-
-This is a single contract with the ability to call multiple contracts. The DAO controls which contracts are accessible by the OpenCash contract.
 
 ### Cashtokens
 

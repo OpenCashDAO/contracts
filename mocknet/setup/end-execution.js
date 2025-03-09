@@ -4,7 +4,13 @@ import {
 } from 'cashscript';
 import { hexToBin, binToHex } from '@bitauth/libauth';
 import { intToBytesToHex, hexToInt } from '../utils.js';
-import { provider, DAOControllerContract, daoCategory, aliceTokenAddress, contractNewLockingBytecode, aliceAddressLockingBytecode } from './index.js';
+import {
+  provider,
+  DAOControllerContract,
+  daoCategory,
+  contractNewLockingBytecode,
+  aliceAddressLockingBytecode
+} from './index.js';
 
 
 export const main = async () => {

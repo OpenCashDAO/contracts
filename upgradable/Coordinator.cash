@@ -1,6 +1,6 @@
 pragma cashscript ^0.11.0;
 
-contract Upgradable(bytes baseCategory, bytes daoLockingBytecode) {
+contract Coordinator(bytes baseCategory, bytes daoLockingBytecode) {
   
   // Allow a thread to be used by the DAO to create a proposal.
   function useAuthorizedThread(){

@@ -2,11 +2,11 @@ import { TransactionBuilder } from 'cashscript';
 import { binToHex } from '@bitauth/libauth';
 import {
   DAOControllerContract,
-  UpgradableProjectContract,
+  ProjectCoordinatorContract,
   SubmitProposalContract,
   provider,
   daoCategory,
-  upgradableProjectCategory,
+  projectCategory,
   submitProposalContractLockingBytecode,
   aliceAddress,
   aliceTemplate,
@@ -34,9 +34,9 @@ export const main = async () => {
   );
   if(!daoMintingUtxo) { throw new Error('DAO minting utxo not found'); }
 
-  const projectUtxos = await provider.getUtxos(UpgradableProjectContract.address);
+  const projectUtxos = await provider.getUtxos(ProjectCoordinatorContract.address);
   const projectAuthorizedUtxo = projectUtxos.find(utxo => 
-    utxo.token?.category === upgradableProjectCategory &&
+    utxo.token?.category === projectCategory &&
     utxo.token?.nft?.capability === 'none'
   );
   if(!projectAuthorizedUtxo) { throw new Error('Project authorized utxo not found'); }
@@ -53,7 +53,7 @@ export const main = async () => {
     .addInput(authorizedThreadUtxo, DAOControllerContract.unlock.call())
     .addInput(proposalUtxo, SubmitProposalContract.unlock.remove())
     .addInput(daoMintingUtxo, DAOControllerContract.unlock.call())
-    .addInput(projectAuthorizedUtxo, UpgradableProjectContract.unlock.useAuthorizedThread())
+    .addInput(projectAuthorizedUtxo, ProjectCoordinatorContract.unlock.useAuthorizedThread())
     .addInput(aliceUtxo, aliceTemplate.unlockP2PKH())
     .addOutput({
       to: DAOControllerContract.tokenAddress,
@@ -105,7 +105,7 @@ export const main = async () => {
       },
     })
     .addOutput({
-      to: UpgradableProjectContract.tokenAddress,
+      to: ProjectCoordinatorContract.tokenAddress,
       amount: projectAuthorizedUtxo.satoshis,
       token: {
         category: projectAuthorizedUtxo.token.category,

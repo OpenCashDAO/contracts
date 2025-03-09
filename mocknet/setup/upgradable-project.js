@@ -7,9 +7,9 @@ import {
   DAOControllerContract,
   proposalId,
   threadCount,
-  upgradableProjectCategory,
-  UpgradableProjectNFT,
-  UpgradableProjectContract,
+  projectCategory,
+  ProjectCoordinatorNFT,
+  ProjectCoordinatorContract,
   contractALockingBytecode,
 } from './index.js';
 
@@ -17,7 +17,7 @@ import {
 export const main = async () => {
   provider.addUtxo(DAOControllerContract.address, {
     token: {
-      ...UpgradableProjectNFT,
+      ...ProjectCoordinatorNFT,
     },
     ...randomUtxo()
   });
@@ -26,7 +26,7 @@ export const main = async () => {
   const authorizedThreadNFTUtxoForProject = {
     token: {
       ...randomNFT({
-        category: upgradableProjectCategory,
+        category: projectCategory,
         nft: {
           commitment: proposalId + threadCount + contractALockingBytecode.slice(4, -2),
           capability: 'none'
@@ -37,5 +37,5 @@ export const main = async () => {
   };
 
   // Add threads
-  provider.addUtxo(UpgradableProjectContract.address, authorizedThreadNFTUtxoForProject);
+  provider.addUtxo(ProjectCoordinatorContract.address, authorizedThreadNFTUtxoForProject);
 }

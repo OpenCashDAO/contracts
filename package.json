@@ -10,10 +10,10 @@
     "compile:submitProposal": "cashc ./dao/SubmitProposal.cash -o ./artifacts/dao/SubmitProposal.json",
     "compile:executeProposal": "cashc ./dao/ExecuteProposal.cash -o ./artifacts/dao/ExecuteProposal.json",
     "compile:voting": "cashc ./dao/Voting.cash -o ./artifacts/dao/Voting.json",
-    "compile:upgradable": "cashc ./upgradable/Upgradable.cash -o ./artifacts/upgradable/Upgradable.json",
+    "compile:coordinator": "cashc ./upgradable/Coordinator.cash -o ./artifacts/upgradable/Coordinator.json",
     "compile:contractA": "cashc ./upgradable/ContractA.cash -o ./artifacts/upgradable/ContractA.json",
     "compile:contractNew": "cashc ./upgradable/ContractNew.cash -o ./artifacts/upgradable/ContractNew.json",
-    "compile": "npm run compile:controller && npm run compile:submitProposal && npm run compile:executeProposal && npm run compile:voting && npm run compile:upgradable && npm run compile:contractA && npm run compile:contractNew",
+    "compile": "npm run compile:controller && npm run compile:submitProposal && npm run compile:executeProposal && npm run compile:voting && npm run compile:coordinator && npm run compile:contractA && npm run compile:contractNew",
     "build": "npm run compile && node index.js"
   },
   "dependencies": {
