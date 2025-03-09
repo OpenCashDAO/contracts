@@ -103,10 +103,10 @@ export const main = async () => {
     })
     .addOutput({
       to: DAOControllerContract.tokenAddress,
-      amount: voteProposalUtxo.satoshis,
+      amount: timeProposalUtxo.satoshis,
       token: {
         category: timeProposalUtxo.token.category,
-        amount: voteProposalUtxo?.token?.amount,
+        amount: timeProposalUtxo?.token?.amount + voteProposalUtxo?.token?.amount,
         nft: {
           commitment: timeProposalUtxo?.token?.nft?.commitment,
           capability: timeProposalUtxo?.token?.nft?.capability

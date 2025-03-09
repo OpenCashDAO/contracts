@@ -146,13 +146,16 @@ Transaction Structure:
 
 The ExecuteProposal contract allows anyone to execute a proposal. The contract ensures that the proposal is valid and updates the project's authorizedThreadNFTs accordingly.
 
- - **execute** The Execute function.
+Constructor:
+  - `voteThreshold`: The minimum number of votes required for the proposal to pass.
+  - `voteWindow`: The minimum time window during which votes can be cast.
+  - `projectCategory`: The category of the project for which the proposal is being applied. [reversed]
+  - `projectLockingBytecode`: The locking bytecode of the project for which the proposal is being applied.
 
-The ExecuteProposal contract allows anyone to execute a proposal. The contract ensures that the proposal is valid and updates the project's authorizedThreadNFTs accordingly.
 
 There are two functions in the ExecuteProposal contract:
 
-1. **execute** This function validates the proposal and ensures that the DAO and project contracts are correctly updated.
+1. **execute** This function is responsible for executing the proposal. Since the proposal can be of three types, the function behaves differently based on the type of proposalNFT used in the transaction. Below are the details of the function for each type of proposalNFT.
 
 Transaction Structure:
 | # | Inputs | Outputs |
@@ -236,50 +239,51 @@ The contracts talk to each other through cashtokens.
 
 - **[DAO] AuthorizedThreadNFT**:
 These are immutable NFTs that control the transaction's execution flow of the DAO. These NFTs exist as utxos in the [Controller.cash](#controllercash) contract.
-
   - `category`: daoCategory
   - `commitment`: 35 bytes
+  - `capability`: immutable
   - Allocates 1 thread.
+  - exists in the [Controller.cash](#controllercash) contract
 
 - **[Project] AuthorizedThreadNFT**:
-These are immutable NFTs that exist with the project's controller contract. These are responsible to manage the transaction's execution flow of the project.
-
-The DAO is responsible to create/remove/replace these NFTs from the project's controller contract. Making it possible for the project to upgrade itself.
-
-For any project to be compatible with the DAO, it must hold an AuthorizedThreadNFT with the following commitment pattern:
+These immutable NFTs reside within the project's coordinator contract and are responsible for managing the project's transaction execution flow. The DAO has the authority to create, remove, or replace these NFTs within the coordinator contract, enabling the project to upgrade itself. To be compatible with the DAO, a project must hold an AuthorizedThreadNFT with the following commitment pattern:
   - `category`: projectCategory
-  - `commitment`: 38 bytes < 4 bytes proposalID >< 2 bytes threadCount >< 32 bytes proposedScriptHash >
-
+  - `commitment`: `38 bytes < 4 bytes proposalID >< 2 bytes threadCount >< 32 bytes proposedScriptHash >`
+  - `capability`: immutable
+  - exists in the project's coordinator contract
 
 #### MintingNFTs
 
-The [Controller.cash](#controllercash) contract holds the following minting NFTs:
 - **ProposalCounterNFT**: This NFT is used to create new proposals for users to vote on. Since each proposal should be unique, the commitment of this NFT holds can't as a counter which increments by 1 for each new proposal.
   - `category`: daoCategory
   - `commitment`: 4 bytes
   - `capability`: minting
-  - 1 threads/utxos
+  - 1 thread/utxo
+  - exists in the [Controller.cash](#controllercash) contract
 - **VoteMintingNFT**: This NFT is used to create NFT reciepts for new votes, the minted immutable NFT is send to the voter, that can be used to retract their vote.
   - `category`: daoCategory
   - `commitment`: 0 bytes
-  - `capability`: immutable
+  - `capability`: minting
   - x threads/utxos
+  - exists in the [Controller.cash](#controllercash) contract
 - **ProjectThreadMintingNFT**: This NFT is used to mint or replace the project's authorizedThreadNFTs.
   - `category`: projectCategory
   - `commitment`: 0 bytes
   - `capability`: minting
   - x threads/utxos
+  - exists in the [Controller.cash](#controllercash) contract
 
 
 #### ProposalNFTs
 
-- **TimeProposalNFT**: An immutable NFT used to manage the timing of proposals, this NFT is created when a new proposal is created. Initially it's used as timer for the proposal, but once the proposal is executed, it's used to lock the proposalNFT's votes and commitmentDeposit.
+- **TimeProposalNFT**: An immutable NFT used to manage the timing of proposals, this NFT is created when a new proposal is created. Initially it's used as timer for the proposal and holds the commitmentDeposit, but once the proposal is executed, it's used to lock the proposalNFT's votes and commitmentDeposit until the proposal is executed.
   - `category`: daoCategory
   - `commitment`: 29 bytes
   - `capability`: immutable
   - 1 thread/utxo for each proposal
+  - exists in the [Controller.cash](#controllercash) contract
 
-- **VoteProposalNFT**: This NFT holds all the votes for a proposal, whenever a user votes on a proposal, the vote amount is added to this NFT. This NFT also holds the proposal's commitmentDeposit. This NFT has different behaviour depending on the type of proposal.
+- **VoteProposalNFT**: This NFT holds all the votes for a proposal, whenever a user votes on a proposal, the vote amount is added to this NFT. This NFT has different commitment pattern depending on the type of proposal.
   - If the proposal is to add a new contract to the project, then the 
    nftCommitment must be of 40 bytes and holds the following information:
     - `category`: daoCategory
@@ -291,21 +295,22 @@ The [Controller.cash](#controllercash) contract holds the following minting NFTs
     - `capability`: mutable
   - If the proposal is a replace proposal, then the nftCommitment must be of 36 bytes and holds the following information:
     - `category`: daoCategory
-    - `commitment`: `36 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ProposedScriptHash (32 bytes)>`
+    - `commitment`: `38 bytes <ProposalID (4 bytes), ThreadLeft (2 bytes), ProposedScriptHash (32 bytes)>`
     - `capability`: mutable
+  - exists in the [Controller.cash](#controllercash) contract
 
 Once the proposal is eligible to be passed, the proposal is executed. During this process, the `threadLeft` is decremented by 1 for each thread that is minted, removed or replaced. until it reaches 0, at which point the proposal is fully executed.
 
 During the proposal execution, the votes and commitmentDeposit are locked in the timeProposalNFT.
 
-Once all the threadsLeft reaches 0, the timeProposalNFT is burned and the votes and commitmentDeposit are returned to the proposalNFT allowing the votes to take back their tokens.
+Once all the threadsLeft reaches 0, the voteProposlNFT is turned immutable, the timeProposalNFT is burned and the votes and commitmentDeposit are returned to the proposalNFT allowing the votes to take back their tokens.
 
 #### VoteNFT
-Each vote cast results in the issuance of a VoteNFT.
+Each vote cast on a proposalresults in the issuance of a VoteNFT.
   - `category`: daoCategory
-  - `commitment`: 12 bytes
+  - `commitment`: 12 bytes `< ProposalID (4 bytes), VoteAmount (8 bytes) >`
   - `capability`: immutable
-  - `breakup`: < ProposalID >< VoteAmount >
+  - exists with the voter
 
 ### License
 
