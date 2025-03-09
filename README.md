@@ -1,23 +1,20 @@
 # OpenCashDAO
 
-> **Note:** This project is under active development.
-
-
-OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) template, designed to empower stakeholders to influence the project's direction. It serves as a proposal and voting platform for the community, enabling token holders to vote on various proposals to modify the project's functionality.
+OpenCashDAO is a decentralized autonomous organization (DAO) template, designed to empower stakeholders to influence the project's direction. It serves as a proposal and voting platform for the community, enabling token holders to vote on various proposals to modify the project's functionality.
 
 - **1 DAO, ∞ projects**: A single DAO can control multiple projects.
 - **Proposals and Voting by stakeholders**: Anyone can submit proposals and stakeholders/token holders can vote on them.
 - **Upgradable Project**: Once a proposal passes, the project gets updated by either removing, replacing or adding functionality.
 
 
-
 ## Table of Contents
-1. [Upgradable Project](#upgradable-project)
-2. [DAO contracts](#dao-contracts)
-    - [Controller.cash](#controller.cash)
-    - [SubmitProposal.cash](#submitproposal.cash)
-    - [Voting.cash](#voting.cash)
-    - [ExecuteProposal.cash](#executeproposal.cash)
+1. [DAO contracts](#dao-contracts)
+    - [Controller.cash](#controllercash)
+    - [SubmitProposal.cash](#submitproposalcash)
+    - [Voting.cash](#votingcash)
+    - [ExecuteProposal.cash](#executeproposalcash)
+2. [Upgradable Project](#upgradable-project)
+    - [Coordinator.cash](#coordinatorcash)
 3. [Cashtokens](#cashtokens)
     - [AuthorizedThreadNFTs](#authorizedthreadnfts)
     - [MintingNFTs](#mintingnfts)
@@ -28,31 +25,13 @@ OpenCashDAO is a feature-rich decentralized autonomous organization (DAO) templa
     - [VoteNFT](#votenft)
 4. [FAQs](#faqs)
 
- 
-### Upgradable Project
-
-The DAO is responsible for upgrading the project's functionality. It does so by managing the AuthorizedThreadNFTs that exist within the project's controller contract.
-
-The upgradable project follows a pattern what I call it a 'star contract composition' pattern. It has a central control and storage contract with 1 or more authorizedThreadNFTs. (utxos) that 
-
-In order for a project to be upgradable, it must fullfil the following requirements:
-
-1. The project must hold an AuthorizedThreadNFT with the following commitment pattern:
-  - `category`: projectCategory
-  - `commitment`: 39 bytes < proposalID >< threadCount >< proposedScriptHash >
-
-2. It must have a function `useAuthorizedThread` that must be used in any transaction by the DAO's controller contract.
-
-3. It must have a function `call` that makes use of the authorizedThreadNFTs to manage it's own functionality.
-
 
 ### DAO contracts
 
-DAO is a system of 4 contracts where the controller is the main contract that is part of every transaction that happens in the DAO.
-
+DAO is a system of 4 contracts where the Controller.cash is the main contract that is part of every transaction that happens in the DAO.
 
 #### Controller.cash
-The Controller contract functions as the control and storage hub for the DAO. 
+The Controller contract functions as the control and storage hub for the DAO. It holds DAO's [AuthorizedThreadNFTs](#authorizedthreadnfts), [ProposalCounterNFTs](#proposalcounternft) and [MintingNFTs](#mintingnfts), [VoteProposalNFTs](#voteproposalnfts) and [TimeProposalNFTs](#timeproposaltnft)
 
 Constructor:
   - `daoCategory`: The category of the DAO NFTs.
@@ -65,18 +44,16 @@ Transaction Structure:
 
 
 #### SubmitProposal.cash
-Anyone can submit new proposals to the DAO, which can have one of three intentions: to add, remove, or replace functionality. Once a proposal is submitted, a timer starts(`voteWindow`), and the proposal is open for voting. The proposal remains open for a set period, after which it can be executed. Based on the number of votes, the proposal is either passed or failed. If a proposal passes(`voteThreshold` is met), it can be executed by anyone, implementing the new changes to the project. While the DAO's contracts are static, the projects it controls are upgradable in nature.
+Anyone can submit new proposals to the DAO, which can have one of three intentions: to add, remove, or replace functionality. Once a proposal is submitted, a timer starts (`voteWindow`), and the proposal is open for voting. The proposal remains open for a set period, after which it can be executed. Based on the number of votes, the proposal is either passed or failed. If a proposal passes (`voteThreshold` is met), it can be executed by anyone, implementing the new changes to the project. While the DAO's contracts are static, the projects it controls are upgradable in nature.
 
 The proposal requires a `commitmentDeposit` to prevent spam and ensure serious commitment from the proposal creator. If the proposal passes, the creator gets back the commitment deposit. If the proposal fails, the BCH is sent to anyone who calls the `completeOrFail` function of the [ExecuteProposal.cash](#executeproposalcash) contract.
-
-![Submit Proposal](./diagrams/submit-proposal.png)
 
 Constructor:
   - `minCommitmentDeposit`: The minimum amount of satoshis the creator has to commit to the proposal.
 
 There are 3 functions in in the SubmitProposal contract:
 
-1. **add** This function allows anyone to submit a proposal to add new authorizedThreadNFTs to the Upgradable Project Contract.
+1. **add** This function allows anyone to submit a proposal to add new authorizedThreadNFTs to the Project Coordinator.
 
 Parameters:
   - `proposalScriptHash`: 32 bytes scriptHash of the new contract to be included in the project.
@@ -94,7 +71,7 @@ Transaction Structure:
 | 6 |                        | Change pure BCH |
 
 
-2. **remove** This function allows anyone to submit a proposal to remove authorizedThreadNFTs from the Project. In order to remove the threads, an existing thread should be used as the input.
+2. **remove** This function allows anyone to submit a proposal to remove authorizedThreadNFTs from the Project Coordinator. In order to remove the threads, an existing thread should be used as the input.
 
 
 Transaction Structure:
@@ -110,7 +87,7 @@ Transaction Structure:
 | 7 |                        | Change pure BCH |
 
 
-3. **replace** This function allows anyone to submit a proposal to replace authorizedThreadNFTs in the Project.
+3. **replace** This function allows anyone to submit a proposal to replace authorizedThreadNFTs in the Project. In order to replace the threads, an existing thread should be used as the input.
 
 Parameters:
   - `proposalScriptHash`: 32 bytes scriptHash of the new contract to be included in the project. The proposalId of the contract to be replaced is taken from the authorizedThreadNFT included in the input.
@@ -134,8 +111,6 @@ There are 2 functions in in the Voting contract:
 
 1. **vote** This function allows anyone to cast their vote on a proposal.
 
-![Vote](./diagrams/vote.png)
-
 Parameters:
   - `voteAmount`: The amount of tokens to be committed to the proposal.
 
@@ -154,8 +129,6 @@ Transaction Structure:
 
 > **Note:** When the proposal is being executed, the votes are temporarily locked in the timeProposalNFT so the votes can't be retracted during the execution.
 
-![Retract-vote](./diagrams/retract-vote.png)
-
 Transaction Structure:
 | # | Inputs | Outputs |
 |---|--------|---------|
@@ -171,16 +144,90 @@ Transaction Structure:
 The ExecuteProposal contract allows anyone to execute a proposal. The contract ensures that the proposal is valid and updates the project's authorizedThreadNFTs accordingly.
 
  - **execute** The Execute function.
- - **completeOrFail** The CompleteOrFail function.
+
+The ExecuteProposal contract allows anyone to execute a proposal. The contract ensures that the proposal is valid and updates the project's authorizedThreadNFTs accordingly.
+
+There are two functions in the ExecuteProposal contract:
+
+1. **execute** This function validates the proposal and ensures that the DAO and project contracts are correctly updated.
+
+Transaction Structure:
+| # | Inputs | Outputs |
+|---|--------|---------|
+| 0 | [DAO Contract's authorizedThreadNFT](#authorizedthreadnfts) from Controller.cash | [DAO Contract's authorizedThreadNFT](#authorizedthreadnfts) back to Controller.cash |
+| 1 | Any input from this contract | Input1 back to this contract without any change |
+| 2 | [VoteProposalNFT](#proposalnfts) from Controller.cash | [VoteProposalNFT](#proposalnfts) back to Controller.cash |
+| 3 | [TimeProposalNFT](#proposaltnft) from Controller.cash | [TimeProposalNFT](#proposaltnft) back to Controller.cash |
+| 4 | Funding UTXO | Change UTXO |
+
+ADD
+
+| # | Inputs | Outputs |
+|---|--------|---------|
+| 5 | [Minting NFT of the Upgradable Project](#mintingnfts) from Controller.cash | [Minting NFT of the Upgradable Project](#mintingnfts) back to Controller.cash |
+| 6 | | [New authorizedThreadNFT](#authorizedthreadnfts) to the Project Controller |
+
+REMOVE
+
+| # | Inputs | Outputs |
+|---|--------|---------|
+| 5 | [authorizedThreadNFT](#authorizedthreadnfts) to the Project Controller | |
+
+
+REPLACE
+
+| # | Inputs | Outputs |
+|---|--------|---------|
+| 5 | [Minting NFT of the Upgradable Project](#mintingnfts) from Controller.cash | [Minting NFT of the Upgradable Project](#mintingnfts) back to Controller.cash |
+| 6 | [authorizedThreadNFT](#authorizedthreadnfts) to the Project Controller | [New authorizedThreadNFT](#authorizedthreadnfts) to the Project Controller |
+
+2. **completeOrFail** This function burns the timeProposalNFT and makes the proposalNFT immutable. It ensures that the proposalNFT has the votes and commitmentDeposit is sent to the correct party.
+This function is called under two circumstances:
+    - When the voteThreshold is not met, anyone can call this function and claim the commitmentDeposit.
+    - When the proposal is executed, and all the threads are minted or removed already. At this stage, the timeProposalNFT has all the votes and commitmentDeposit.
+
+Transaction Structure:
+| # | Inputs | Outputs |
+|---|--------|---------|
+| 0 | [DAO Contract's authorizedThreadNFT](#authorizedthreadnfts) from Controller.cash | [DAO Contract's authorizedThreadNFT](#authorizedthreadnfts) back to Controller.cash |
+| 1 | Any input from this contract | Input1 back to this contract without any change |
+| 2 | [VoteProposalNFT](#proposalnfts) from Controller.cash | [VoteProposalNFT](#proposalnfts) back to Controller.cash |
+| 3 | [TimeProposalNFT](#proposaltnft) from Controller.cash | Commitment Deposit to the creator |
+| 4 | Funding UTXO | Change BCH |
+
+
+### Upgradable Project
+
+The DAO is responsible for changing the project's functionality. It does so by managing the AuthorizedThreadNFTs that exist within the project's coordinator contract.
+
+#### Coordinator.cash
+
+In order for a contract to be upgradable and compatible with the DAO, it must fullfil the following requirements:
+
+1. **AuthorizedThreadNFT**:The project must hold an AuthorizedThreadNFT with the following commitment pattern:
+  - `category`: projectCategory
+  - `commitment`: 39 bytes < proposalID >< threadCount >< scriptHash >
+
+2. **useAuthorizedThread**: It must have a function `useAuthorizedThread` that can only be called when used with the DAO's [Controller.cash](#controllercash). This function let's the DAO to remove or replace the project's authorizedThreadNFTs.
+
+Transaction Structure:
+| # | Inputs | Outputs |
+|---|--------|---------|
+| 0 | [DAO Contract's authorizedThreadNFT](#authorizedthreadnfts) from Controller.cash | |
+
+
+3. **call**: It must have a function `call` that let's the project to use the authorizedThreadNFTs with other contracts.
+
+Transaction Structure:
+| # | Inputs | Outputs |
+|---|--------|---------|
+| 0 | [Project's authorizedThreadNFT](#authorizedthreadnfts) from Coordinator.cash | [Project's authorizedThreadNFT](#authorizedthreadnfts) back to Coordinator.cash |
+| 1 | Any UTXO from Authorized contract | UTXO back to Authorized contract |
 
 
 ### Cashtokens
 
-The contracts talk to each other through cashtokens. There are a few types in this system:
-
-- [Controller.cash](#controllercash) holds [AuthorizedThreadNFTs](#authorizedthreadnfts), [ProposalCounterNFTs](#proposalcounternft) and [MintingNFTs](#mintingnfts), [VoteProposalNFTs](#voteproposalnfts), [TimeProposalNFTs](#timeproposaltnft)
-- [UpgradableProject.cash](#upgradableproject.cash) holds the project's authorizedThreadNFTs.
-- Each individual votes holds the [voteNFTs](#votenft)
+The contracts talk to each other through cashtokens.
 
 #### AuthorizedThreadNFTs
 

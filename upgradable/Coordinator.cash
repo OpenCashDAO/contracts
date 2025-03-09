@@ -6,7 +6,7 @@ contract Coordinator(bytes baseCategory, bytes daoLockingBytecode) {
   function useAuthorizedThread(){
     console.log(daoLockingBytecode);
     // @todo: Uncomment this, commented out because of cashscript bug
-    // require(tx.inputs[this.activeInputIndex +1].lockingBytecode == daoLockingBytecode);
+    // require(tx.inputs[0].lockingBytecode == daoLockingBytecode);
   }
 
   /**
